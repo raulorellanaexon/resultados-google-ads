@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Google Ads – Wow Fibra Óptica</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --success: #34a853;
+    --danger: #ea4335;
+    --warning: #fbbc04;
+    --neutral: #5f6368;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #e8eaed;
+    --text: #202124;
+    --text2: #5f6368;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Google Sans', Arial, sans-serif; background: var(--bg); color: var(--text); }
+
+  .header {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    color: white; padding: 32px 40px;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; }
+  .header .dates { display: flex; gap: 24px; margin-top: 16px; }
+  .header .date-badge {
+    background: rgba(255,255,255,0.18); border-radius: 8px;
+    padding: 8px 16px; font-size: 13px;
+  }
+  .header .date-badge strong { display: block; font-size: 15px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+
+  /* KPI Cards */
+  .section-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--primary); padding-left: 12px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .kpi-card {
+    background: var(--card); border-radius: 12px; padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid var(--border);
+    transition: transform .2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .kpi-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: var(--text); }
+  .kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; margin-top: 6px; padding: 2px 8px; border-radius: 20px; }
+  .delta-up { background: #e6f4ea; color: #137333; }
+  .delta-down { background: #fce8e6; color: #c5221f; }
+  .delta-neutral { background: #f1f3f4; color: #5f6368; }
+  .kpi-prev { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
+  .tab-btn {
+    padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer;
+    border: none; background: none; color: var(--text2); border-bottom: 3px solid transparent;
+    margin-bottom: -2px; transition: all .2s;
+  }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+  .tab-btn:hover { color: var(--primary); background: #f0f4ff; border-radius: 6px 6px 0 0; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Tables */
+  .table-wrap { background: var(--card); border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 28px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #f0f4ff; }
+  th { padding: 12px 14px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; color: var(--primary); letter-spacing: .4px; }
+  td { padding: 12px 14px; border-top: 1px solid var(--border); }
+  tr:hover td { background: #f8f9fa; }
+  .campaign-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .tag-busqueda { background: #e8f0fe; color: #1a73e8; }
+  .tag-pmax { background: #fce8e6; color: #c5221f; }
+  .badge-up { color: #137333; font-weight: 700; }
+  .badge-down { color: #c5221f; font-weight: 700; }
+  .arrow-up::before { content: "▲ "; font-size: 10px; }
+  .arrow-down::before { content: "▼ "; font-size: 10px; }
+
+  /* Actions */
+  .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .action-card {
+    background: var(--card); border-radius: 12px; padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid;
+  }
+  .action-card.priority-alta { border-color: #ea4335; }
+  .action-card.priority-media { border-color: #fbbc04; }
+  .action-card.priority-baja { border-color: #34a853; }
+  .action-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .action-title { font-weight: 700; font-size: 14px; }
+  .priority-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
+  .pt-alta { background: #fce8e6; color: #c5221f; }
+  .pt-media { background: #fef9e7; color: #b45309; }
+  .pt-baja { background: #e6f4ea; color: #137333; }
+  .action-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .action-expected {
+    margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;
+    font-size: 12px; color: var(--text2);
+  }
+  .action-expected strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+
+  /* Results Expected */
+  .results-section { background: var(--card); border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+  .result-item { text-align: center; padding: 16px; background: #f8f9fa; border-radius: 10px; }
+  .result-icon { font-size: 28px; margin-bottom: 8px; }
+  .result-metric { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .result-val { font-size: 20px; font-weight: 700; color: var(--primary); }
+  .result-desc { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  .footer { text-align: center; padding: 24px; color: var(--text2); font-size: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+
+  /* Chart bars */
+  .mini-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .mini-bar { height: 8px; border-radius: 4px; min-width: 4px; }
+  .bar-cur { background: #1a73e8; }
+  .bar-prev { background: #a8c7fa; }
+  .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text2); margin-bottom: 16px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+
+  @media(max-width:600px) {
+    .header { padding: 24px 16px; }
+    .container { padding: 16px; }
+    .kpi-value { font-size: 20px; }
+    .header .dates { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Reporte Google Ads — Wow Fibra Óptica</h1>
+  <p class="subtitle">Análisis comparativo semanal • Generado el 6 de marzo de 2026</p>
+  <div class="dates">
+    <div class="date-badge">
+      <strong>Semana Actual</strong>
+      02 Mar – 06 Mar 2026
+    </div>
+    <div class="date-badge">
+      <strong>Semana Referencia</strong>
+      02 Feb – 06 Feb 2026
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPIs Globales -->
+  <div class="section-title">📈 Resumen Ejecutivo — Todas las Campañas</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Inversión Total</div>
+      <div class="kpi-value">S/1,011</div>
+      <div class="kpi-delta delta-down arrow-down">-18.8%</div>
+      <div class="kpi-prev">Ref: S/1,245</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Impresiones</div>
+      <div class="kpi-value">15,837</div>
+      <div class="kpi-delta delta-up arrow-up">+35.3%</div>
+      <div class="kpi-prev">Ref: 11,504</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Clics</div>
+      <div class="kpi-value">705</div>
+      <div class="kpi-delta delta-down arrow-down">-8.3%</div>
+      <div class="kpi-prev">Ref: 785</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conversiones</div>
+      <div class="kpi-value">34.5</div>
+      <div class="kpi-delta delta-down arrow-down">-43.4%</div>
+      <div class="kpi-prev">Ref: 61.0</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">CPL Promedio</div>
+      <div class="kpi-value">S/29.3</div>
+      <div class="kpi-delta delta-down arrow-down">+55.3%</div>
+      <div class="kpi-prev">Ref: S/20.4</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Tasa de Conv.</div>
+      <div class="kpi-value">4.9%</div>
+      <div class="kpi-delta delta-down arrow-down">-36.4%</div>
+      <div class="kpi-prev">Ref: 7.8%</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('tab-detalle')">🔎 Detalle por Campaña</button>
+    <button class="tab-btn" onclick="showTab('tab-busqueda')">🔵 Búsqueda</button>
+    <button class="tab-btn" onclick="showTab('tab-pmax')">🔴 Performance Max</button>
+    <button class="tab-btn" onclick="showTab('tab-acciones')">⚡ Acciones</button>
+  </div>
+
+  <!-- Tab Detalle -->
+  <div id="tab-detalle" class="tab-content active">
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#1a73e8"></span>Semana Actual</span>
+      <span><span class="legend-dot" style="background:#a8c7fa"></span>Semana Referencia</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaña</th>
+            <th>Métrica</th>
+            <th>Sem. Actual<br>(02–06 Mar)</th>
+            <th>Sem. Referencia<br>(02–06 Feb)</th>
+            <th>Variación</th>
+            <th>Visual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="5"><span class="campaign-tag tag-busqueda">Búsqueda</span></td>
+            <td>Impresiones</td><td><strong>3,942</strong></td><td>7,455</td>
+            <td class="badge-down arrow-down">-47.1%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:53px"></div><div class="mini-bar bar-prev" style="width:100px"></div></div></td>
+          </tr>
+          <tr>
+            <td>Clics</td><td><strong>391</strong></td><td>557</td>
+            <td class="badge-down arrow-down">-29.8%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:70px"></div><div class="mini-bar bar-prev" style="width:100px"></div></div></td>
+          </tr>
+          <tr>
+            <td>CTR</td><td><strong>9.92%</strong></td><td>7.47%</td>
+            <td class="badge-up arrow-up">+32.8%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:100px"></div><div class="mini-bar bar-prev" style="width:75px"></div></div></td>
+          </tr>
+          <tr>
+            <td>Conversiones</td><td><strong>27.5</strong></td><td>44.0</td>
+            <td class="badge-down arrow-down">-37.5%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:62px"></div><div class="mini-bar bar-prev" style="width:100px"></div></div></td>
+          </tr>
+          <tr>
+            <td>CPL (S/)</td><td><strong>31.4</strong></td><td>24.7</td>
+            <td class="badge-down arrow-down">+27.1%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:100px;background:#ea4335"></div><div class="mini-bar bar-prev" style="width:79px;background:#fbbc04"></div></div></td>
+          </tr>
+          <tr>
+            <td rowspan="5"><span class="campaign-tag tag-pmax">P.Max</span></td>
+            <td>Impresiones</td><td><strong>11,895</strong></td><td>4,049</td>
+            <td class="badge-up arrow-up">+193.8%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:100px"></div><div class="mini-bar bar-prev" style="width:34px"></div></div></td>
+          </tr>
+          <tr>
+            <td>Clics</td><td><strong>314</strong></td><td>228</td>
+            <td class="badge-up arrow-up">+37.7%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:100px"></div><div class="mini-bar bar-prev" style="width:73px"></div></div></td>
+          </tr>
+          <tr>
+            <td>CTR</td><td><strong>2.64%</strong></td><td>5.63%</td>
+            <td class="badge-down arrow-down">-53.1%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:47px"></div><div class="mini-bar bar-prev" style="width:100px"></div></div></td>
+          </tr>
+          <tr>
+            <td>Conversiones</td><td><strong>7.0</strong></td><td>16.1</td>
+            <td class="badge-down arrow-down">-56.5%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:43px"></div><div class="mini-bar bar-prev" style="width:100px"></div></div></td>
+          </tr>
+          <tr>
+            <td>CPL (S/)</td><td><strong>21.0</strong></td><td>9.5</td>
+            <td class="badge-down arrow-down">+120.5%</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar bar-cur" style="width:100px;background:#ea4335"></div><div class="mini-bar bar-prev" style="width:45px;background:#34a853"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab Búsqueda -->
+  <div id="tab-busqueda" class="tab-content">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>CPC (S/)</th><th>Conversiones</th><th>Tasa Conv.</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>02 Mar</td><td>691</td><td>71</td><td>10.27%</td><td>2.38</td><td>4.0</td><td>5.63%</td></tr>
+          <tr><td>03 Mar</td><td>1,019</td><td>82</td><td>8.05%</td><td>2.38</td><td>6.0</td><td>7.32%</td></tr>
+          <tr><td>04 Mar</td><td>743</td><td>109</td><td>14.67%</td><td>1.91</td><td>8.5</td><td>7.80%</td></tr>
+          <tr><td>05 Mar</td><td>1,086</td><td>88</td><td>8.10%</td><td>2.37</td><td>7.0</td><td>7.95%</td></tr>
+          <tr><td>06 Mar</td><td>403</td><td>41</td><td>10.17%</td><td>2.04</td><td>2.0</td><td>4.88%</td></tr>
+          <tr style="background:#f0f4ff;font-weight:700">
+            <td>TOTAL / AVG</td><td>3,942</td><td>391</td><td>9.92%</td><td>2.21</td><td>27.5</td><td>7.03%</td>
+          </tr>
+          <tr style="background:#fff8e1;font-style:italic;color:#5f6368">
+            <td>Ref Feb 02–06</td><td>7,455</td><td>557</td><td>7.47%</td><td>1.95</td><td>44.0</td><td>7.90%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="background:#fff3cd;border-radius:10px;padding:16px;font-size:13px;color:#856404;border-left:4px solid #fbbc04">
+      <strong>⚠️ Observación:</strong> La campaña de Búsqueda muestra un CTR muy superior esta semana (+32.8%), señal de que los anuncios son relevantes. Sin embargo, las impresiones cayeron a la mitad, lo que indica una <strong>reducción de presupuesto o restricción de pujas</strong> que está limitando el alcance. Las conversiones cayeron un 37.5% directamente como consecuencia.
+    </div>
+  </div>
+
+  <!-- Tab PMax -->
+  <div id="tab-pmax" class="tab-content">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>CPC (S/)</th><th>Conversiones</th><th>Tasa Conv.</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>02 Mar</td><td>3,086</td><td>79</td><td>2.56%</td><td>0.45</td><td>1.0</td><td>0.67%</td></tr>
+          <tr><td>03 Mar</td><td>3,415</td><td>88</td><td>2.58%</td><td>0.44</td><td>4.0</td><td>2.53%</td></tr>
+          <tr><td>04 Mar</td><td>1,376</td><td>37</td><td>2.69%</td><td>0.77</td><td>0.0</td><td>0.00%</td></tr>
+          <tr><td>05 Mar</td><td>2,497</td><td>67</td><td>2.68%</td><td>0.40</td><td>2.0</td><td>1.32%</td></tr>
+          <tr><td>06 Mar</td><td>1,521</td><td>43</td><td>2.83%</td><td>0.40</td><td>0.0</td><td>0.00%</td></tr>
+          <tr style="background:#f0f4ff;font-weight:700">
+            <td>TOTAL / AVG</td><td>11,895</td><td>314</td><td>2.64%</td><td>0.47</td><td>7.0</td><td>2.23%</td>
+          </tr>
+          <tr style="background:#fff8e1;font-style:italic;color:#5f6368">
+            <td>Ref Feb 02–06</td><td>4,049</td><td>228</td><td>5.63%</td><td>0.67</td><td>16.1</td><td>7.06%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="background:#fce8e6;border-radius:10px;padding:16px;font-size:13px;color:#c5221f;border-left:4px solid #ea4335">
+      <strong>🚨 Alerta PMax:</strong> El CTR colapsó de 5.63% a 2.64% y la tasa de conversión bajó de 7.06% a 2.23%. Las impresiones se triplicaron pero con audiencias de muy baja calidad. El algoritmo de PMax está <strong>expandiendo su audiencia hacia segmentos no calificados</strong>, quemando presupuesto sin generar leads útiles. CPL se duplicó de S/9.5 a S/21.0.
+    </div>
+  </div>
+
+  <!-- Tab Acciones -->
+  <div id="tab-acciones" class="tab-content">
+    <div class="section-title">⚡ Plan de Acciones – Semana del 9 al 13 de Marzo 2026</div>
+    <div class="actions-grid">
+
+      <div class="action-card priority-alta">
+        <div class="action-header">
+          <div class="action-title">🔴 Revisar presupuesto de Búsqueda</div>
+          <span class="priority-tag pt-alta">Prioridad Alta</span>
+        </div>
+        <div class="action-desc">La campaña de Búsqueda perdió el 47% de sus impresiones vs. la semana de referencia. Verificar si hubo reducción manual de presupuesto diario o si la campaña entró en modo de presupuesto limitado. Aumentar presupuesto diario o liberarlo para recuperar el volumen perdido.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          Recuperar +40% de impresiones y +30% de conversiones en Búsqueda. CPL estimado: S/26–28.
+        </div>
+      </div>
+
+      <div class="action-card priority-alta">
+        <div class="action-header">
+          <div class="action-title">🔴 Agregar señales de audiencia a PMax</div>
+          <span class="priority-tag pt-alta">Prioridad Alta</span>
+        </div>
+        <div class="action-desc">El CTR de PMax cayó a 2.64% y la tasa de conversión a 2.23%. El algoritmo está mostrando anuncios a audiencias no calificadas. Ingresar a la campaña → "Grupos de recursos" → Agregar o refinar señales: lista de clientes actuales, visitantes del sitio, audiencias similares de convertidores, e intereses de conectividad/hogar.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          CTR sube de 2.64% hacia 4–5% en 7–14 días. CPL baja de S/21 hacia S/12–14.
+        </div>
+      </div>
+
+      <div class="action-card priority-alta">
+        <div class="action-header">
+          <div class="action-title">🔴 Activar exclusiones de audiencia en PMax</div>
+          <span class="priority-tag pt-alta">Prioridad Alta</span>
+        </div>
+        <div class="action-desc">Excluir audiencias que no convierten: zonas geográficas fuera de cobertura, segmentos demográficos con 0 conversiones históricas. Revisar el informe de "Información sobre la audiencia" en PMax para identificar los segmentos de bajo rendimiento y solicitar exclusiones a través del equipo de Google Ads.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          Reducción del desperdicio de impresiones en 30%. CPL total de ambas campañas baja a S/22–24.
+        </div>
+      </div>
+
+      <div class="action-card priority-media">
+        <div class="action-header">
+          <div class="action-title">🟡 Aprovechar el CTR alto de Búsqueda</div>
+          <span class="priority-tag pt-media">Prioridad Media</span>
+        </div>
+        <div class="action-desc">El CTR de Búsqueda subió a 9.92%, el más alto del período analizado. Esto indica alta relevancia de los anuncios actuales. Acción: Duplicar o escalar los grupos de anuncios con mejor CTR, revisar las palabras clave de mejor rendimiento y aumentar sus pujas máximas en un 15–20%.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          Incremento del volumen de clics calificados en +20%. Tasa de conversión se mantiene sobre 7%.
+        </div>
+      </div>
+
+      <div class="action-card priority-media">
+        <div class="action-header">
+          <div class="action-title">🟡 Revisar assets creativos de PMax</div>
+          <span class="priority-tag pt-media">Prioridad Media</span>
+        </div>
+        <div class="action-desc">Con un CTR tan bajo (2.64%), los creativos probablemente no están resonando en los canales de display/YouTube. Acción: Actualizar imágenes, titulares y descripciones en los grupos de recursos. Priorizar mensajes de oferta concreta (precio, velocidad, instalación) y agregar al menos 3 nuevos titulares y 2 nuevas descripciones.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          CTR de PMax sube +1 punto porcentual en los primeros 10 días.
+        </div>
+      </div>
+
+      <div class="action-card priority-baja">
+        <div class="action-header">
+          <div class="action-title">🟢 Monitoreo de conversiones Mar 7–8</div>
+          <span class="priority-tag pt-baja">Prioridad Normal</span>
+        </div>
+        <div class="action-desc">Verificar si el bajo volumen del 06 Mar (solo 403 impresiones en Búsqueda) es por pausa manual, restricción de presupuesto a fin de semana o un problema técnico. Revisar el panel de campañas el lunes 9 de marzo para confirmar que ambas campañas están activas y sin alertas.</div>
+        <div class="action-expected">
+          <strong>📈 Resultado esperado</strong>
+          Confirmación de operación normal al inicio de la semana siguiente.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Resultados Esperados Globales -->
+    <div class="results-section">
+      <div class="section-title">🎯 Resultados Esperados tras Acciones (Semana 9–13 Mar)</div>
+      <div class="results-grid">
+        <div class="result-item">
+          <div class="result-icon">📥</div>
+          <div class="result-metric">Conversiones totales</div>
+          <div class="result-val">48–55</div>
+          <div class="result-desc">vs. 34.5 actual (+39–59%)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">💰</div>
+          <div class="result-metric">CPL Proyectado</div>
+          <div class="result-val">S/22–26</div>
+          <div class="result-desc">vs. S/29.3 actual (-11–25%)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">📊</div>
+          <div class="result-metric">CTR PMax</div>
+          <div class="result-val">3.5–4.5%</div>
+          <div class="result-desc">vs. 2.64% actual (+33–70%)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">🖱️</div>
+          <div class="result-metric">CTR Búsqueda</div>
+          <div class="result-val">9–11%</div>
+          <div class="result-desc">Mantener nivel actual</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">👁️</div>
+          <div class="result-metric">Impresiones Búsqueda</div>
+          <div class="result-val">5,500+</div>
+          <div class="result-desc">vs. 3,942 actual (+40%)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">⏱️</div>
+          <div class="result-metric">Plazo de mejora</div>
+          <div class="result-val">7–14 días</div>
+          <div class="result-desc">PMax necesita aprendizaje</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Reporte generado para Wow – INFO CORPORATIVA | MCC: Raul Exon Marketing | Google Ads | Marzo 2026
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
