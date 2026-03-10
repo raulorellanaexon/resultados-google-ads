@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Optimización · Estudio Delgado Abogados · Marzo 2026</title>
+<style>
+  :root {
+    --azul: #1a56db;
+    --azul-claro: #e8f0fe;
+    --verde: #0e9f6e;
+    --verde-claro: #def7ec;
+    --rojo: #e02424;
+    --rojo-claro: #fde8e8;
+    --amarillo: #c27803;
+    --amarillo-claro: #fdf6b2;
+    --gris: #6b7280;
+    --gris-claro: #f9fafb;
+    --borde: #e5e7eb;
+    --texto: #111827;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f3f4f6; color: var(--texto); line-height: 1.5; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1e3a8a 0%, #1a56db 100%); color: white; padding: 36px 48px; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .header p { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+  .badge-date { background: rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; text-align: right; }
+  .badge-date span { display: block; font-size: 11px; opacity: 0.75; margin-bottom: 2px; }
+
+  /* CONTAINER */
+  .container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+
+  /* SECTIONS */
+  .section { background: white; border-radius: 12px; border: 1px solid var(--borde); padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .section-title { font-size: 18px; font-weight: 700; color: var(--texto); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-title .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .icon-blue { background: var(--azul-claro); }
+  .icon-green { background: var(--verde-claro); }
+  .icon-yellow { background: var(--amarillo-claro); }
+  .icon-purple { background: #f5f3ff; }
+
+  /* ALERTA EJECUTIVA */
+  .alerta { border-left: 4px solid var(--azul); background: var(--azul-claro); border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; }
+  .alerta strong { color: var(--azul); font-size: 15px; }
+  .alerta p { font-size: 14px; color: #374151; margin-top: 6px; }
+
+  /* CAMBIOS GRID */
+  .cambios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cambio-card { border-radius: 10px; padding: 20px; border: 1px solid var(--borde); }
+  .cambio-card.blue { background: var(--azul-claro); border-color: #93c5fd; }
+  .cambio-card.green { background: var(--verde-claro); border-color: #6ee7b7; }
+  .cambio-card.purple { background: #f5f3ff; border-color: #c4b5fd; }
+  .cambio-num { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .cambio-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .cambio-card ul { padding-left: 16px; list-style-type: none; }
+  .cambio-card li { font-size: 13px; color: #374151; margin-bottom: 6px; position: relative; }
+  .cambio-card li::before { content: "•"; position: absolute; left: -12px; color: currentColor; }
+
+  /* TABLAS */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+  thead th { background: #f3f4f6; padding: 12px; text-align: left; font-size: 11px; text-transform: uppercase; color: var(--gris); border-bottom: 2px solid var(--borde); }
+  tbody td { padding: 14px 12px; border-bottom: 1px solid var(--borde); }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .tag-purple { background: #f5f3ff; color: #7c3aed; }
+  .tag-green { background: var(--verde-claro); color: var(--verde); }
+  .tag-blue { background: var(--azul-claro); color: var(--azul); }
+  .tag-gray { background: #f3f4f6; color: var(--gris); }
+
+  /* NEGATIVAS */
+  .kw-neg-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .kw-neg { background: var(--rojo-claro); border: 1px solid #fca5a5; color: #991b1b; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+  /* PROYECCIÓN COMPARATIVA */
+  .comparison-table { width: 100%; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+  .comparison-table th { background: #f8fafc; color: var(--gris); font-weight: 700; }
+  .val-new { color: var(--verde); font-weight: 800; font-size: 16px; }
+  .val-old { color: var(--gris); font-size: 13px; text-decoration: line-through; opacity: 0.7; }
+  .impact-badge { background: var(--verde-claro); color: var(--verde); font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+  @media (max-width: 768px) {
+    .cambios-grid { grid-template-columns: 1fr; }
+    .header { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>📋 Reporte de Optimización Estratégica</h1>
+      <p>Estudio Delgado Abogados · Gestión Google Ads · Marzo 2026</p>
+    </div>
+    <div class="badge-date">
+      <span>Fecha de actualización</span>
+      10 Marzo 2026
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="alerta">
+    <strong>🎯 Enfoque de la optimización</strong>
+    <p>Se ha escalado la inversión a <strong>S/ 105 diarios</strong> repartidos en 3 campañas estratégicas. Esta gestión prioriza la captación en distritos premium (Lima Top) y la eliminación de clics no cualificados mediante un filtrado estricto de términos de búsqueda.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-blue">✅</div>
+      Acciones Realizadas (10 Mar 2026)
+    </div>
+    <div class="cambios-grid">
+      <div class="cambio-card blue">
+        <div class="cambio-num" style="color: var(--azul);">Inversión</div>
+        <h3>💰 Nivelación de Presupuesto</h3>
+        <ul>
+          <li>Búsqueda: S/ 35/día</li>
+          <li>PMAX General: S/ 35/día</li>
+          <li><strong>PMAX Lima Top: S/ 35/día</strong></li>
+          <li>Total diario: <strong>S/ 105.00</strong></li>
+        </ul>
+      </div>
+      <div class="cambio-card purple">
+        <div class="cambio-num" style="color: #7c3aed;">Cobertura</div>
+        <h3>📍 Nueva Campaña Lima Top</h3>
+        <ul>
+          <li>Enfoque: Perfil NSE A/B.</li>
+          <li>Ubicación: Distritos estratégicos.</li>
+          <li>Estrategia: Performance Max.</li>
+        </ul>
+      </div>
+      <div class="cambio-card green">
+        <div class="cambio-num" style="color: var(--verde);">Filtros</div>
+        <h3>🚫 Control de Calidad</h3>
+        <ul>
+          <li>Bloqueo de términos informativos.</li>
+          <li>Pausa estratégica los Sábados.</li>
+          <li>Optimización de horario (Prime).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-green">📈</div>
+      Proyección de Impacto: Con Cambios vs. Sin Cambios
+    </div>
+    <p style="font-size: 13px; margin-bottom: 15px;">Comparativa del rendimiento estimado aplicando la nueva estrategia vs. mantener la configuración anterior (Baseline):</p>
+    
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Periodo</th>
+          <th>Inversión (S/)</th>
+          <th>Leads Estimados</th>
+          <th>Mejora en Volumen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Esta Semana</strong> (10 - 15 Mar)</td>
+          <td>S/ 525</td>
+          <td>
+            <div class="val-new">~31 leads</div>
+            <div class="val-old">vs 17 leads</div>
+          </td>
+          <td><span class="impact-badge">+82% leads</span></td>
+        </tr>
+        <tr>
+          <td><strong>Próxima Semana</strong> (16 - 22 Mar)</td>
+          <td>S/ 630</td>
+          <td>
+            <div class="val-new">~37 leads</div>
+            <div class="val-old">vs 20 leads</div>
+          </td>
+          <td><span class="impact-badge">+85% leads</span></td>
+        </tr>
+        <tr style="background: #f0fdf4;">
+          <td><strong>Mes Completo</strong> (Proyectado)</td>
+          <td>S/ 2,730</td>
+          <td>
+            <div class="val-new">~161 leads</div>
+            <div class="val-old">vs 84 leads</div>
+          </td>
+          <td><span class="impact-badge">+91% leads</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 11px; color: var(--gris); margin-top: 10px;">* Cálculos basados en un presupuesto diario de S/ 105 (Nuevo) vs S/ 61.27 (Histórico) y una mejora estimada de CPA del 22% por optimización geográfica y horaria.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-purple">📍</div>
+      Segmentación Geográfica: Campaña Lima Top
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Distrito Seleccionado</th>
+          <th>Ciudad / Provincia</th>
+          <th>Cobertura Estimada</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Santiago de Surco</strong></td><td>Lima, Perú</td><td>853,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+        <tr><td><strong>Miraflores</strong></td><td>Lima, Perú</td><td>593,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+        <tr><td><strong>San Isidro</strong></td><td>Lima, Perú</td><td>539,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+        <tr><td><strong>San Borja</strong></td><td>Lima, Perú</td><td>428,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+        <tr><td><strong>La Molina</strong></td><td>Lima, Perú</td><td>294,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+        <tr><td><strong>Barranco</strong></td><td>Lima, Perú</td><td>169,000</td><td><span class="tag tag-green">Activo</span></td></tr>
+      </tbody>
+      <tfoot>
+        <tr style="background: var(--gris-claro); font-weight: 700;">
+          <td colspan="2" style="text-align: right;">Alcance Total Distritos Top:</td>
+          <td colspan="2" style="color: var(--azul);">~2,876,000 impresiones potenciales</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <div class="icon icon-yellow">🛡️</div>
+      Protección de Inversión: Palabras Negativas
+    </div>
+    <p style="font-size: 13px;">Se han bloqueado términos que atraen usuarios sin intención de contratación profesional:</p>
+    <div class="kw-neg-grid">
+      <span class="kw-neg">"consulta gratuita"</span>
+      <span class="kw-neg">"asesoría gratuita"</span>
+      <span class="kw-neg">"orientación legal gratuita"</span>
+      <span class="kw-neg">"asistencia legal gratuita"</span>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align: center; padding: 40px; color: var(--gris); font-size: 12px;">
+  Reporte de optimización · Elaborado para Estudio Delgado Abogados · 2026
+</div>
+
+</body>
+</html>
