@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Preparación de Pauta — House/Go Inmobiliaria</title>
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --gold: #f5a623;
+    --green: #27ae60;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+    --border: #e0e0e0;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: white;
+    padding: 48px 40px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(233,69,96,0.15);
+  }
+  .header::after {
+    content: '';
+    position: absolute; bottom: -80px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(245,166,35,0.10);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(233,69,96,0.2);
+    border: 1px solid rgba(233,69,96,0.5);
+    color: #ff8fa3;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .header h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+  .header h1 span { color: #e94560; }
+  .header p { font-size: 15px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 12px 24px;
+    text-align: center;
+  }
+  .header-meta-item .label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .header-meta-item .value { font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
+
+  /* NAV TABS */
+  .tabs-bar {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    padding: 0 32px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    padding: 16px 22px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover:not(.active) { color: var(--accent2); border-bottom-color: #ddd; }
+
+  /* SECTIONS */
+  .section { display: none; padding: 36px 40px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .icon-red { background: rgba(233,69,96,0.1); }
+  .icon-blue { background: rgba(15,52,96,0.1); }
+  .icon-gold { background: rgba(245,166,35,0.1); }
+  .icon-green { background: rgba(39,174,96,0.1); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* KPI BOXES */
+  .kpi-box {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid transparent;
+    text-align: center;
+  }
+  .kpi-box.red { border-top-color: var(--accent); }
+  .kpi-box.blue { border-top-color: var(--accent2); }
+  .kpi-box.gold { border-top-color: var(--gold); }
+  .kpi-box.green { border-top-color: var(--green); }
+  .kpi-box .kpi-val { font-size: 28px; font-weight: 800; color: var(--primary); }
+  .kpi-box .kpi-label { font-size: 12px; color: var(--gray); margin-top: 4px; font-weight: 500; }
+  .kpi-box .kpi-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    background: #f5f7fa;
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--gray);
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+    color: #2c2c2c;
+  }
+  tr:hover td { background: #fafbff; }
+  tr:last-child td { border-bottom: none; }
+
+  /* CAMPAIGN TREE */
+  .campaign-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .campaign-header {
+    padding: 16px 22px;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .campaign-header:hover { filter: brightness(0.97); }
+  .camp1 .campaign-header { background: linear-gradient(90deg, rgba(15,52,96,0.08), rgba(15,52,96,0.03)); color: #0f3460; border-bottom: 2px solid rgba(15,52,96,0.15); }
+  .camp2 .campaign-header { background: linear-gradient(90deg, rgba(233,69,96,0.08), rgba(233,69,96,0.03)); color: #c0392b; border-bottom: 2px solid rgba(233,69,96,0.15); }
+  .campaign-body { padding: 16px 22px 20px; }
+  .conjunto-block {
+    margin-bottom: 14px;
+    background: #fafbfd;
+    border-radius: 8px;
+    border: 1px solid #eaecf2;
+    overflow: hidden;
+  }
+  .conjunto-header {
+    padding: 11px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #444;
+    background: #f2f4f8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .ads-list {
+    padding: 10px 16px 12px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .ad-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #555;
+  }
+  .ad-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-video { background: #e8f0fe; color: #1a73e8; }
+  .badge-img { background: #fce8f3; color: #b5179e; }
+  .arrow { margin-left: auto; font-size: 12px; transition: transform 0.2s; }
+  .collapsed .arrow { transform: rotate(-90deg); }
+  .collapsible-content { transition: max-height 0.3s ease; overflow: hidden; }
+
+  /* PILLS */
+  .pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 3px 3px 3px 0;
+  }
+  .pill-blue { background: #e8f4fd; color: #1565c0; }
+  .pill-red { background: #fdecea; color: #c0392b; }
+  .pill-green { background: #e8f5e9; color: #2e7d32; }
+  .pill-gray { background: #f0f0f0; color: #555; }
+
+  /* ALERT BOXES */
+  .alert {
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-blue { background: #e8f4fd; border-left: 4px solid #1565c0; color: #1a237e; }
+  .alert-orange { background: #fff8e1; border-left: 4px solid #f57f17; color: #5d4037; }
+  .alert-green { background: #e8f5e9; border-left: 4px solid #2e7d32; color: #1b5e20; }
+  .alert-red { background: #fdecea; border-left: 4px solid #c0392b; color: #7f0000; }
+
+  /* BUDGET VISUAL */
+  .budget-bar-container { margin: 10px 0; }
+  .budget-bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; font-weight: 600; }
+  .budget-bar-bg { background: #eee; border-radius: 6px; height: 10px; overflow: hidden; }
+  .budget-bar-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
+
+  /* METRIC CARDS */
+  .metric-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid transparent;
+  }
+  .metric-card.priority-high { border-left-color: var(--accent); }
+  .metric-card.priority-mid { border-left-color: var(--gold); }
+  .metric-card.priority-low { border-left-color: var(--green); }
+  .metric-name { font-weight: 700; font-size: 14px; color: var(--primary); }
+  .metric-ref { font-size: 12px; color: var(--gray); margin-top: 4px; }
+  .metric-action { font-size: 12px; color: #c0392b; margin-top: 6px; font-style: italic; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13.5px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-circle {
+    width: 22px; height: 22px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1px;
+    font-size: 12px;
+  }
+  .check-circle.done { background: var(--green); border-color: var(--green); color: white; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--primary);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 28px;
+    font-size: 12px;
+    margin-top: 48px;
+  }
+  .footer strong { color: rgba(255,255,255,0.85); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* SECTION INTRO */
+  .section-intro {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .header { padding: 32px 20px; }
+    .header h1 { font-size: 26px; }
+    .section { padding: 20px 16px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .tabs-bar { padding: 0 8px; }
+    .card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="badge">Propuesta de Pauta Digital</div>
+  <h1>Meta Ads — <span>House/Go Inmobiliaria</span></h1>
+  <p>Estrategia de captación de propietarios que desean vender su inmueble</p>
+  <div class="header-meta">
+    <div class="header-meta-item">
+      <div class="label">Plataforma</div>
+      <div class="value">Meta Ads</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="label">Inversión mensual</div>
+      <div class="value">S/ 1,000</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="label">Inversión diaria</div>
+      <div class="value">~S/ 33</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="label">Duración inicial</div>
+      <div class="value">1 mes</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="label">Objetivo</div>
+      <div class="value">Captación de leads</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('resumen')">📊 Resumen</button>
+  <button class="tab-btn" onclick="showTab('estructura')">🏗️ Estructura</button>
+  <button class="tab-btn" onclick="showTab('presupuesto')">💰 Presupuesto</button>
+  <button class="tab-btn" onclick="showTab('publico')">🎯 Públicos</button>
+  <button class="tab-btn" onclick="showTab('metricas')">📈 Métricas</button>
+  <button class="tab-btn" onclick="showTab('checklist')">✅ Checklist</button>
+</div>
+
+<!-- ===================== RESUMEN ===================== -->
+<div id="tab-resumen" class="section active">
+  <p class="section-intro">Visión general de la estrategia de pauta para el primer mes de House/Go Inmobiliaria en Meta Ads.</p>
+
+  <div class="grid-4" style="margin-bottom:24px;">
+    <div class="kpi-box red">
+      <div class="kpi-val">2</div>
+      <div class="kpi-label">Campañas activas</div>
+      <div class="kpi-sub">Formulario + WhatsApp</div>
+    </div>
+    <div class="kpi-box blue">
+      <div class="kpi-val">4</div>
+      <div class="kpi-label">Conjuntos de anuncios</div>
+      <div class="kpi-sub">2 por campaña</div>
+    </div>
+    <div class="kpi-box gold">
+      <div class="kpi-val">12</div>
+      <div class="kpi-label">Anuncios totales</div>
+      <div class="kpi-sub">3 por conjunto</div>
+    </div>
+    <div class="kpi-box green">
+      <div class="kpi-val">2</div>
+      <div class="kpi-label">Zonas geográficas</div>
+      <div class="kpi-sub">Norte/Centro y Moderna/Sur</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">🎯</div>Objetivo del negocio</div>
+      <p style="font-size:14px;line-height:1.7;color:#444;">
+        House/Go Inmobiliaria busca captar <strong>propietarios que desean vender su inmueble</strong> en Lima. 
+        Una vez captado el lead, el equipo comercial realiza la tasación, publica el inmueble 
+        y cobra una <strong>comisión por venta exitosa</strong>. El costo de captación del lead 
+        es lo que estamos optimizando.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">💡</div>Enfoque estratégico</div>
+      <p style="font-size:14px;line-height:1.7;color:#444;">
+        Al ser una cuenta nueva <strong>sin historial publicitario</strong>, la prioridad es 
+        concentrar el presupuesto, generar señal rápida y dejar que el algoritmo de Meta 
+        identifique al propietario ideal. Usamos <strong>segmentación amplia + 
+        creatividad específica</strong> como filtro principal.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-gold">🗂️</div>¿Por qué esta estructura?</div>
+    <div class="grid-3">
+      <div style="padding:14px;background:#f8f9fa;border-radius:10px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">📋</div>
+        <div style="font-weight:700;font-size:14px;color:#0f3460;">Campaña 1: Formulario</div>
+        <div style="font-size:12.5px;color:#666;margin-top:6px;line-height:1.6;">El usuario llena sus datos dentro de Facebook/Instagram sin salir de la app. Alta tasa de conversión y fácil de medir desde el inicio.</div>
+      </div>
+      <div style="padding:14px;background:#f8f9fa;border-radius:10px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">💬</div>
+        <div style="font-weight:700;font-size:14px;color:#c0392b;">Campaña 2: WhatsApp</div>
+        <div style="font-size:12.5px;color:#666;margin-top:6px;line-height:1.6;">El usuario hace clic y abre un chat directo con House/Go Inmobiliaria. Lead más cálido, pero requiere respuesta comercial rápida (máx. 5 minutos).</div>
+      </div>
+      <div style="padding:14px;background:#f8f9fa;border-radius:10px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">📍</div>
+        <div style="font-weight:700;font-size:14px;color:#27ae60;">Zonas como eje</div>
+        <div style="font-size:12.5px;color:#666;margin-top:6px;line-height:1.6;">Los conjuntos se dividen por zona geográfica operativa, no por formato. Así podemos ver en qué zona el CPL es más bajo y escalar ahí.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-orange">
+    <div class="alert-icon">⚠️</div>
+    <div><strong>Importante para el equipo comercial:</strong> Los leads de WhatsApp deben recibir respuesta en menos de 5 minutos. Un lead ignorado por más de 1 hora se enfría significativamente. Esto impacta directamente el retorno de la inversión.</div>
+  </div>
+</div>
+
+<!-- ===================== ESTRUCTURA ===================== -->
+<div id="tab-estructura" class="section">
+  <p class="section-intro">Detalle de las 2 campañas, 4 conjuntos y 12 anuncios planificados.</p>
+
+  <!-- CAMPAÑA 1 -->
+  <div class="campaign-block camp1">
+    <div class="campaign-header" onclick="toggleBlock('camp1-body', this)">
+      <span>📋</span>
+      <span>CAMPAÑA 1 — Generación de Leads con Formulario</span>
+      <span style="margin-left:auto;font-size:12px;font-weight:400;color:#888;">Objetivo: Leads · Optimización: Formulario instantáneo</span>
+      <span class="arrow" style="margin-left:16px;">▼</span>
+    </div>
+    <div class="campaign-body" id="camp1-body">
+      <div class="grid-2">
+        <div>
+          <div class="conjunto-block">
+            <div class="conjunto-header" onclick="toggleBlock('c1a-ads', this)">
+              <span>📂</span>
+              <span>Conjunto 1A — Lima Norte/Centro</span>
+              <span class="arrow" style="margin-left:auto;">▼</span>
+            </div>
+            <div class="collapsible-content" id="c1a-ads">
+              <div class="ads-list">
+                <div class="ad-item"><span class="ad-badge badge-video">🎬 Video</span> Anuncio 1 — Proceso de venta con House/Go Inmobiliaria</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 2 — Propuesta de valor directa</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 3 — Beneficio + urgencia</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#999;padding:0 6px 6px;">
+            Distritos: Los Olivos, Independencia, SMP, Comas, Breña, Pueblo Libre, Magdalena, Jesús María, Lince, Rímac
+          </div>
+        </div>
+        <div>
+          <div class="conjunto-block">
+            <div class="conjunto-header" onclick="toggleBlock('c1b-ads', this)">
+              <span>📂</span>
+              <span>Conjunto 1B — Lima Moderna/Sur</span>
+              <span class="arrow" style="margin-left:auto;">▼</span>
+            </div>
+            <div class="collapsible-content" id="c1b-ads">
+              <div class="ads-list">
+                <div class="ad-item"><span class="ad-badge badge-video">🎬 Video</span> Anuncio 1 — Proceso de venta con House/Go Inmobiliaria</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 2 — Propuesta de valor directa</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 3 — Beneficio + urgencia</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#999;padding:0 6px 6px;">
+            Distritos: Miraflores, San Isidro, Surco, La Molina, San Borja, Barranco, Surquillo, Chorrillos
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPAÑA 2 -->
+  <div class="campaign-block camp2">
+    <div class="campaign-header" onclick="toggleBlock('camp2-body', this)">
+      <span>💬</span>
+      <span>CAMPAÑA 2 — Click to WhatsApp</span>
+      <span style="margin-left:auto;font-size:12px;font-weight:400;color:#888;">Objetivo: Mensajes · Optimización: Conversaciones iniciadas</span>
+      <span class="arrow" style="margin-left:16px;">▼</span>
+    </div>
+    <div class="campaign-body" id="camp2-body">
+      <div class="grid-2">
+        <div>
+          <div class="conjunto-block">
+            <div class="conjunto-header" onclick="toggleBlock('c2a-ads', this)">
+              <span>📂</span>
+              <span>Conjunto 2A — Lima Norte/Centro</span>
+              <span class="arrow" style="margin-left:auto;">▼</span>
+            </div>
+            <div class="collapsible-content" id="c2a-ads">
+              <div class="ads-list">
+                <div class="ad-item"><span class="ad-badge badge-video">🎬 Video</span> Anuncio 1 — Proceso de venta con House/Go Inmobiliaria</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 2 — Propuesta de valor directa</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 3 — Beneficio + urgencia</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#999;padding:0 6px 6px;">
+            Mismos distritos que Conjunto 1A
+          </div>
+        </div>
+        <div>
+          <div class="conjunto-block">
+            <div class="conjunto-header" onclick="toggleBlock('c2b-ads', this)">
+              <span>📂</span>
+              <span>Conjunto 2B — Lima Moderna/Sur</span>
+              <span class="arrow" style="margin-left:auto;">▼</span>
+            </div>
+            <div class="collapsible-content" id="c2b-ads">
+              <div class="ads-list">
+                <div class="ad-item"><span class="ad-badge badge-video">🎬 Video</span> Anuncio 1 — Proceso de venta con House/Go Inmobiliaria</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 2 — Propuesta de valor directa</div>
+                <div class="ad-item"><span class="ad-badge badge-img">🖼️ Imagen</span> Anuncio 3 — Beneficio + urgencia</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#999;padding:0 6px 6px;">
+            Mismos distritos que Conjunto 1B
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIAL CREATIVO -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-gold">🎨</div>Material creativo que debe preparar House/Go Inmobiliaria</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Pieza</th>
+          <th>Formato</th>
+          <th>Uso en</th>
+          <th>Especificaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Video principal</strong></td>
+          <td><span class="pill pill-blue">Video</span></td>
+          <td>4 conjuntos (mismo video)</td>
+          <td>9:16 vertical, 15–30 seg, subtítulos, logo + CTA al final</td>
+        </tr>
+        <tr>
+          <td><strong>Imagen propuesta de valor</strong></td>
+          <td><span class="pill pill-red">Imagen</span></td>
+          <td>Anuncio 2 de cada conjunto</td>
+          <td>1080x1080 o 1080x1920, texto mínimo, branding visible</td>
+        </tr>
+        <tr>
+          <td><strong>Imagen beneficio/urgencia</strong></td>
+          <td><span class="pill pill-red">Imagen</span></td>
+          <td>Anuncio 3 de cada conjunto</td>
+          <td>1080x1080 o 1080x1920, diferente de la anterior</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert alert-blue" style="margin-top:16px;">
+      <div class="alert-icon">ℹ️</div>
+      <div>Con 1 video y 2 imágenes diferentes se cubren los 12 anuncios de toda la estructura. El mismo creativo se reutiliza en los 4 conjuntos, variando únicamente el <strong>copy del anuncio</strong> según la zona.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PRESUPUESTO ===================== -->
+<div id="tab-presupuesto" class="section">
+  <p class="section-intro">Distribución recomendada del presupuesto mensual de S/ 1,000 entre campañas y conjuntos.</p>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">💰</div>Distribución por campaña</div>
+      <div class="budget-bar-container">
+        <div class="budget-bar-label"><span>📋 Campaña 1 — Formulario</span><span style="color:#0f3460;font-weight:700;">S/ 600 / mes</span></div>
+        <div class="budget-bar-bg"><div class="budget-bar-fill" style="width:60%;background:#0f3460;"></div></div>
+      </div>
+      <div style="color:#888;font-size:12px;margin-bottom:16px;">60% del presupuesto total — S/ 20/día</div>
+      <div class="budget-bar-container">
+        <div class="budget-bar-label"><span>💬 Campaña 2 — WhatsApp</span><span style="color:#c0392b;font-weight:700;">S/ 400 / mes</span></div>
+        <div class="budget-bar-bg"><div class="budget-bar-fill" style="width:40%;background:#e94560;"></div></div>
+      </div>
+      <div style="color:#888;font-size:12px;">40% del presupuesto total — S/ 13/día</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📊</div>Desglose por conjunto</div>
+      <table>
+        <thead>
+          <tr><th>Conjunto</th><th>Campaña</th><th>Diario</th><th>Mensual</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1A — Norte/Centro</td><td><span class="pill pill-blue">Formulario</span></td><td><strong>S/ 10</strong></td><td>S/ 300</td></tr>
+          <tr><td>1B — Moderna/Sur</td><td><span class="pill pill-blue">Formulario</span></td><td><strong>S/ 10</strong></td><td>S/ 300</td></tr>
+          <tr><td>2A — Norte/Centro</td><td><span class="pill pill-red">WhatsApp</span></td><td><strong>S/ 6.50</strong></td><td>S/ 195</td></tr>
+          <tr><td>2B — Moderna/Sur</td><td><span class="pill pill-red">WhatsApp</span></td><td><strong>S/ 6.50</strong></td><td>S/ 195</td></tr>
+          <tr style="background:#f5f7fa;"><td colspan="2"><strong>TOTAL</strong></td><td><strong>~S/ 33</strong></td><td><strong>S/ 990</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-green">📉</div>Proyección de resultados esperados (mes 1)</div>
+    <p style="font-size:13px;color:#888;margin-bottom:16px;">Estimados conservadores basados en benchmarks del sector inmobiliario en Lima. Son proyecciones referenciales, no garantías.</p>
+    <table>
+      <thead>
+        <tr><th>Métrica</th><th>Campaña Formulario</th><th>Campaña WhatsApp</th><th>Nota</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CPL estimado</td><td>S/ 20 – S/ 45</td><td>S/ 25 – S/ 55</td><td>Varía según creativo y zona</td></tr>
+        <tr><td>Leads estimados (mes)</td><td>13 – 30</td><td>7 – 16</td><td>Con inversión asignada</td></tr>
+        <tr><td>CTR esperado</td><td>0.8% – 2.5%</td><td>1.0% – 3.0%</td><td>Video tiende a ser mayor</td></tr>
+        <tr><td>Alcance estimado</td><td>8,000 – 20,000 personas</td><td>5,000 – 13,000 personas</td><td>Por mes, por zona</td></tr>
+        <tr><td>Leads calificados (~50%)</td><td>6 – 15</td><td>3 – 8</td><td>Filtrado en formulario</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-green" style="margin-top:16px;">
+      <div class="alert-icon">💡</div>
+      <div><strong>¿Cuándo escalar el presupuesto?</strong> Si en la semana 2 el CPL está por debajo de S/ 35 y los leads son calificados, es momento de conversar un incremento de inversión en los conjuntos que mejor funcionen.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PÚBLICO ===================== -->
+<div id="tab-publico" class="section">
+  <p class="section-intro">Configuración detallada de audiencias para cada uno de los 4 conjuntos de anuncios.</p>
+
+  <div class="alert alert-blue">
+    <div class="alert-icon">🧠</div>
+    <div><strong>¿Por qué no usamos intereses específicos?</strong> En cuentas nuevas, Meta puede encontrar al propietario correcto si el copy es específico ("¿Tienes un inmueble que quieres vender?"). Los intereses de "real estate" en Perú capturan más compradores que vendedores. La creatividad actúa como el filtro real de audiencia.</div>
+  </div>
+
+  <!-- TABLA DE CONFIGURACIÓN -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">🎯</div>Configuración de Públicos — Vista Comparativa</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Parámetro</th>
+          <th>Conjunto 1A y 2A<br><small>Lima Norte/Centro</small></th>
+          <th>Conjunto 1B y 2B<br><small>Lima Moderna/Sur</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Distritos</strong></td>
+          <td>Los Olivos, Independencia, SMP, Comas, Breña, Pueblo Libre, Magdalena, Jesús María, Lince, Rímac</td>
+          <td>Miraflores, San Isidro, Surco, La Molina, San Borja, Barranco, Surquillo, Chorrillos</td>
+        </tr>
+        <tr>
+          <td><strong>Tipo de ubicación</strong></td>
+          <td colspan="2">✅ Personas que <strong>viven</strong> en esta ubicación (NO "estuvieron recientemente")</td>
+        </tr>
+        <tr>
+          <td><strong>Edad</strong></td>
+          <td>35 a 65+</td>
+          <td>38 a 65+</td>
+        </tr>
+        <tr>
+          <td><strong>Género</strong></td>
+          <td colspan="2">Todos</td>
+        </tr>
+        <tr>
+          <td><strong>Idioma</strong></td>
+          <td colspan="2">Español</td>
+        </tr>
+        <tr>
+          <td><strong>Intereses</strong></td>
+          <td colspan="2">❌ Ninguno — Segmentación amplia (Advantage+ Audience activado)</td>
+        </tr>
+        <tr>
+          <td><strong>Placements</strong></td>
+          <td colspan="2">Automático (Advantage+ Placements) — Meta distribuye entre Feed, Stories, Reels, Messenger</td>
+        </tr>
+        <tr>
+          <td><strong>Exclusiones</strong></td>
+          <td colspan="2">Excluir personas que ya completaron el formulario (activar desde semana 2)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DISTRITOS DETALLE -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">📍</div>Lima Norte/Centro — Distritos</div>
+      <div style="margin-bottom:10px;">
+        <span class="pill pill-blue">Los Olivos</span>
+        <span class="pill pill-blue">Independencia</span>
+        <span class="pill pill-blue">San Martín de Porres</span>
+        <span class="pill pill-blue">Comas</span>
+        <span class="pill pill-blue">Breña</span>
+        <span class="pill pill-blue">Pueblo Libre</span>
+        <span class="pill pill-blue">Magdalena del Mar</span>
+        <span class="pill pill-blue">Jesús María</span>
+        <span class="pill pill-blue">Lince</span>
+        <span class="pill pill-blue">Rímac</span>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:13px;color:#666;">
+        <strong>Perfil de propietario:</strong> Edad 35–65+. Propiedades de ticket medio. Alta densidad poblacional.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📍</div>Lima Moderna/Sur — Distritos</div>
+      <div style="margin-bottom:10px;">
+        <span class="pill pill-red">Miraflores</span>
+        <span class="pill pill-red">San Isidro</span>
+        <span class="pill pill-red">Surco</span>
+        <span class="pill pill-red">La Molina</span>
+        <span class="pill pill-red">San Borja</span>
+        <span class="pill pill-red">Barranco</span>
+        <span class="pill pill-red">Surquillo</span>
+        <span class="pill pill-red">Chorrillos</span>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:13px;color:#666;">
+        <strong>Perfil de propietario:</strong> Edad 38–65+. Propiedades de ticket alto/medio-alto. Mayor poder adquisitivo.
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-gold">📝</div>Configuración del Formulario Instantáneo (Campaña 1)</div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:13.5px;color:#444;margin-bottom:14px;line-height:1.6;">Usar tipo <strong>"Mayor intención"</strong> (Higher Intent). Esto agrega una pantalla de revisión que reduce leads falsos. Activar verificación por SMS para mejorar calidad.</p>
+        <table>
+          <thead><tr><th>#</th><th>Pregunta</th><th>Tipo</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Nombre completo</td><td><span class="pill pill-gray">Automático</span></td></tr>
+            <tr><td>2</td><td>Número de celular</td><td><span class="pill pill-gray">Automático</span></td></tr>
+            <tr><td>3</td><td>Distrito del inmueble</td><td><span class="pill pill-blue">Texto libre</span></td></tr>
+            <tr><td>4</td><td>¿Qué tipo de inmueble tienes? (casa / depa / terreno / otro)</td><td><span class="pill pill-blue">Opción múltiple</span></td></tr>
+            <tr><td>5</td><td>¿En cuánto tiempo deseas vender? (0–3 meses / 3–6 meses / sin urgencia)</td><td><span class="pill pill-blue">Opción múltiple</span></td></tr>
+            <tr><td>6</td><td>¿Eres el propietario directo del inmueble?</td><td><span class="pill pill-blue">Sí / No</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="alert alert-orange" style="margin-top:0;">
+          <div class="alert-icon">⚠️</div>
+          <div><strong>Máximo 6 preguntas.</strong> Más preguntas = menos conversiones. Las preguntas 3–6 sirven para calificar al lead antes de que el equipo comercial lo contacte.</div>
+        </div>
+        <div class="alert alert-green" style="margin-top:12px;">
+          <div class="alert-icon">✅</div>
+          <div><strong>WhatsApp pre-fill message:</strong> Para la Campaña 2, configurar un mensaje prefilled en el chat de WhatsApp como: <em>"Hola, me interesa saber más sobre cómo vender mi inmueble con House/Go Inmobiliaria."</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MÉTRICAS ===================== -->
+<div id="tab-metricas" class="section">
+  <p class="section-intro">Indicadores clave que deben revisarse semanalmente para tomar decisiones de optimización.</p>
+
+  <div class="grid-3" style="margin-bottom:24px;">
+    <div class="metric-card priority-high">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#e94560;font-weight:700;margin-bottom:6px;">🔴 Prioridad Alta</div>
+      <div class="metric-name">CPL — Costo por Lead</div>
+      <div class="metric-ref">Referencia inicial: S/ 20 – S/ 45</div>
+      <div class="metric-action">Si supera S/ 50 en semana 1 → revisar creativo antes de tocar audiencia</div>
+    </div>
+    <div class="metric-card priority-high">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#e94560;font-weight:700;margin-bottom:6px;">🔴 Prioridad Alta</div>
+      <div class="metric-name">Tasa de Lead Calificado</div>
+      <div class="metric-ref">Meta: +50% de leads son propietarios reales</div>
+      <div class="metric-action">Si baja de 30% → revisar preguntas del formulario</div>
+    </div>
+    <div class="metric-card priority-high">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#e94560;font-weight:700;margin-bottom:6px;">🔴 Prioridad Alta</div>
+      <div class="metric-name">CTR del Anuncio</div>
+      <div class="metric-ref">Referencia: 0.8% – 2.5%</div>
+      <div class="metric-action">Si baja de 0.8% → el creativo no engancha, cambiar copy o imagen</div>
+    </div>
+    <div class="metric-card priority-mid">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#f5a623;font-weight:700;margin-bottom:6px;">🟡 Prioridad Media</div>
+      <div class="metric-name">CPC — Costo por Clic</div>
+      <div class="metric-ref">Referencia: S/ 0.50 – S/ 2.50</div>
+      <div class="metric-action">Si sube mucho → audiencia saturada o creativo débil</div>
+    </div>
+    <div class="metric-card priority-mid">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#f5a623;font-weight:700;margin-bottom:6px;">🟡 Prioridad Media</div>
+      <div class="metric-name">Frecuencia</div>
+      <div class="metric-ref">Límite sano: menos de 2.5 en 7 días</div>
+      <div class="metric-action">Si supera 3 → ampliar zona geográfica o rotar creativos</div>
+    </div>
+    <div class="metric-card priority-mid">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#f5a623;font-weight:700;margin-bottom:6px;">🟡 Prioridad Media</div>
+      <div class="metric-name">Tasa de formulario completado</div>
+      <div class="metric-ref">Meta: +40% de clics completan el form</div>
+      <div class="metric-action">Si baja de 40% → simplificar preguntas del formulario</div>
+    </div>
+    <div class="metric-card priority-low">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#27ae60;font-weight:700;margin-bottom:6px;">🟢 Negocio</div>
+      <div class="metric-name">Leads contactados vs agendados</div>
+      <div class="metric-ref">Meta: +30% de leads agendan tasación</div>
+      <div class="metric-action">Si baja → revisar velocidad de respuesta del equipo comercial</div>
+    </div>
+    <div class="metric-card priority-low">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#27ae60;font-weight:700;margin-bottom:6px;">🟢 Negocio</div>
+      <div class="metric-name">Costo por inmueble captado</div>
+      <div class="metric-ref">Objetivo: que sea menor a la comisión esperada</div>
+      <div class="metric-action">Este es el KPI de rentabilidad real del negocio</div>
+    </div>
+    <div class="metric-card priority-low">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#27ae60;font-weight:700;margin-bottom:6px;">🟢 Negocio</div>
+      <div class="metric-name">CPM — Costo por 1,000 impresiones</div>
+      <div class="metric-ref">Referencia: S/ 5 – S/ 18</div>
+      <div class="metric-action">Útil para comparar alcance entre zonas</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🚨</div>Señales de alerta — ¿Qué hacer si...?</div>
+    <table>
+      <thead>
+        <tr><th>Señal detectada</th><th>Acción inmediata</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CPL > S/ 50 en los primeros 7 días</td><td>Revisar copy y creativo. No tocar audiencia aún.</td></tr>
+        <tr><td>CTR < 0.8%</td><td>Cambiar el titular del anuncio. Probar ángulo diferente.</td></tr>
+        <tr><td>Frecuencia > 2.5 en 7 días</td><td>Ampliar distritos o subir presupuesto del conjunto.</td></tr>
+        <tr><td>Formularios con 0 leads calificados</td><td>Revisar preguntas. Agregar opción "soy propietario".</td></tr>
+        <tr><td>WhatsApp sin respuesta comercial &gt; 1 hora</td><td>Escalar internamente. El lead se pierde.</td></tr>
+        <tr><td>Una zona con CPL mucho más bajo</td><td>Redirigir presupuesto de la zona cara hacia la zona barata.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===================== CHECKLIST ===================== -->
+<div id="tab-checklist" class="section">
+  <p class="section-intro">Tareas que deben completarse antes del lanzamiento de la pauta. Haz clic en cada círculo para marcarla como completada.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><div class="icon icon-blue">🏢</div>Configuración de Business Manager</div>
+      <ul class="checklist" id="checklist1">
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Crear Business Manager (Meta Business Suite)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Conectar Página de Facebook de House/Go Inmobiliaria</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Conectar cuenta de Instagram de House/Go Inmobiliaria</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Crear cuenta publicitaria nueva</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Agregar método de pago (tarjeta de crédito/débito)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Verificar el dominio de la web de House/Go Inmobiliaria</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Agregar número de WhatsApp Business a la cuenta</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📡</div>Configuración técnica (Pixel y Eventos)</div>
+      <ul class="checklist" id="checklist2">
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Instalar Meta Pixel en el sitio web de House/Go Inmobiliaria</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Configurar evento "Lead" en el Pixel</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Verificar que los eventos disparan correctamente (Event Manager)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Configurar Conversions API (opcional pero recomendado)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-gold">📝</div>Formulario instantáneo</div>
+      <ul class="checklist" id="checklist3">
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Crear formulario tipo "Mayor intención" (Higher Intent)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Agregar las 6 preguntas de calificación definidas</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Activar verificación por SMS</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Agregar política de privacidad de House/Go Inmobiliaria al formulario</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Conectar formulario con CRM o Google Sheets (via Zapier o Make)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Configurar alerta automática al equipo comercial por cada lead</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon icon-green">🚀</div>Material y configuración de campañas</div>
+      <ul class="checklist" id="checklist4">
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Entregar 1 video (9:16, 15–30 seg, con subtítulos)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Entregar 2 imágenes estáticas (1080x1080 o 1080x1920)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Definir y aprobar copy de los 12 anuncios</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Revisar categoría especial de anuncios (Housing)</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Crear las 2 campañas en Ads Manager</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Configurar los 4 conjuntos con públicos y zonas definidas</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Subir y revisar los 12 anuncios</span></li>
+        <li><div class="check-circle" onclick="toggleCheck(this)"></div><span>Enviar a revisión y confirmar aprobación de Meta</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-orange" style="margin-top:4px;">
+    <div class="alert-icon">📅</div>
+    <div><strong>Tiempo estimado de setup:</strong> 3 a 5 días hábiles desde que se tiene acceso al Business Manager y el material creativo. Meta puede tardar 24–48 horas en aprobar los anuncios una vez enviados a revisión.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Preparado por <strong>Agencia</strong> para <strong>House/Go Inmobiliaria</strong> · Marzo 2026</p>
+  <p style="margin-top:6px;">Este documento es confidencial y de uso exclusivo del cliente. Los datos proyectados son estimaciones referenciales.</p>
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function toggleBlock(id, header) {
+    const content = document.getElementById(id);
+    if (!content) return;
+    const arrow = header ? header.querySelector('.arrow') : null;
+    if (content.style.display === 'none') {
+      content.style.display = '';
+      if (arrow) arrow.style.transform = '';
+    } else {
+      content.style.display = 'none';
+      if (arrow) arrow.style.transform = 'rotate(-90deg)';
+    }
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    el.innerHTML = el.classList.contains('done') ? '✓' : '';
+  }
+
+  // Animate budget bars on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.budget-bar-fill').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = w; }, 100);
+      });
+    }, 300);
+  });
+</script>
+</body>
+</html>
