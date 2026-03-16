@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Mensual · Wow Fibra Óptica · Marzo 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --azul:       #1B4FD8;
+  --azul-dark:  #1239A8;
+  --azul-light: #EEF3FF;
+  --verde:      #16A34A;
+  --verde-l:    #F0FDF4;
+  --rojo:       #DC2626;
+  --rojo-l:     #FEF2F2;
+  --naranja:    #EA580C;
+  --naranja-l:  #FFF7ED;
+  --gris:       #6B7280;
+  --gris-l:     #F9FAFB;
+  --border:     #E5E7EB;
+  --text:       #111827;
+  --white:      #FFFFFF;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: #F3F4F6;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #0F2E8A 0%, #1B4FD8 60%, #3B6EF5 100%);
+  padding: 40px 48px 36px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  right: -60px; top: -60px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.logo-area { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.logo-text h1 { font-size: 22px; font-weight: 800; }
+.logo-text p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+.header-meta {
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 2;
+}
+.period-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* ── CONTENIDO ── */
+.content { max-width: 960px; margin: 0 auto; padding: 32px 24px 48px; }
+
+/* ── SECCIÓN ── */
+.section { margin-bottom: 36px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.section-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.icon-blue   { background: var(--azul-light); }
+.icon-green  { background: var(--verde-l); }
+.icon-orange { background: var(--naranja-l); }
+.icon-red    { background: var(--rojo-l); }
+
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.section-sub {
+  font-size: 12px;
+  color: var(--gris);
+  margin-top: 1px;
+}
+
+/* ── CARD BASE ── */
+.card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* ── INTRO CARD ── */
+.intro-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  font-size: 14px;
+  line-height: 1.75;
+  color: #374151;
+}
+.intro-card strong { color: var(--azul); }
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.kpi {
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.kpi.blue::before   { background: var(--azul); }
+.kpi.green::before  { background: var(--verde); }
+.kpi.orange::before { background: var(--naranja); }
+.kpi.red::before    { background: var(--rojo); }
+.kpi.purple::before { background: #7C3AED; }
+
+.kpi-emoji { font-size: 20px; margin-bottom: 8px; }
+.kpi-label { font-size: 11px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.kpi-value { font-size: 28px; font-weight: 800; line-height: 1; color: var(--text); }
+.kpi-note  { font-size: 11.5px; color: var(--gris); margin-top: 6px; }
+.kpi-status { font-size: 11px; font-weight: 600; margin-top: 4px; }
+.ok   { color: var(--verde); }
+.warn { color: var(--naranja); }
+.bad  { color: var(--rojo); }
+
+/* ── PACING ── */
+.pacing-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.pacing-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pacing-title { font-size: 14px; font-weight: 700; }
+.pacing-amount { font-size: 22px; font-weight: 800; color: var(--azul); }
+.pacing-sub { font-size: 12px; color: var(--gris); }
+.progress-bar {
+  height: 16px;
+  background: #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 8px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #1B4FD8, #3B6EF5);
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 10px; font-weight: 700; color: white;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--gris);
+}
+
+/* ── TABLA DIARIA ── */
+.daily-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.daily-table th {
+  padding: 10px 12px;
+  background: #F3F4F6;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: var(--gris);
+  border-bottom: 2px solid var(--border);
+}
+.daily-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #F3F4F6;
+  vertical-align: middle;
+}
+.daily-table tbody tr:hover { background: #FAFAFA; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.day-label { font-weight: 600; }
+.day-sub { font-size: 11px; color: var(--gris); font-weight: 400; }
+
+.conv-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.conv-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--verde);
+  min-width: 4px;
+}
+.conv-bar.zero { background: var(--rojo); width: 4px !important; }
+.conv-num { font-weight: 700; font-size: 13px; min-width: 28px; }
+.conv-num.zero { color: var(--rojo); }
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.tag-green  { background: var(--verde-l);   color: var(--verde); }
+.tag-red    { background: var(--rojo-l);    color: var(--rojo); }
+.tag-orange { background: var(--naranja-l); color: var(--naranja); }
+.tag-blue   { background: var(--azul-light);color: var(--azul); }
+.tag-gray   { background: #F3F4F6; color: var(--gris); }
+
+.warning-row { background: #FFFBEB !important; }
+
+/* ── CAMPAÑAS ── */
+.camp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:620px){ .camp-grid{grid-template-columns:1fr;} }
+
+.camp-card {
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.camp-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--azul-dark);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.camp-metrics { display: flex; flex-wrap: wrap; gap: 10px; }
+.camp-metric { flex: 1; min-width: 90px; }
+.cm-label { font-size: 10px; font-weight: 600; color: var(--gris); text-transform: uppercase; }
+.cm-value { font-size: 18px; font-weight: 800; color: var(--text); }
+.cm-sub   { font-size: 11px; color: var(--gris); }
+
+/* ── PROBLEMA PRINCIPAL ── */
+.problem-card {
+  background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+  border: 2px solid #FED7AA;
+  border-radius: 16px;
+  padding: 28px;
+}
+.problem-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #9A3412;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.problem-desc {
+  font-size: 14px;
+  color: #7C2D12;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+.cause-list { display: flex; flex-direction: column; gap: 12px; }
+.cause-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 18px;
+  border-left: 4px solid var(--naranja);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.cause-item strong { color: #9A3412; display: block; margin-bottom: 2px; }
+
+/* ── ACCIONES ── */
+.acciones-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.accion-card {
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+  display: flex;
+  gap: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow .2s;
+}
+.accion-num {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.n-red    { background: var(--rojo-l);    color: var(--rojo); }
+.n-orange { background: var(--naranja-l); color: var(--naranja); }
+.n-blue   { background: var(--azul-light);color: var(--azul); }
+.n-green  { background: var(--verde-l);   color: var(--verde); }
+
+.accion-content {}
+.accion-title  { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.accion-desc   { font-size: 13px; color: #374151; line-height: 1.65; }
+.accion-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--verde);
+  background: var(--verde-l);
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+/* ── RECOMENDACIÓN VENTAS ── */
+.sales-card {
+  background: linear-gradient(135deg, #EEF3FF 0%, #E0E9FF 100%);
+  border: 1.5px solid #BFCFFF;
+  border-radius: 16px;
+  padding: 26px 28px;
+}
+.sales-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--azul-dark);
+  margin-bottom: 6px;
+}
+.sales-desc {
+  font-size: 13.5px;
+  color: #1E3A8A;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+.sales-steps { display: flex; flex-direction: column; gap: 10px; }
+.sales-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+}
+.step-dot {
+  width: 26px; height: 26px;
+  background: var(--azul);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+  flex-shrink: 0;
+}
+.step-text strong { color: var(--azul-dark); display: block; margin-bottom: 2px; }
+
+/* ── RESUMEN VISUAL ── */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+@media(max-width:600px){ .summary-row{grid-template-columns:1fr;} }
+
+.summary-item {
+  text-align: center;
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 16px 10px;
+}
+.s-emoji { font-size: 28px; }
+.s-label { font-size: 11px; font-weight: 600; color: var(--gris); margin-top: 4px; }
+.s-value { font-size: 20px; font-weight: 800; color: var(--text); }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 28px 20px;
+  font-size: 12px;
+  color: var(--gris);
+  border-top: 1px solid var(--border);
+  background: var(--white);
+  margin-top: 16px;
+}
+.footer strong { color: var(--azul); }
+
+@media(max-width:600px){
+  .header { padding: 28px 20px; }
+  .content { padding: 20px 16px 40px; }
+  .kpi-value { font-size: 22px; }
+  .accion-card { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo-area">
+      <div class="logo-icon">📡</div>
+      <div class="logo-text">
+        <h1>Wow Fibra Óptica</h1>
+        <p>Reporte de rendimiento publicitario · Google Ads</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div>📅 Período analizado</div>
+      <div><strong>1 al 15 de Marzo, 2026</strong></div>
+      <div style="margin-top:4px;">Preparado por Equipo Exon</div>
+      <div class="period-badge">15 días · 2 campañas activas</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- INTRO -->
+<div class="intro-card">
+  Hola, en este reporte te mostramos <strong>cómo están funcionando tus anuncios en Google</strong> durante la primera quincena de marzo. Los números muestran que los anuncios están llegando a muchas personas y generando consultas, pero también identificamos <strong>por qué esas consultas no se están convirtiendo en clientes</strong> — y qué vamos a hacer al respecto.
+</div>
+
+<!-- ════ KPIs ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-blue">📊</div>
+    <div>
+      <div class="section-title">¿Cómo nos fue? — Los números del mes</div>
+      <div class="section-sub">Del 1 al 15 de Marzo · Todas las campañas</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-emoji">💬</div>
+      <div class="kpi-label">Personas que consultaron</div>
+      <div class="kpi-value">106</div>
+      <div class="kpi-note">Formularios completados</div>
+      <div class="kpi-status ok">✓ ~7 consultas por día</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-emoji">👁️</div>
+      <div class="kpi-label">Personas que vieron el anuncio</div>
+      <div class="kpi-value">51,552</div>
+      <div class="kpi-note">Impresiones totales</div>
+      <div class="kpi-status ok">✓ Buen alcance</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-emoji">🖱️</div>
+      <div class="kpi-label">Personas que hicieron clic</div>
+      <div class="kpi-value">2,158</div>
+      <div class="kpi-note">De cada 100 que ven, ~4 hacen clic</div>
+      <div class="kpi-status ok">✓ Ritmo normal</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-emoji">💰</div>
+      <div class="kpi-label">Costo por consulta</div>
+      <div class="kpi-value">S/ 28</div>
+      <div class="kpi-note">Promedio por lead generado</div>
+      <div class="kpi-status warn">↗ Puede mejorar a S/ 20</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-emoji">💵</div>
+      <div class="kpi-label">Total invertido</div>
+      <div class="kpi-value">S/ 3,024</div>
+      <div class="kpi-note">Presupuesto 15 días: S/ 3,150</div>
+      <div class="kpi-status ok">✓ Dentro del presupuesto</div>
+    </div>
+  </div>
+
+  <!-- PACING -->
+  <div class="pacing-card">
+    <div class="pacing-top">
+      <div>
+        <div class="pacing-title">Control del presupuesto</div>
+        <div class="pacing-sub">Llevamos 15 de 31 días de marzo</div>
+      </div>
+      <div style="text-align:right">
+        <div class="pacing-amount">S/ 3,024 / S/ 3,150</div>
+        <div class="pacing-sub" style="color:var(--verde);font-weight:600;">✓ Sin riesgo de exceder el presupuesto</div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:96%;">96%</div>
+    </div>
+    <div class="progress-labels">
+      <span>S/ 0</span>
+      <span style="color:var(--verde);font-weight:600;">▲ Ideal: 50% = S/ 3,255</span>
+      <span>S/ 6,510 (mes completo)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CAMPAÑAS ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-blue">🎯</div>
+    <div>
+      <div class="section-title">Las 2 campañas activas</div>
+      <div class="section-sub">Cada una tiene una función diferente</div>
+    </div>
+  </div>
+  <div class="camp-grid">
+    <div class="camp-card">
+      <div class="camp-name">🔍 Campaña de Búsqueda<br><span style="font-size:11px;color:var(--gris);font-weight:400;">Aparece cuando alguien busca en Google</span></div>
+      <div class="camp-metrics">
+        <div class="camp-metric">
+          <div class="cm-label">Consultas</div>
+          <div class="cm-value" style="color:var(--verde)">89.5</div>
+          <div class="cm-sub">84% del total</div>
+        </div>
+        <div class="camp-metric">
+          <div class="cm-label">Costo x consulta</div>
+          <div class="cm-value">S/ 28.62</div>
+          <div class="cm-sub">Puede bajar</div>
+        </div>
+        <div class="camp-metric">
+          <div class="cm-label">Invertido</div>
+          <div class="cm-value">S/ 2,562</div>
+          <div class="cm-sub">de S/ 2,700 ppto.</div>
+        </div>
+      </div>
+    </div>
+    <div class="camp-card">
+      <div class="camp-name">📲 Campaña Performance Max<br><span style="font-size:11px;color:var(--gris);font-weight:400;">Llega a más personas (YouTube, Display, etc.)</span></div>
+      <div class="camp-metrics">
+        <div class="camp-metric">
+          <div class="cm-label">Consultas</div>
+          <div class="cm-value" style="color:var(--verde)">17</div>
+          <div class="cm-sub">16% del total</div>
+        </div>
+        <div class="camp-metric">
+          <div class="cm-label">Costo x consulta</div>
+          <div class="cm-value">S/ 27.19</div>
+          <div class="cm-sub">Buen resultado</div>
+        </div>
+        <div class="camp-metric">
+          <div class="cm-label">Invertido</div>
+          <div class="cm-value">S/ 462</div>
+          <div class="cm-sub">Alcance: 37,978</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TABLA DIARIA ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-blue">📅</div>
+    <div>
+      <div class="section-title">Día a día — ¿Cómo fue cada jornada?</div>
+      <div class="section-sub">Consultas generadas y costo por día</div>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:auto;">
+    <table class="daily-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Día</th>
+          <th class="num">Vieron el anuncio</th>
+          <th class="num">Clics</th>
+          <th class="num">Consultas</th>
+          <th class="num">Invertido</th>
+          <th class="num">Costo c/consulta</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="day-label">01 Mar</span></td>
+          <td><span class="tag tag-gray">Dom</span></td>
+          <td class="num">3,725</td><td class="num">164</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:66px"></div><span class="conv-num">11</span></div></td>
+          <td class="num">S/ 256</td><td class="num">S/ 23.30</td>
+          <td><span class="tag tag-green">✓ Muy bueno</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">02 Mar</span></td>
+          <td><span class="tag tag-gray">Lun</span></td>
+          <td class="num">3,778</td><td class="num">150</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:30px"></div><span class="conv-num">5</span></div></td>
+          <td class="num">S/ 205</td><td class="num">S/ 40.98</td>
+          <td><span class="tag tag-orange">Costo alto</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">03 Mar</span></td>
+          <td><span class="tag tag-gray">Mar</span></td>
+          <td class="num">4,434</td><td class="num">170</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:60px"></div><span class="conv-num">10</span></div></td>
+          <td class="num">S/ 234</td><td class="num">S/ 23.37</td>
+          <td><span class="tag tag-green">✓ Muy bueno</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">04 Mar</span></td>
+          <td><span class="tag tag-gray">Mié</span></td>
+          <td class="num">2,120</td><td class="num">146</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:51px"></div><span class="conv-num">8.5</span></div></td>
+          <td class="num">S/ 237</td><td class="num">S/ 27.85</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">05 Mar</span></td>
+          <td><span class="tag tag-gray">Jue</span></td>
+          <td class="num">3,584</td><td class="num">155</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:54px"></div><span class="conv-num">9</span></div></td>
+          <td class="num">S/ 235</td><td class="num">S/ 26.11</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">06 Mar</span></td>
+          <td><span class="tag tag-gray">Vie</span></td>
+          <td class="num">1,951</td><td class="num">86</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:12px"></div><span class="conv-num">2</span></div></td>
+          <td class="num">S/ 102</td><td class="num">S/ 50.84</td>
+          <td><span class="tag tag-orange">⚠ Costo alto</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">07 Mar</span></td>
+          <td><span class="tag tag-gray">Sáb</span></td>
+          <td class="num">1,788</td><td class="num">121</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:33px"></div><span class="conv-num">5.5</span></div></td>
+          <td class="num">S/ 191</td><td class="num">S/ 34.65</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">08 Mar</span></td>
+          <td><span class="tag tag-gray">Dom</span></td>
+          <td class="num">4,307</td><td class="num">161</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:39px"></div><span class="conv-num">6.5</span></div></td>
+          <td class="num">S/ 184</td><td class="num">S/ 28.37</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr class="warning-row">
+          <td><span class="day-label">09 Mar</span></td>
+          <td><span class="tag tag-gray">Lun</span></td>
+          <td class="num">3,977</td><td class="num">162</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar zero"></div><span class="conv-num zero">0 ⚠</span></div></td>
+          <td class="num" style="color:var(--rojo);font-weight:700;">S/ 245</td>
+          <td class="num" style="color:var(--rojo);">—</td>
+          <td><span class="tag tag-red">⚠ Sin registros</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">10 Mar</span></td>
+          <td><span class="tag tag-gray">Mar</span></td>
+          <td class="num">4,162</td><td class="num">168</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:78px;background:var(--azul)"></div><span class="conv-num" style="color:var(--azul)">13 🏆</span></div></td>
+          <td class="num">S/ 212</td><td class="num" style="color:var(--verde);font-weight:700;">S/ 16.31</td>
+          <td><span class="tag tag-green">⭐ Mejor día</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">11 Mar</span></td>
+          <td><span class="tag tag-gray">Mié</span></td>
+          <td class="num">4,000</td><td class="num">151</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:60px"></div><span class="conv-num">10</span></div></td>
+          <td class="num">S/ 209</td><td class="num">S/ 20.86</td>
+          <td><span class="tag tag-green">✓ Muy bueno</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">12 Mar</span></td>
+          <td><span class="tag tag-gray">Jue</span></td>
+          <td class="num">3,416</td><td class="num">142</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:36px"></div><span class="conv-num">6</span></div></td>
+          <td class="num">S/ 183</td><td class="num">S/ 30.44</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">13 Mar</span></td>
+          <td><span class="tag tag-gray">Vie</span></td>
+          <td class="num">3,346</td><td class="num">112</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:42px"></div><span class="conv-num">7</span></div></td>
+          <td class="num">S/ 173</td><td class="num">S/ 24.69</td>
+          <td><span class="tag tag-blue">Normal</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">14 Mar</span></td>
+          <td><span class="tag tag-gray">Sáb</span></td>
+          <td class="num">4,097</td><td class="num">147</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:30px"></div><span class="conv-num">5</span></div></td>
+          <td class="num">S/ 189</td><td class="num">S/ 37.77</td>
+          <td><span class="tag tag-orange">Costo alto</span></td>
+        </tr>
+        <tr>
+          <td><span class="day-label">15 Mar</span></td>
+          <td><span class="tag tag-gray">Dom</span></td>
+          <td class="num">2,867</td><td class="num">123</td>
+          <td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:48px"></div><span class="conv-num">8</span></div></td>
+          <td class="num">S/ 171</td><td class="num">S/ 21.40</td>
+          <td><span class="tag tag-green">✓ Bueno</span></td>
+        </tr>
+      </tbody>
+      <tr style="background:#F3F4F6;font-weight:700;border-top:2px solid #D1D5DB;">
+        <td colspan="2" style="padding:10px 12px;">TOTAL</td>
+        <td class="num" style="padding:10px 12px;">51,552</td>
+        <td class="num" style="padding:10px 12px;">2,158</td>
+        <td class="num" style="padding:10px 12px;color:var(--verde)">106.5</td>
+        <td class="num" style="padding:10px 12px;">S/ 3,024</td>
+        <td class="num" style="padding:10px 12px;">S/ 28.40 prom.</td>
+        <td style="padding:10px 12px;"></td>
+      </tr>
+    </table>
+  </div>
+  <div style="margin-top:10px;background:var(--rojo-l);border:1px solid #FECACA;border-radius:10px;padding:12px 16px;font-size:13px;color:var(--rojo);display:flex;gap:10px;align-items:flex-start;">
+    <span style="font-size:16px;flex-shrink:0;">⚠️</span>
+    <div><strong>09 de Marzo:</strong> Se gastaron S/ 245 y se registraron <strong>0 consultas</strong>. Esto no es normal — lo estamos revisando para asegurarnos de que el sistema de seguimiento esté funcionando correctamente y que ningún lead se haya perdido.</div>
+  </div>
+</div>
+
+<!-- ════ PROBLEMA PRINCIPAL ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-orange">🔎</div>
+    <div>
+      <div class="section-title">El punto clave: "Consultan pero no compran"</div>
+      <div class="section-sub">Entendemos tu preocupación — te explicamos por qué está pasando</div>
+    </div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-title">
+      <span>🤔</span> ¿Por qué llegan consultas pero no se convierten en clientes?
+    </div>
+    <div class="problem-desc">
+      Los anuncios están trayendo personas que se interesan en internet para el hogar — eso funciona bien. El problema está en <strong>qué pasa después de que la persona llega</strong> a tu página o llena el formulario. Identificamos estas causas principales:
+    </div>
+    <div class="cause-list">
+      <div class="cause-item">
+        <strong>1. Los anuncios atraen personas que buscan a la competencia</strong>
+        Palabras como "bitel internet hogar", "movistar hogar", "entel internet" están activas. Alguien buscando Movistar ve tu anuncio, consulta por curiosidad, pero no compra porque quería Movistar.
+      </div>
+      <div class="cause-item">
+        <strong>2. La landing page no filtra ni convence al visitante</strong>
+        Si la persona llega a tu web y no encuentra rápido el precio, la cobertura o un beneficio claro frente a la competencia, consulta pero no se decide. El 91% del tráfico es desde celular — si la página carga lento o es difícil de navegar en móvil, se van.
+      </div>
+      <div class="cause-item">
+        <strong>3. El seguimiento post-consulta puede ser lento</strong>
+        Cuando alguien llena un formulario buscando internet, también está comparando con Movistar, Claro, Bitel al mismo tiempo. Si no los contactas en los primeros 15–30 minutos, ya tomaron otra decisión. La velocidad de respuesta es crítica en este sector.
+      </div>
+      <div class="cause-item">
+        <strong>4. El formulario no pre-califica al lead</strong>
+        Si el formulario no pregunta "¿en qué distrito estás?" o "¿para cuándo necesitas el servicio?", llegan consultas de zonas donde no tienes cobertura, o de personas que solo "están viendo opciones" sin urgencia de compra.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ACCIONES CLAVE ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-green">🚀</div>
+    <div>
+      <div class="section-title">5 acciones clave para esta quincena</div>
+      <div class="section-sub">Lo que vamos a hacer — y lo que necesitamos de tu parte</div>
+    </div>
+  </div>
+
+  <div class="acciones-grid">
+
+    <div class="accion-card">
+      <div class="accion-num n-red">1</div>
+      <div class="accion-content">
+        <div class="accion-title">🚫 Eliminar búsquedas de la competencia que no convierten</div>
+        <div class="accion-desc">
+          Vamos a bloquear términos como "bitel", "movistar hogar", "entel internet", "internet cusco", "internet gratis" y similares. Estas búsquedas están consumiendo presupuesto sin generar clientes reales. Al eliminarlas, cada sol invertido llegará a personas más dispuestas a contratar.
+        </div>
+        <span class="accion-result">📈 Estimado: CPA baja de S/ 28 → S/ 21</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num n-red">2</div>
+      <div class="accion-content">
+        <div class="accion-title">🌐 Mejorar la página web para móvil</div>
+        <div class="accion-desc">
+          El <strong>91% de las personas que hacen clic entran desde su celular</strong>. Necesitamos revisar que la página cargue rápido (menos de 3 segundos), que el precio y las coberturas estén visibles sin scrollear mucho, y que el botón de "Contratar" sea fácil de tocar. <em>Esto lo revisamos juntos en nuestra reunión.</em>
+        </div>
+        <span class="accion-result">📱 Cada segundo menos de carga = +10% de conversiones</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num n-orange">3</div>
+      <div class="accion-content">
+        <div class="accion-title">📋 Agregar preguntas de calificación al formulario</div>
+        <div class="accion-desc">
+          Propuesta: añadir al formulario los campos <strong>Distrito / Zona</strong> y <strong>¿Cuándo necesitas el servicio?</strong> Así tu equipo de ventas sabrá de entrada si la persona está en zona de cobertura y qué tan urgente es su necesidad. Menos tiempo perdido, más cierres.
+        </div>
+        <span class="accion-result">🎯 Leads más calificados = mayor tasa de cierre</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num n-orange">4</div>
+      <div class="accion-content">
+        <div class="accion-title">⚡ Protocolo de respuesta rápida a leads</div>
+        <div class="accion-desc">
+          <strong>Este punto está de tu lado:</strong> te recomendamos establecer una regla interna de contactar a cada lead en menos de 20 minutos desde que llena el formulario. En el mercado de internet hogar en Perú, la persona está comparando 3–4 operadores simultáneamente. El primero en llamar tiene ventaja enorme. Si quieres, te ayudamos a configurar una notificación automática por WhatsApp cuando llegue un nuevo lead.
+        </div>
+        <span class="accion-result">📞 Respuesta en &lt; 20 min puede doblar tu tasa de cierre</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num n-blue">5</div>
+      <div class="accion-content">
+        <div class="accion-title">🔍 Investigar el 9 de Marzo (día sin registros)</div>
+        <div class="accion-desc">
+          El 9 de marzo se gastaron S/ 245 con 162 personas que ingresaron a la web, pero no quedó ninguna consulta registrada. Vamos a revisar si fue un problema técnico del sistema de seguimiento (GTM/GA4) o si los leads llegaron pero no fueron registrados correctamente. Si hay leads perdidos, los recuperamos.
+        </div>
+        <span class="accion-result">🔧 Posibles leads recuperables de ese día</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ RECOMENDACIÓN VENTAS ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-green">💡</div>
+    <div>
+      <div class="section-title">Recomendación especial: el proceso de venta</div>
+      <div class="section-sub">Google trae al interesado — el cierre depende del proceso de atención</div>
+    </div>
+  </div>
+
+  <div class="sales-card">
+    <div class="sales-title">El camino de un lead a cliente</div>
+    <div class="sales-desc">
+      Google Ads está funcionando bien para traer personas interesadas. El "cuello de botella" está entre el momento en que la persona llena el formulario y el momento en que contrata. Aquí está el flujo ideal que recomendamos:
+    </div>
+    <div class="sales-steps">
+      <div class="sales-step">
+        <div class="step-dot">1</div>
+        <div class="step-text">
+          <strong>La persona ve tu anuncio y hace clic</strong>
+          Llega a tu landing page desde su celular → ve precio, velocidad y cobertura → llena el formulario.
+        </div>
+      </div>
+      <div class="sales-step">
+        <div class="step-dot">2</div>
+        <div class="step-text">
+          <strong>⚡ Notificación inmediata a tu equipo (0–5 min)</strong>
+          Configuramos alerta automática por email/WhatsApp cuando llega un nuevo lead con el nombre, teléfono y distrito.
+        </div>
+      </div>
+      <div class="sales-step">
+        <div class="step-dot">3</div>
+        <div class="step-text">
+          <strong>📞 Tu vendedor llama o escribe en menos de 20 minutos</strong>
+          Usa el dato del formulario ("necesito internet este mes en Surco") para personalizar la llamada. No es solo "hola, ¿en qué te ayudo?", sino "hola, vi que buscas internet en Surco — tenemos cobertura ahí y puedo darte la instalación esta semana".
+        </div>
+      </div>
+      <div class="sales-step">
+        <div class="step-dot">4</div>
+        <div class="step-text">
+          <strong>💬 Seguimiento si no contesta (24–48 hs)</strong>
+          Un mensaje de WhatsApp simple: "Hola, te contactamos de Wow Fibra. ¿Aún estás buscando internet para tu hogar? Tenemos una oferta válida hasta el viernes." Esta reactivación puede rescatar leads fríos.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ RESUMEN VISUAL ════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon icon-blue">✅</div>
+    <div>
+      <div class="section-title">En resumen — Estado actual</div>
+    </div>
+  </div>
+  <div class="summary-row">
+    <div class="summary-item">
+      <div class="s-emoji">📣</div>
+      <div class="s-label">Los anuncios</div>
+      <div class="s-value" style="color:var(--verde);">Funcionan</div>
+      <div style="font-size:11px;color:var(--gris);margin-top:4px;">106 consultas en 15 días</div>
+    </div>
+    <div class="summary-item">
+      <div class="s-emoji">💰</div>
+      <div class="s-label">El presupuesto</div>
+      <div class="s-value" style="color:var(--verde);">Controlado</div>
+      <div style="font-size:11px;color:var(--gris);margin-top:4px;">Sin riesgo de sobrepaso</div>
+    </div>
+    <div class="summary-item">
+      <div class="s-emoji">🎯</div>
+      <div class="s-label">El cierre de ventas</div>
+      <div class="s-value" style="color:var(--naranja);">A mejorar</div>
+      <div style="font-size:11px;color:var(--gris);margin-top:4px;">Proceso de atención y seguimiento</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  Reporte preparado por <strong>Equipo Exon</strong> · Para: Wow – INFO CORPORACION PERU S.A.C · Período: 1 al 15 de Marzo, 2026<br>
+  <span style="margin-top:6px;display:inline-block;">¿Tienes dudas sobre este reporte? Escríbenos antes de nuestra reunión para resolverlas juntos.</span>
+</div>
+
+</body>
+</html>
