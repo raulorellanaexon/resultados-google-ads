@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Google Ads — LARKANA Arquitectura</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  /* ── HEADER ── */
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    color: #fff; padding: 36px 40px 28px; position: relative; overflow: hidden; }
+  .header::after { content:''; position:absolute; right:-60px; top:-60px; width:300px; height:300px;
+    border-radius:50%; background:rgba(255,255,255,.04); }
+  .header-inner { max-width: 1100px; margin: 0 auto; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; }
+  .header h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { color: #e94560; }
+  .header .subtitle { font-size: .88rem; color: #a0aec0; margin-top: 4px; }
+  .header .period-badge { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px; padding: 6px 16px; font-size: .8rem; color: #e2e8f0; }
+
+  /* ── ALERT BANNER ── */
+  .alert-banner { max-width: 1100px; margin: 20px auto 0; padding: 0 20px; }
+  .alert { background: #fff0f0; border-left: 5px solid #e94560; border-radius: 8px;
+    padding: 14px 20px; display:flex; align-items:center; gap:12px; }
+  .alert .icon { font-size: 1.5rem; }
+  .alert strong { color: #c0392b; font-size: 1rem; }
+  .alert p { font-size: .85rem; color: #555; margin-top: 2px; }
+
+  /* ── MAIN CONTENT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+  /* ── KPI CARDS ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .kpi-card { background: #fff; border-radius: 12px; padding: 20px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    border-top: 4px solid #e94560; transition: transform .2s; }
+  .kpi-card:hover { transform: translateY(-3px); }
+  .kpi-card.blue { border-top-color: #0f3460; }
+  .kpi-card.green { border-top-color: #27ae60; }
+  .kpi-card.orange { border-top-color: #f39c12; }
+  .kpi-card.purple { border-top-color: #8e44ad; }
+  .kpi-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .8px; color: #888; font-weight: 600; }
+  .kpi-value { font-size: 1.9rem; font-weight: 700; color: #1a1a2e; margin: 6px 0 4px; line-height: 1; }
+  .kpi-sub { font-size: .75rem; color: #aaa; }
+
+  /* ── SECTION ── */
+  .section { background: #fff; border-radius: 14px; padding: 24px; margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+  .section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:8px; }
+  .section-title { font-size: 1.05rem; font-weight: 700; color: #1a1a2e; display:flex; align-items:center; gap:8px; }
+  .section-title .dot { width:10px; height:10px; border-radius:50%; background:#e94560; display:inline-block; }
+
+  /* ── TABS ── */
+  .tab-nav { display:flex; gap:6px; background:#f0f2f5; border-radius:8px; padding:4px; margin-bottom:20px; flex-wrap:wrap; }
+  .tab-btn { border:none; background:transparent; padding:8px 16px; border-radius:6px; cursor:pointer;
+    font-size:.83rem; font-weight:600; color:#888; transition:all .2s; }
+  .tab-btn.active { background:#fff; color:#1a1a2e; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* ── CHARTS ── */
+  .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-grid.single { grid-template-columns:1fr; }
+  @media(max-width:640px){ .chart-grid { grid-template-columns:1fr; } }
+  .chart-box { position:relative; }
+  .chart-box canvas { max-height:280px; }
+
+  /* ── CAMPAIGNS TABLE ── */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:.84rem; }
+  th { background:#f8f9fc; color:#555; font-weight:700; padding:10px 14px; text-align:left;
+    border-bottom:2px solid #e8ecf0; white-space:nowrap; }
+  td { padding:10px 14px; border-bottom:1px solid #f0f2f5; }
+  tr:hover td { background:#fafbfd; }
+  .badge { display:inline-block; border-radius:20px; padding:2px 10px; font-size:.72rem; font-weight:700; }
+  .badge.paused { background:#fee2e2; color:#c0392b; }
+  .badge.active { background:#d1fae5; color:#065f46; }
+  .badge.excellent { background:#dbeafe; color:#1d4ed8; }
+  .badge.good { background:#e0e7ff; color:#4338ca; }
+  .pct-bar { height:6px; border-radius:3px; background:#f0f2f5; margin-top:4px; }
+  .pct-bar-fill { height:6px; border-radius:3px; background: linear-gradient(90deg,#e94560,#0f3460); }
+
+  /* ── ACTIONS ── */
+  .actions-grid { display:grid; gap:12px; }
+  .action-item { border-radius:10px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; }
+  .action-item.high { background:#fff0f0; border-left:4px solid #e94560; }
+  .action-item.mid { background:#fffbeb; border-left:4px solid #f39c12; }
+  .action-item.low { background:#f0fdf4; border-left:4px solid #27ae60; }
+  .action-priority { font-size:1.3rem; flex-shrink:0; margin-top:2px; }
+  .action-text h4 { font-size:.88rem; font-weight:700; margin-bottom:3px; }
+  .action-text p { font-size:.8rem; color:#555; line-height:1.5; }
+  .priority-tag { display:inline-block; font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:6px; }
+  .tag-high { background:#fee2e2; color:#c0392b; }
+  .tag-mid { background:#fef3c7; color:#92400e; }
+  .tag-low { background:#d1fae5; color:#065f46; }
+
+  /* ── TERMS TABLE ── */
+  .terms-row td:first-child { font-size:.8rem; }
+  .waste-tag { color:#e94560; font-weight:700; }
+
+  /* ── FOOTER ── */
+  .footer { text-align:center; padding:30px 20px; color:#aaa; font-size:.78rem; }
+  .footer strong { color:#0f3460; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px){
+    .header { padding: 24px 20px 20px; }
+    .header h1 { font-size:1.4rem; }
+    .kpi-value { font-size:1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>🏗️ Reporte Google Ads — <span>LARKANA</span></h1>
+      <p class="subtitle">Larkana Arquitectura · Diseño + Obra Residencial</p>
+    </div>
+    <div class="period-badge">📅 Ene 1 – Mar 19, 2026</div>
+  </div>
+</div>
+
+<!-- ALERT BANNER -->
+<div class="alert-banner">
+  <div class="alert">
+    <div class="icon">🚨</div>
+    <div>
+      <strong>ALERTA CRÍTICA: Las 3 campañas están PAUSADAS desde el 19 de marzo</strong>
+      <p>El último cambio de estado fue realizado el 19-Mar-2026 por stefanoem.ads@gmail.com. No hay tráfico ni leads actualmente. Se requiere reactivación inmediata.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" style="margin-top:20px;">
+    <div class="kpi-card">
+      <div class="kpi-label">Inversión Total</div>
+      <div class="kpi-value">$4,605</div>
+      <div class="kpi-sub">Ene – Mar 2026</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Leads Generados</div>
+      <div class="kpi-value">100</div>
+      <div class="kpi-sub">Solicitudes de cotización</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">CPA Promedio</div>
+      <div class="kpi-value">$46</div>
+      <div class="kpi-sub">Costo por lead</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Clics Totales</div>
+      <div class="kpi-value">4,520</div>
+      <div class="kpi-sub">CTR global 6.53%</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Impresiones</div>
+      <div class="kpi-value">69.2K</div>
+      <div class="kpi-sub">3 campañas activas</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Tasa Conversión</div>
+      <div class="kpi-value">2.2%</div>
+      <div class="kpi-sub">Clics → Leads</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="section">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('overview')">📊 Resumen</button>
+      <button class="tab-btn" onclick="showTab('campaigns')">📣 Campañas</button>
+      <button class="tab-btn" onclick="showTab('terms')">🔍 Términos</button>
+      <button class="tab-btn" onclick="showTab('devices')">📱 Dispositivos</button>
+      <button class="tab-btn" onclick="showTab('actions')">⚡ Acciones</button>
+    </div>
+
+    <!-- TAB: OVERVIEW -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="chart-grid">
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot"></span> Leads por Mes (Búsqueda)</div>
+          <canvas id="chartLeads"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot" style="background:#0f3460"></span> Inversión por Campaña</div>
+          <canvas id="chartInversion"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot" style="background:#27ae60"></span> CPA Mensual — Búsqueda (tendencia ↓)</div>
+          <canvas id="chartCPA"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot" style="background:#f39c12"></span> CPA por Campaña</div>
+          <canvas id="chartCPAcamp"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CAMPAIGNS -->
+    <div class="tab-content" id="tab-campaigns">
+      <div class="section-title" style="margin-bottom:16px;"><span class="dot"></span> Performance por Campaña (Período Completo)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaña</th>
+              <th>Estado</th>
+              <th>Impresiones</th>
+              <th>Clics</th>
+              <th>CTR</th>
+              <th>CPC Prom.</th>
+              <th>Inversión</th>
+              <th>Leads</th>
+              <th>CPA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>[BÚSQUEDA]</strong><br><small style="color:#888">Diseño + Obra Res.</small></td>
+              <td><span class="badge paused">PAUSADA</span></td>
+              <td>11,696</td>
+              <td>1,337</td>
+              <td><strong>11.43%</strong></td>
+              <td>$2.43</td>
+              <td><strong>$3,253</strong></td>
+              <td><strong>45.5</strong></td>
+              <td>$71.50</td>
+            </tr>
+            <tr>
+              <td><strong>[P.MAX]</strong><br><small style="color:#888">Diseño + Obra Res.</small></td>
+              <td><span class="badge paused">PAUSADA</span></td>
+              <td>48,052</td>
+              <td>2,768</td>
+              <td>5.76%</td>
+              <td>$0.36</td>
+              <td>$985</td>
+              <td>39.5</td>
+              <td style="color:#27ae60"><strong>$24.93</strong></td>
+            </tr>
+            <tr>
+              <td><strong>[ReM PMAX]</strong><br><small style="color:#888">Remarketing</small></td>
+              <td><span class="badge paused">PAUSADA</span></td>
+              <td>9,460</td>
+              <td>415</td>
+              <td>4.39%</td>
+              <td>$0.88</td>
+              <td>$367</td>
+              <td>15.0</td>
+              <td style="color:#27ae60"><strong>$24.45</strong></td>
+            </tr>
+            <tr style="background:#f8f9fc">
+              <td><strong>[Búsqueda] Diseño Interiores</strong></td>
+              <td><span class="badge paused">PAUSADA</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td>—</td>
+              <td>—</td>
+              <td>$0</td>
+              <td>0</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:24px;" class="section-title"><span class="dot" style="background:#0f3460"></span> Calidad del Anuncio RSA</div>
+      <div style="margin-top:12px; display:grid; gap:10px;">
+        <div style="background:#f0fdf4; border-radius:8px; padding:14px 16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:.88rem;">[BÚSQUEDA] Diseño + Obra Residencial</strong>
+              <span class="badge excellent" style="margin-left:8px;">EXCELLENT</span>
+            </div>
+            <div style="font-size:.8rem; color:#888;">11,696 impr. · 11.43% CTR</div>
+          </div>
+          <div style="font-size:.78rem; color:#555; margin-top:6px;">Titular destacado: "Remodelamos tu espacio" (CTR 13.64%) · "Diseño personalizado" (14.38%) · "Espacios únicos para ti" (15.01%)</div>
+        </div>
+        <div style="background:#fefce8; border-radius:8px; padding:14px 16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:.88rem;">[Búsqueda] Diseño de Interiores</strong>
+              <span class="badge excellent" style="margin-left:8px;">EXCELLENT</span>
+            </div>
+            <div style="font-size:.78rem; color:#e94560;">⚠️ 0 impresiones — nunca sirvió</div>
+          </div>
+          <div style="font-size:.78rem; color:#555; margin-top:6px;">Campaña tiene calidad EXCELLENT pero no ha generado ningún tráfico. Revisar configuración de palabras clave y presupuesto.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;" class="section-title"><span class="dot" style="background:#f39c12"></span> Evolución Mensual — Búsqueda</div>
+      <div style="margin-top:12px;" class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Mes</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>Inversión</th><th>Leads</th><th>CPA</th><th>Tendencia CPA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Enero 2026</td><td>6,128</td><td>615</td><td>10.04%</td><td>$1,570</td><td>17</td><td>$92.37</td>
+              <td><div class="pct-bar"><div class="pct-bar-fill" style="width:100%;background:#e94560;"></div></div></td></tr>
+            <tr><td>Febrero 2026</td><td>3,450</td><td>450</td><td>13.04%</td><td>$1,023</td><td>15.5</td><td>$66.02</td>
+              <td><div class="pct-bar"><div class="pct-bar-fill" style="width:71%;background:#f39c12;"></div></div></td></tr>
+            <tr><td>Marzo 2026 (19d)</td><td>2,118</td><td>272</td><td>12.84%</td><td>$659</td><td>13</td><td>$50.72</td>
+              <td><div class="pct-bar"><div class="pct-bar-fill" style="width:55%;background:#27ae60;"></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.78rem; color:#27ae60; margin-top:8px;">✅ <strong>Tendencia positiva:</strong> El CPA ha mejorado de $92 → $50 en 3 meses. La estrategia está optimizando bien.</p>
+    </div>
+
+    <!-- TAB: TERMS -->
+    <div class="tab-content" id="tab-terms">
+      <div class="section-title" style="margin-bottom:16px;"><span class="dot" style="background:#e94560"></span> Términos que Generaron Gasto sin Conversiones (Agregar como Negativos)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Término de Búsqueda</th><th>Clics</th><th>Gasto</th><th>Conv.</th><th>Estado</th><th>Acción</th></tr>
+          </thead>
+          <tbody class="terms-row">
+            <tr><td>diseñadora de interiores</td><td>19</td><td class="waste-tag">$77.09</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+            <tr><td>decoradora de interiores</td><td>11</td><td class="waste-tag">$36.34</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+            <tr><td>diseñadores de interiores lima</td><td>4</td><td class="waste-tag">$18.31</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+            <tr><td>decoradores de interiores</td><td>6</td><td class="waste-tag">$17.03</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+            <tr><td>instalación de papel tapiz en lima</td><td>4</td><td class="waste-tag">$14.55</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+            <tr><td>diseño de interiores empresas</td><td>3</td><td class="waste-tag">$13.46</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🟡 Agregar negativo</td></tr>
+            <tr><td>diseño de habitaciones</td><td>3</td><td class="waste-tag">$13.01</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🟡 Revisar</td></tr>
+            <tr><td>arquitectos lima</td><td>4</td><td class="waste-tag">$12.93</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🟡 Agregar negativo</td></tr>
+            <tr><td>remodelaciones en lima</td><td>2</td><td class="waste-tag">$12.87</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🟡 Evaluar</td></tr>
+            <tr><td>remodelacion de oficina</td><td>1</td><td class="waste-tag">$12.77</td><td>0</td><td><span class="badge paused">Sin acción</span></td><td>🔴 Agregar negativo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px; background:#fff0f0; border-radius:8px; padding:12px 16px; font-size:.82rem; color:#c0392b;">
+        ⚠️ <strong>Gasto desperdiciado estimado: ~$228</strong> en términos irrelevantes sin ninguna conversión. Agregar estas palabras como negativas liberará presupuesto para búsquedas de mayor intención.
+      </div>
+
+      <div style="margin-top:24px;" class="section-title"><span class="dot" style="background:#27ae60"></span> Términos con Conversiones (Agregar como Palabras Clave)</div>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr><th>Término</th><th>Clics</th><th>Gasto</th><th>Conv.</th><th>Estado</th></tr>
+          </thead>
+          <tbody class="terms-row">
+            <tr><td>diseño de interiores lima</td><td>9</td><td>$36.25</td><td style="color:#27ae60"><strong>2</strong></td><td><span class="badge" style="background:#fef9c3;color:#92400e;">Sin agregar</span></td></tr>
+            <tr><td>diseñadores de interiores</td><td>9</td><td>$35.30</td><td style="color:#27ae60"><strong>1</strong></td><td><span class="badge" style="background:#fef9c3;color:#92400e;">Sin agregar</span></td></tr>
+            <tr><td>asesor diseño de interiores</td><td>1</td><td>$11.46</td><td style="color:#27ae60"><strong>1</strong></td><td><span class="badge" style="background:#fef9c3;color:#92400e;">Sin agregar</span></td></tr>
+            <tr><td>diseño de interiores en lima</td><td>2</td><td>$8.88</td><td style="color:#27ae60"><strong>1</strong></td><td><span class="badge" style="background:#fef9c3;color:#92400e;">Sin agregar</span></td></tr>
+            <tr><td>servicio de renderizado</td><td>2</td><td>$9.26</td><td style="color:#27ae60"><strong>1</strong></td><td><span class="badge" style="background:#fef9c3;color:#92400e;">Sin agregar</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: DEVICES -->
+    <div class="tab-content" id="tab-devices">
+      <div class="chart-grid">
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot"></span> Distribución de Clics por Dispositivo</div>
+          <canvas id="chartDevClicks"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:12px;"><span class="dot" style="background:#0f3460"></span> CPA por Dispositivo</div>
+          <canvas id="chartDevCPA"></canvas>
+        </div>
+      </div>
+      <div style="margin-top:16px;" class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Dispositivo</th><th>Clics</th><th>Inversión</th><th>Leads</th><th>CPA</th><th>Análisis</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🖥️ Desktop</td><td>590</td><td>$1,510</td><td>24.5</td>
+              <td style="color:#27ae60"><strong>$61.62</strong></td>
+              <td style="font-size:.78rem; color:#27ae60;">✅ Mejor CPA. Priorizar presupuesto.</td>
+            </tr>
+            <tr>
+              <td>📱 Mobile</td><td>733</td><td>$1,725</td><td>20.0</td>
+              <td style="color:#e94560"><strong>$86.23</strong></td>
+              <td style="font-size:.78rem; color:#e94560;">⚠️ CPA 40% más alto que desktop. Ajustar bid negativo en mobile.</td>
+            </tr>
+            <tr>
+              <td>📋 Tablet</td><td>14</td><td>$19</td><td>1.0</td>
+              <td style="color:#27ae60"><strong>$18.78</strong></td>
+              <td style="font-size:.78rem; color:#888;">📊 Muestra pequeña, no concluyente.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px; background:#fffbeb; border-radius:8px; padding:12px 16px; font-size:.82rem; color:#92400e;">
+        💡 <strong>Recomendación:</strong> Aplicar un ajuste de puja de -20% en Mobile para mejorar el CPA. Desktop convierte 40% más barato. Verificar que la landing sea rápida en mobile.
+      </div>
+    </div>
+
+    <!-- TAB: ACTIONS -->
+    <div class="tab-content" id="tab-actions">
+      <div class="section-title" style="margin-bottom:16px;"><span class="dot"></span> Plan de Acciones — Prioridad Alta → Baja</div>
+      <div class="actions-grid">
+
+        <div class="action-item high">
+          <div class="action-priority">🚨</div>
+          <div class="action-text">
+            <h4>Reactivar las 3 campañas INMEDIATAMENTE <span class="priority-tag tag-high">ALTA PRIORIDAD</span></h4>
+            <p>Las campañas están pausadas desde el 19-Mar-2026. Cada día sin actividad significa 0 leads para el negocio. Acceder a Google Ads y cambiar el estado de las 3 campañas a "Activa" hoy mismo.</p>
+          </div>
+        </div>
+
+        <div class="action-item high">
+          <div class="action-priority">🚫</div>
+          <div class="action-text">
+            <h4>Agregar 8+ palabras clave negativas urgentes <span class="priority-tag tag-high">ALTA PRIORIDAD</span></h4>
+            <p>Se detectaron +$228 en gasto desperdiciado en términos irrelevantes. Agregar como negativos: "diseñadora de interiores", "decoradora", "papel tapiz", "remodelacion de oficina", "diseño de habitaciones", "empresas". Esto libera presupuesto para búsquedas de mayor intención.</p>
+          </div>
+        </div>
+
+        <div class="action-item high">
+          <div class="action-priority">📱</div>
+          <div class="action-text">
+            <h4>Aplicar ajuste de puja -20% en Mobile <span class="priority-tag tag-high">ALTA PRIORIDAD</span></h4>
+            <p>Mobile tiene un CPA de $86 vs $62 en Desktop (39% más caro). Aplicar un ajuste de puja de -20% en dispositivos móviles en la campaña de Búsqueda para mejorar eficiencia del gasto. Monitorear por 7 días.</p>
+          </div>
+        </div>
+
+        <div class="action-item mid">
+          <div class="action-priority">💰</div>
+          <div class="action-text">
+            <h4>Reasignar presupuesto: escalar P.Max <span class="priority-tag tag-mid">PRIORIDAD MEDIA</span></h4>
+            <p>P.Max tiene un CPA de $24.93 (3x mejor que Búsqueda a $71.50). Con solo $15/día, tiene mucho potencial. Recomendamos incrementar P.Max a $25/día y reducir Búsqueda a $25/día. El budget total diario se mantiene en $60/día.</p>
+          </div>
+        </div>
+
+        <div class="action-item mid">
+          <div class="action-priority">🔍</div>
+          <div class="action-text">
+            <h4>Agregar keywords ganadoras como palabras clave exactas <span class="priority-tag tag-mid">PRIORIDAD MEDIA</span></h4>
+            <p>Los términos "diseño de interiores lima" (2 conv.), "diseñadores de interiores" (1 conv.) y "asesor diseño de interiores" (1 conv.) generan leads pero aún no están agregados como palabras clave oficiales. Agregarlos en concordancia de frase para capturar más volumen.</p>
+          </div>
+        </div>
+
+        <div class="action-item mid">
+          <div class="action-priority">📊</div>
+          <div class="action-text">
+            <h4>Aumentar Search Impression Share <span class="priority-tag tag-mid">PRIORIDAD MEDIA</span></h4>
+            <p>La campaña de Búsqueda tiene un share de impresión de solo 10-12% (debería estar en 30-40%+). Esto indica que se están perdiendo muchas búsquedas relevantes. Revisar si hay restricciones de presupuesto o de calidad de anuncio que limiten la visibilidad.</p>
+          </div>
+        </div>
+
+        <div class="action-item mid">
+          <div class="action-priority">🌐</div>
+          <div class="action-text">
+            <h4>Revisar velocidad y UX de la landing page <span class="priority-tag tag-mid">PRIORIDAD MEDIA</span></h4>
+            <p>Los datos de velocidad mobile (speed_score) y mobile_friendly no tienen valores registrados. Esto es una señal de alerta. Ejecutar PageSpeed Insights en larkanarquitectura.com para identificar problemas de carga, especialmente en mobile donde el CPA es más alto.</p>
+          </div>
+        </div>
+
+        <div class="action-item low">
+          <div class="action-priority">🚀</div>
+          <div class="action-text">
+            <h4>Activar campaña "[Búsqueda] Diseño de Interiores" <span class="priority-tag tag-low">PRIORIDAD BAJA</span></h4>
+            <p>Esta campaña tiene RSA con calidad EXCELLENT pero 0 impresiones y 0 clics en todo el período. Revisar que tenga presupuesto asignado, keywords activas, y que no esté limitada por segmentación. Tiene potencial para capturar demanda de diseño de interiores.</p>
+          </div>
+        </div>
+
+        <div class="action-item low">
+          <div class="action-priority">🎯</div>
+          <div class="action-text">
+            <h4>Agregar extensiones de anuncio (Sitelinks, Llamadas, Precios) <span class="priority-tag tag-low">PRIORIDAD BAJA</span></h4>
+            <p>No se detectaron datos de extensiones/assets en los reportes. Agregar sitelinks (Ver proyectos, Solicitar cotización, Diseño 3D), extensiones de llamada (teléfono), y extensiones de imagen para mejorar el CTR y la calidad del anuncio.</p>
+          </div>
+        </div>
+
+        <div class="action-item low">
+          <div class="action-priority">📈</div>
+          <div class="action-text">
+            <h4>Configurar conversiones de mayor valor (llamadas, WhatsApp) <span class="priority-tag tag-low">PRIORIDAD BAJA</span></h4>
+            <p>Actualmente solo se trackea "Lead Exon" (REQUEST_QUOTE). Si existen conversiones por llamada telefónica o WhatsApp, agregarlas como eventos de conversión secundarios en GA4 + Google Ads para tener una visión más completa del ROI de la pauta.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CHECKLIST -->
+      <div style="margin-top:24px; background:#f8f9fc; border-radius:12px; padding:18px 20px;">
+        <div class="section-title" style="margin-bottom:14px;"><span class="dot" style="background:#0f3460"></span> Checklist de Calidad</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:8px; font-size:.82rem;">
+          <div style="padding:8px 12px; background:#fee2e2; border-radius:6px;">🔴 Tracking — Campañas PAUSADAS</div>
+          <div style="padding:8px 12px; background:#d1fae5; border-radius:6px;">✅ Conversiones — Lead Exon activo</div>
+          <div style="padding:8px 12px; background:#fee2e2; border-radius:6px;">🔴 Pacing — $0 gasto hoy</div>
+          <div style="padding:8px 12px; background:#fef3c7; border-radius:6px;">⚠️ Search Terms — Negativos pendientes</div>
+          <div style="padding:8px 12px; background:#fef3c7; border-radius:6px;">⚠️ Keywords — Ganadoras sin agregar</div>
+          <div style="padding:8px 12px; background:#d1fae5; border-radius:6px;">✅ Ads RSA — Calidad EXCELLENT</div>
+          <div style="padding:8px 12px; background:#fef3c7; border-radius:6px;">⚠️ Landing — Speed score sin datos</div>
+          <div style="padding:8px 12px; background:#fef3c7; border-radius:6px;">⚠️ Dashboard — CPA mejorando ↓</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end .section -->
+</div><!-- end .container -->
+
+<div class="footer">
+  Reporte generado por <strong>Exon Agency</strong> · <strong>LARKANA Arquitectura</strong> · Período Ene–Mar 2026
+</div>
+
+<script>
+// ── TAB LOGIC ──
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const colors = {
+  red: '#e94560', blue: '#0f3460', green: '#27ae60', orange: '#f39c12',
+  purple: '#8e44ad', teal: '#16a085'
+};
+
+// ── CHART: Leads por Mes ──
+new Chart(document.getElementById('chartLeads'), {
+  type: 'bar',
+  data: {
+    labels: ['Enero', 'Febrero', 'Marzo (19d)'],
+    datasets: [{
+      label: 'Leads',
+      data: [17, 15.5, 13],
+      backgroundColor: [colors.red, colors.orange, colors.green],
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true, ticks: { stepSize: 5 } } } }
+});
+
+// ── CHART: Inversión por Campaña ──
+new Chart(document.getElementById('chartInversion'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Búsqueda ($3,253)', 'P.Max ($985)', 'ReM PMAX ($367)'],
+    datasets: [{ data: [3253, 985, 367],
+      backgroundColor: [colors.red, colors.blue, colors.teal],
+      borderWidth: 3, borderColor: '#fff' }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
+});
+
+// ── CHART: CPA Mensual ──
+new Chart(document.getElementById('chartCPA'), {
+  type: 'line',
+  data: {
+    labels: ['Enero', 'Febrero', 'Marzo (19d)'],
+    datasets: [{
+      label: 'CPA ($)',
+      data: [92.37, 66.02, 50.72],
+      borderColor: colors.green, backgroundColor: 'rgba(39,174,96,.1)',
+      tension: 0.4, fill: true, pointRadius: 6, pointBackgroundColor: colors.green
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: false, min: 40 } } }
+});
+
+// ── CHART: CPA por Campaña ──
+new Chart(document.getElementById('chartCPAcamp'), {
+  type: 'bar',
+  data: {
+    labels: ['Búsqueda', 'P.Max', 'ReM PMAX'],
+    datasets: [{
+      label: 'CPA ($)',
+      data: [71.50, 24.93, 24.45],
+      backgroundColor: [colors.red, colors.green, colors.teal],
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } } }
+});
+
+// ── CHART: Devices Clicks ──
+new Chart(document.getElementById('chartDevClicks'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Desktop (590)', 'Mobile (733)', 'Tablet (14)'],
+    datasets: [{ data: [590, 733, 14],
+      backgroundColor: [colors.blue, colors.red, colors.orange],
+      borderWidth: 3, borderColor: '#fff' }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
+});
+
+// ── CHART: Devices CPA ──
+new Chart(document.getElementById('chartDevCPA'), {
+  type: 'bar',
+  data: {
+    labels: ['Desktop', 'Mobile', 'Tablet'],
+    datasets: [{
+      label: 'CPA ($)',
+      data: [61.62, 86.23, 18.78],
+      backgroundColor: [colors.green, colors.red, colors.orange],
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } } }
+});
+</script>
+</body>
+</html>
