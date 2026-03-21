@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Google Ads – Hand M Prestige Lawn Care</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--green:#2D7A3A;--greenL:#4CAF50;--pale:#E8F5E9;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;--gbg:#F9FAFB;--gtxt:#6B7280;--dark:#111827;--shadow:0 2px 12px rgba(0,0,0,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#F3F4F6;color:var(--dark);}
+.hdr{background:linear-gradient(135deg,#1B5E20 0%,#2D7A3A 60%,#43A047 100%);color:white;padding:36px 40px 28px;}
+.hdr h1{font-size:26px;font-weight:700;letter-spacing:-0.5px;}
+.hdr p{font-size:14px;opacity:.85;margin-top:4px;}
+.hdr .period{background:rgba(255,255,255,.18);border-radius:20px;display:inline-block;padding:4px 14px;font-size:13px;margin-top:10px;}
+.nav{background:white;border-bottom:1px solid #E5E7EB;display:flex;gap:4px;padding:0 32px;position:sticky;top:0;z-index:100;overflow-x:auto;}
+.nav button{background:none;border:none;padding:14px 16px;font-size:13px;font-weight:500;color:var(--gtxt);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;}
+.nav button.active,.nav button:hover{color:var(--green);border-bottom-color:var(--green);}
+.sec{display:none;padding:24px 32px;max-width:1200px;margin:0 auto;}
+.sec.active{display:block;}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px;}
+.kcard{background:white;border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);border-left:4px solid var(--green);}
+.kcard.warn{border-left-color:var(--yellow);}.kcard.alert{border-left-color:var(--red);}
+.kcard .lbl{font-size:11px;color:var(--gtxt);text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+.kcard .val{font-size:28px;font-weight:700;color:var(--dark);margin-top:4px;line-height:1;}
+.kcard .sub{font-size:12px;color:var(--gtxt);margin-top:4px;}
+.card{background:white;border-radius:12px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:20px;}
+.card h2{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+@media(max-width:768px){.g2,.g3{grid-template-columns:1fr;}}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--gbg);color:var(--gtxt);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;text-align:left;}
+td{padding:10px 12px;border-bottom:1px solid #F3F4F6;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#F0FDF4;}
+.b{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.bg{background:#DCFCE7;color:#166534;}.by{background:#FEF9C3;color:#854D0E;}.br{background:#FEE2E2;color:#991B1B;}.bb{background:#DBEAFE;color:#1E40AF;}.bd{background:#F3F4F6;color:#4B5563;}
+.ai{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:10px;margin-bottom:10px;}
+.ai.high{background:#FFF1F2;border-left:4px solid var(--red);}
+.ai.med{background:#FFFBEB;border-left:4px solid var(--yellow);}
+.ai.low{background:#F0FDF4;border-left:4px solid var(--greenL);}
+.ai .ico{font-size:22px;flex-shrink:0;}
+.ai .ttl{font-weight:700;font-size:14px;}
+.ai .dsc{font-size:13px;color:#4B5563;margin-top:3px;}
+.pt{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:5px;}
+.pt.high{background:#FEE2E2;color:#991B1B;}.pt.med{background:#FEF3C7;color:#92400E;}.pt.low{background:#DCFCE7;color:#166534;}
+.bw{background:#E5E7EB;border-radius:999px;height:8px;margin:4px 0;overflow:hidden;}
+.bf{height:100%;border-radius:999px;}
+.bfg{background:var(--greenL);}.bfy{background:var(--yellow);}.bfr{background:var(--red);}.bfb{background:var(--blue);}
+.cw{position:relative;height:260px;}
+.cws{position:relative;height:200px;}
+.cl{list-style:none;}
+.cl li{padding:8px 0;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;gap:10px;font-size:13px;}
+.cl li:last-child{border-bottom:none;}
+.np{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:20px;padding:3px 12px;font-size:12px;margin:3px 2px;}
+.ap{display:inline-block;background:#DCFCE7;color:#166534;border-radius:20px;padding:3px 12px;font-size:12px;margin:3px 2px;}
+footer{text-align:center;padding:20px;color:var(--gtxt);font-size:12px;}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>&#127807; Hand M Prestige Lawn Care &mdash; Reporte Google Ads</h1>
+  <p>Campana: [Busqueda] Hand M Prestige &nbsp;|&nbsp; Cuenta: HANDMPRESTIGE &nbsp;|&nbsp; handmprestigelawncare.com</p>
+  <div class="period">&#128197; 1 &ndash; 19 de Marzo, 2026</div>
+</div>
+<div class="nav">
+  <button class="active" onclick="showTab('ov',this)">Resumen</button>
+  <button onclick="showTab('dv',this)">Dispositivos</button>
+  <button onclick="showTab('sc',this)">Horarios</button>
+  <button onclick="showTab('tr',this)">Terminos</button>
+  <button onclick="showTab('ad',this)">Anuncios</button>
+  <button onclick="showTab('ge',this)">Geografia</button>
+  <button onclick="showTab('ac',this)">Acciones</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="ov" class="sec active">
+<div class="kgrid">
+<div class="kcard"><div class="lbl">Impresiones</div><div class="val">3,849</div><div class="sub">Total del periodo</div></div>
+<div class="kcard"><div class="lbl">Clics</div><div class="val">140</div><div class="sub">CTR 3.64%</div></div>
+<div class="kcard warn"><div class="lbl">Inversion</div><div class="val">$901.89</div><div class="sub">~$50/dia promedio</div></div>
+<div class="kcard"><div class="lbl">Conversiones</div><div class="val">11</div><div class="sub">Conv. rate: 7.86%</div></div>
+<div class="kcard warn"><div class="lbl">CPA</div><div class="val">$82.00</div><div class="sub">Costo por conversion</div></div>
+<div class="kcard"><div class="lbl">CPC Prom.</div><div class="val">$6.44</div><div class="sub">Costo por clic</div></div>
+</div>
+<div class="g2">
+<div class="card"><h2>Clics y Costo Diario</h2><div class="cw"><canvas id="dlyC"></canvas></div></div>
+<div class="card"><h2>Conversiones por Dia</h2><div class="cw"><canvas id="cvnC"></canvas></div></div>
+</div>
+<div class="card"><h2>Checklist de Salud de la Cuenta</h2>
+<ul class="cl">
+<li><span>&#9989;</span>Tracking activo &mdash; conversiones registradas en Google Ads</li>
+<li><span>&#9989;</span>Campana ACTIVA con anuncio RSA habilitado</li>
+<li><span>&#9989;</span>CTR 3.64% dentro del rango aceptable para servicios locales</li>
+<li><span>&#9888;</span>Ad Strength del RSA: <strong>AVERAGE</strong> &mdash; se puede mejorar a "Excelente"</li>
+<li><span>&#9888;</span>Mobile CPA ($115.70) muy superior a Desktop ($48.61) &mdash; requiere ajuste de puja</li>
+<li><span>&#128308;</span>URL paths (path1/path2) del anuncio estan VACIOS &mdash; oportunidad perdida de CTR</li>
+<li><span>&#128308;</span>Velocidad y compatibilidad movil de la landing page SIN datos &mdash; auditar urgente</li>
+<li><span>&#128308;</span>Competidores activos en Search Terms generando gasto sin conversiones</li>
+</ul>
+</div>
+</div>
+
+<!-- DISPOSITIVOS -->
+<div id="dv" class="sec">
+<div class="card"><h2>Rendimiento por Dispositivo</h2>
+<table><thead><tr><th>Dispositivo</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>Costo</th><th>Conv.</th><th>CPA</th><th>% Gasto</th></tr></thead>
+<tbody>
+<tr><td><span class="b bb">Mobile</span></td><td>2,876 (74.7%)</td><td>106</td><td>3.69%</td><td>$694.20</td><td>6</td><td><span class="b by">$115.70</span></td><td><div class="bw"><div class="bf bfy" style="width:77%"></div></div><small>77%</small></td></tr>
+<tr><td><span class="b bb">Desktop</span></td><td>857 (22.3%)</td><td>30</td><td>3.50%</td><td>$194.43</td><td>4</td><td><span class="b bg">$48.61</span></td><td><div class="bw"><div class="bf bfb" style="width:22%"></div></div><small>22%</small></td></tr>
+<tr><td><span class="b bd">Tablet</span></td><td>116 (3.0%)</td><td>4</td><td>3.45%</td><td>$13.25</td><td>1</td><td><span class="b bg">$13.25</span></td><td><div class="bw"><div class="bf bfg" style="width:2%"></div></div><small>1.5%</small></td></tr>
+</tbody></table>
+</div>
+<div class="g2">
+<div class="card"><h2>Distribucion de Clics</h2><div class="cws"><canvas id="dvClk"></canvas></div></div>
+<div class="card"><h2>CPA por Dispositivo</h2><div class="cws"><canvas id="dvCpa"></canvas></div></div>
+</div>
+<div class="ai med"><div class="ico">&#9888;</div><div>
+<div class="ttl">Mobile acapara el 77% del gasto con CPA $115.70 vs $48.61 en Desktop</div>
+<div class="dsc">Aplicar ajuste de puja de <strong>-25% en Mobile</strong>. Desktop convierte mejor por clic y merece mayor presupuesto relativo.</div>
+<div class="pt med">PRIORIDAD MEDIA</div>
+</div></div>
+</div>
+
+<!-- HORARIOS -->
+<div id="sc" class="sec">
+<div class="g2">
+<div class="card"><h2>Rendimiento por Hora del Dia</h2><div class="cw"><canvas id="hrC"></canvas></div></div>
+<div class="card"><h2>Rendimiento por Dia de Semana</h2><div class="cw"><canvas id="dowC"></canvas></div></div>
+</div>
+<div class="card"><h2>Horas con Mayor Performance</h2>
+<table><thead><tr><th>Hora</th><th>Clics</th><th>Costo</th><th>Conversiones</th><th>Conv. Rate</th></tr></thead>
+<tbody>
+<tr><td>11:00 am</td><td>16</td><td>$136.59</td><td><span class="b bg">3</span></td><td>18.75%</td></tr>
+<tr><td>12:00 pm</td><td>15</td><td>$76.49</td><td><span class="b bg">2</span></td><td>13.33%</td></tr>
+<tr><td>16:00 pm</td><td>4</td><td>$40.28</td><td><span class="b by">1</span></td><td>25.00%</td></tr>
+<tr><td>15:00 pm</td><td>12</td><td>$75.37</td><td><span class="b by">1</span></td><td>8.33%</td></tr>
+<tr><td>08:00 am</td><td>13</td><td>$140.49</td><td><span class="b by">1</span></td><td>7.69%</td></tr>
+<tr><td>10:00 am</td><td>19</td><td>$101.07</td><td><span class="b bd">0</span></td><td>0%</td></tr>
+</tbody></table>
+</div>
+<div class="ai low"><div class="ico">&#128161;</div><div>
+<div class="ttl">Las conversiones ocurren entre 8am - 5pm. Reducir puja nocturna para ahorrar presupuesto.</div>
+<div class="dsc">Aplicar -50% de ajuste de puja de 9pm a 6am. Las horas 11h y 12h son las mas eficientes: concentrar ahi el presupuesto.</div>
+<div class="pt low">OPTIMIZACION SEMANA 2</div>
+</div></div>
+</div>
+
+<!-- TERMINOS -->
+<div id="tr" class="sec">
+<div class="g2">
+<div class="card"><h2>Terminos que Convierten</h2>
+<table><thead><tr><th>Termino de Busqueda</th><th>Costo</th><th>Conv.</th></tr></thead>
+<tbody>
+<tr><td>lawn mowing service near me</td><td>$20.60</td><td><span class="b bg">1</span></td></tr>
+<tr><td>lawn mowing service port charlotte fl</td><td>$17.08</td><td><span class="b bg">1</span></td></tr>
+<tr><td>lawn maintenance sarasota</td><td>$17.98</td><td><span class="b bg">1</span></td></tr>
+<tr><td>mowing companies near me</td><td>$16.22</td><td><span class="b bg">1</span></td></tr>
+<tr><td>sod punta gorda</td><td>$9.44</td><td><span class="b bg">1</span></td></tr>
+</tbody></table>
+<div style="margin-top:12px;padding:10px;background:#F0FDF4;border-radius:8px;font-size:13px;color:#166534;">
+<strong>Accion:</strong> Agregar como keywords en [Exacta] para mayor control y pujas especificas.
+</div>
+</div>
+<div class="card"><h2>Terminos que Desperdician Presupuesto</h2>
+<table><thead><tr><th>Termino</th><th>Costo</th><th>Problema</th></tr></thead>
+<tbody>
+<tr><td>yard mowers</td><td>$32.42</td><td><span class="b br">Producto, no servicio</span></td></tr>
+<tr><td>juniper fort myers</td><td>$17.30</td><td><span class="b br">Competidor</span></td></tr>
+<tr><td>landscaping and tree service</td><td>$15.49</td><td><span class="b by">Servicio diferente</span></td></tr>
+<tr><td>battista farms</td><td>$14.74</td><td><span class="b br">Competidor</span></td></tr>
+<tr><td>greenscapes naples</td><td>$13.41</td><td><span class="b br">Competidor</span></td></tr>
+<tr><td>landscape design port charlotte fl</td><td>$11.64</td><td><span class="b by">Intencion diseno</span></td></tr>
+<tr><td>turf companies in my area</td><td>$10.93</td><td><span class="b by">Muy generico</span></td></tr>
+<tr><td>trugreen phone number</td><td>$7.26</td><td><span class="b br">Competidor directo</span></td></tr>
+<tr><td>osi west salem wisconsin</td><td>$7.36</td><td><span class="b br">Irrelevante</span></td></tr>
+</tbody></table>
+</div>
+</div>
+<div class="card"><h2>Negativos a Agregar - Competidores e Irrelevantes</h2>
+<p style="font-size:13px;color:#4B5563;margin-bottom:12px;">Estos terminos generaron gasto sin conversiones y deben agregarse como <strong>palabras clave negativas a nivel campana</strong>:</p>
+<div style="margin-bottom:14px;"><strong style="font-size:13px;color:#991B1B;">Competidores:</strong><br>
+<span class="np">juniper fort myers</span><span class="np">battista farms</span><span class="np">greenscapes naples</span>
+<span class="np">trugreen</span><span class="np">three brothers landscaping</span><span class="np">top notch landscaping</span>
+<span class="np">perfection lawn care</span><span class="np">sb mowing</span><span class="np">bulldog landscape</span>
+<span class="np">henry landscaping</span><span class="np">ortiz landscaping</span><span class="np">morrison landscaping</span>
+<span class="np">lawngevity inc</span><span class="np">total landscape sarasota</span></div>
+<div style="margin-bottom:14px;"><strong style="font-size:13px;color:#92400E;">Irrelevantes / Fuera de negocio:</strong><br>
+<span class="np">yard mowers</span><span class="np">clearance lawn mowers</span><span class="np">osi west salem wisconsin</span>
+<span class="np">crabgrass killer bayer</span><span class="np">lowe's lawn and garden</span><span class="np">tree removal prices</span>
+<span class="np">cheapest tree removal</span><span class="np">arborist tree service</span><span class="np">$25 lawn service</span>
+<span class="np">native plant landscape design</span><span class="np">inexpensive drought tolerant</span></div>
+<div><strong style="font-size:13px;color:#166534;">Ya excluidos correctamente:</strong><br>
+<span class="ap">lawn love phone number</span><span class="ap">1 800 trugreen</span><span class="ap">juniper landscaping</span>
+<span class="ap">gardenia landscaping</span><span class="ap">enviro mow</span><span class="ap">a &amp; g landscaping</span></div>
+</div>
+</div>
+
+<!-- ANUNCIOS -->
+<div id="ad" class="sec">
+<div class="card"><h2>Estado del Anuncio RSA</h2>
+<div class="g3">
+<div style="padding:16px;background:#F0FDF4;border-radius:10px;text-align:center;">
+<div style="font-size:13px;color:#6B7280">Estado</div>
+<div style="font-size:22px;font-weight:700;color:#166534;margin-top:4px;">Activo</div>
+</div>
+<div style="padding:16px;background:#FFFBEB;border-radius:10px;text-align:center;">
+<div style="font-size:13px;color:#6B7280">Fuerza del Anuncio</div>
+<div style="font-size:20px;font-weight:700;color:#92400E;margin-top:4px;">AVERAGE</div>
+<div style="font-size:11px;color:#92400E">Objetivo: Excelente</div>
+</div>
+<div style="padding:16px;background:#FFF1F2;border-radius:10px;text-align:center;">
+<div style="font-size:13px;color:#6B7280">URL Paths</div>
+<div style="font-size:20px;font-weight:700;color:#991B1B;margin-top:4px;">VACIOS</div>
+<div style="font-size:11px;color:#991B1B">path1 y path2 sin rellenar</div>
+</div>
+</div>
+</div>
+<div class="g2">
+<div class="card"><h2>Top Headlines por CTR</h2>
+<table><thead><tr><th>Titular</th><th>Impr.</th><th>CTR</th></tr></thead>
+<tbody>
+<tr><td>Professional Lawn Mowing</td><td>234</td><td><span class="b bg">5.98%</span></td></tr>
+<tr><td>Reliable &amp; Affordable Care</td><td>406</td><td><span class="b bg">5.91%</span></td></tr>
+<tr><td>Top-Rated Lawn Care Service</td><td>155</td><td><span class="b bg">5.16%</span></td></tr>
+<tr><td>Affordable Lawn Care</td><td>1,119</td><td><span class="b bg">4.92%</span></td></tr>
+<tr><td>Lawn Mowing Services Near Me</td><td>695</td><td><span class="b by">4.75%</span></td></tr>
+<tr><td>Local Lawn Mowing Services</td><td>516</td><td><span class="b by">4.46%</span></td></tr>
+</tbody></table>
+</div>
+<div class="card"><h2>Headlines con Bajo CTR (reemplazar)</h2>
+<table><thead><tr><th>Titular</th><th>Impr.</th><th>CTR</th></tr></thead>
+<tbody>
+<tr><td>Reliable Lawn Care Service</td><td>249</td><td><span class="b br">1.61%</span></td></tr>
+<tr><td>Landscaping &amp; Yard Care</td><td>994</td><td><span class="b br">2.21%</span></td></tr>
+<tr><td>Full Service Landscaping</td><td>1,265</td><td><span class="b by">2.92%</span></td></tr>
+<tr><td>Complete Yard Maintenance</td><td>806</td><td><span class="b by">3.23%</span></td></tr>
+</tbody></table>
+</div>
+</div>
+<div class="card"><h2>CTR de Headlines (comparativo)</h2>
+<div class="cw" style="height:300px;"><canvas id="asstC"></canvas></div>
+</div>
+<div class="ai high"><div class="ico">&#128308;</div><div>
+<div class="ttl">Agregar path1 y path2 al RSA - impacto inmediato en CTR</div>
+<div class="dsc">Sugerido: path1="Lawn-Care" / path2="Free-Estimate". El anuncio actualmente no aprovecha estas 2 lineas adicionales de texto visibles en el URL.</div>
+<div class="pt high">HACER HOY</div>
+</div></div>
+<div class="ai med"><div class="ico">&#9999;</div><div>
+<div class="ttl">Reemplazar titulares con CTR bajo por diferenciadores de negocio</div>
+<div class="dsc">Sugeridos nuevos titulares: "Free Quote in 24 Hours", "Same-Week Service Available", "Licensed &amp; Insured Crew", "Fort Myers Lawn Experts", "Serving SW Florida".</div>
+<div class="pt med">SEMANA 1-2</div>
+</div></div>
+</div>
+
+<!-- GEOGRAFIA -->
+<div id="ge" class="sec">
+<div class="card"><h2>Rendimiento por Ciudad (SW Florida)</h2>
+<table><thead><tr><th>Ciudad</th><th>Impr.</th><th>Clics</th><th>Costo</th><th>Conv.</th><th>CPA</th><th>Eficiencia</th></tr></thead>
+<tbody>
+<tr><td><strong>Fort Myers</strong></td><td>651</td><td>33</td><td>$238.15</td><td>2</td><td><span class="b by">$119.08</span></td><td><div class="bw"><div class="bf bfy" style="width:55%"></div></div></td></tr>
+<tr><td><strong>Cape Coral</strong></td><td>562</td><td>22</td><td>$140.01</td><td>2</td><td><span class="b by">$70.01</span></td><td><div class="bw"><div class="bf bfg" style="width:75%"></div></div></td></tr>
+<tr><td><strong>Port Charlotte</strong></td><td>311</td><td>12</td><td>$100.53</td><td>3</td><td><span class="b bg">$33.51</span></td><td><div class="bw"><div class="bf bfg" style="width:92%"></div></div></td></tr>
+<tr><td><strong>Sarasota</strong></td><td>349</td><td>16</td><td>$94.94</td><td>3</td><td><span class="b bg">$31.65</span></td><td><div class="bw"><div class="bf bfg" style="width:95%"></div></div></td></tr>
+<tr><td><strong>Punta Gorda</strong></td><td>502</td><td>14</td><td>$89.16</td><td>0</td><td><span class="b br">Sin conv.</span></td><td><div class="bw"><div class="bf bfr" style="width:10%"></div></div></td></tr>
+<tr><td><strong>North Port</strong></td><td>469</td><td>12</td><td>$58.37</td><td>0</td><td><span class="b br">Sin conv.</span></td><td><div class="bw"><div class="bf bfr" style="width:10%"></div></div></td></tr>
+<tr><td><strong>Naples</strong></td><td>158</td><td>4</td><td>$58.21</td><td>0</td><td><span class="b br">Sin conv.</span></td><td><div class="bw"><div class="bf bfr" style="width:5%"></div></div></td></tr>
+<tr><td><strong>Venice</strong></td><td>162</td><td>8</td><td>$46.24</td><td>0</td><td><span class="b br">Sin conv.</span></td><td><div class="bw"><div class="bf bfr" style="width:5%"></div></div></td></tr>
+<tr><td><strong>Englewood</strong></td><td>204</td><td>7</td><td>$45.13</td><td>0</td><td><span class="b br">Sin conv.</span></td><td><div class="bw"><div class="bf bfr" style="width:5%"></div></div></td></tr>
+<tr><td><strong>Lehigh Acres</strong></td><td>290</td><td>8</td><td>$24.56</td><td>1</td><td><span class="b bg">$24.56</span></td><td><div class="bw"><div class="bf bfg" style="width:88%"></div></div></td></tr>
+</tbody></table>
+</div>
+<div class="card"><h2>Costo vs Conversiones por Ciudad</h2>
+<div class="cw"><canvas id="geoC"></canvas></div>
+</div>
+<div class="g2">
+<div class="ai high"><div class="ico">&#128640;</div><div>
+<div class="ttl">Port Charlotte y Sarasota: CPA de $31-34 (los mejores)</div>
+<div class="dsc">Aumentar pujas +15% en estas ciudades para capturar mas trafico de alta calidad. Son las mas rentables del periodo.</div>
+<div class="pt high">PRIORIDAD ALTA</div>
+</div></div>
+<div class="ai med"><div class="ico">&#9888;</div><div>
+<div class="ttl">Punta Gorda, North Port, Naples: $193 gastados sin conversiones</div>
+<div class="dsc">Reducir pujas -30% en estas ciudades. Si en 2 semanas no convierten, evaluar exclusion temporal.</div>
+<div class="pt med">PRIORIDAD MEDIA</div>
+</div></div>
+</div>
+</div>
+
+<!-- ACCIONES -->
+<div id="ac" class="sec">
+<div class="card">
+<h2>Plan de Acciones Priorizadas &mdash; Proximas 2 Semanas</h2>
+<p style="font-size:13px;color:#6B7280;margin-bottom:20px;">Ordenado por impacto esperado y urgencia.</p>
+
+<div class="ai high"><div class="ico">&#128683;</div><div>
+<div class="ttl">1. Agregar lista de negativos &mdash; competidores e irrelevantes</div>
+<div class="dsc">Se identificaron +20 terminos que generaron gasto sin conversiones. Incluye competidores (TruGreen, Battista Farms, Greenscapes, etc.) y terminos fuera de servicio. <strong>Ahorro estimado: $80-$120 por ciclo similar.</strong></div>
+<div class="pt high">HACER HOY</div>
+</div></div>
+
+<div class="ai high"><div class="ico">&#128279;</div><div>
+<div class="ttl">2. Agregar path1 y path2 al anuncio RSA</div>
+<div class="dsc">Completar: path1="Lawn-Care" y path2="Free-Estimate". Actualmente ambos campos estan vacios, lo que reduce la relevancia y el CTR del anuncio. Impacto inmediato.</div>
+<div class="pt high">HACER HOY</div>
+</div></div>
+
+<div class="ai high"><div class="ico">&#128241;</div><div>
+<div class="ttl">3. Auditar velocidad y mobile-friendliness de la landing page</div>
+<div class="dsc">Los datos de velocidad estan ausentes en Google Ads. Con 75% del trafico en mobile y CPA de $115 en mobile, una landing lenta es sospechosa. Usar PageSpeed Insights. Objetivo: score mayor a 70 en mobile.</div>
+<div class="pt high">ESTA SEMANA</div>
+</div></div>
+
+<div class="ai med"><div class="ico">&#128204;</div><div>
+<div class="ttl">4. Agregar terminos que convierten como keywords en [Exacta]</div>
+<div class="dsc">Crear: [lawn mowing service near me], [lawn maintenance sarasota], [mowing companies near me], [lawn mowing service port charlotte fl]. Permite control granular de pujas por termino rentable.</div>
+<div class="pt med">SEMANA 1</div>
+</div></div>
+
+<div class="ai med"><div class="ico">&#128241;</div><div>
+<div class="ttl">5. Ajuste de puja Mobile: -25%</div>
+<div class="dsc">Mobile tiene CPA de $115.70 vs $48.61 en Desktop. Aplicar modificador de puja -25% en mobile. Esto redistribuira presupuesto hacia clics mas eficientes en Desktop.</div>
+<div class="pt med">SEMANA 1</div>
+</div></div>
+
+<div class="ai med"><div class="ico">&#128176;</div><div>
+<div class="ttl">6. Aumentar pujas +15% en Port Charlotte y Sarasota</div>
+<div class="dsc">CPA de $31-34, los mejores del periodo con 3 conversiones cada una. Aumentar bid adjustment para capturar mas impresiones en estas zonas rentables.</div>
+<div class="pt med">SEMANA 1</div>
+</div></div>
+
+<div class="ai med"><div class="ico">&#9999;</div><div>
+<div class="ttl">7. Reemplazar titulares RSA con CTR menor a 2.5%</div>
+<div class="dsc">Eliminar "Reliable Lawn Care Service" (1.61%) y "Landscaping &amp; Yard Care" (2.21%). Nuevos titulares sugeridos: "Free Quote in 24 Hours", "Licensed &amp; Insured Crew", "Same-Week Service Available".</div>
+<div class="pt med">SEMANA 1-2</div>
+</div></div>
+
+<div class="ai low"><div class="ico">&#128336;</div><div>
+<div class="ttl">8. Reducir puja -50% en horario nocturno (9pm a 6am)</div>
+<div class="dsc">Todas las conversiones ocurren entre 8am-5pm. Las horas nocturnas generan clics pero zero conversiones. Reducir puja nocturna para redirigir ese presupuesto a horarios productivos.</div>
+<div class="pt low">SEMANA 2</div>
+</div></div>
+
+<div class="ai low"><div class="ico">&#128202;</div><div>
+<div class="ttl">9. Mejorar Ad Strength de AVERAGE a EXCELLENT</div>
+<div class="dsc">Agregar titulares con mayor variedad: beneficios unicos, CTA fuerte (Call Now, Get Quote), nombres de ciudad. Reducir redundancia de "landscaping" en multiples titulares.</div>
+<div class="pt low">SEMANA 2</div>
+</div></div>
+
+<div class="ai low"><div class="ico">&#128270;</div><div>
+<div class="ttl">10. Revisar ciudades sin conversiones en 2 semanas</div>
+<div class="dsc">Punta Gorda, Naples, Venice y Englewood: $198 gastados sin conversiones. Dar 2 semanas mas de datos. Si no convierten, excluir de targeting o bajar pujas agresivamente.</div>
+<div class="pt low">EN 2 SEMANAS</div>
+</div></div>
+
+</div>
+</div>
+
+<footer>Reporte generado el 20 de Marzo, 2026 | Exon Google Ads Agency | handmprestigelawncare.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+Chart.defaults.color='#6B7280';
+const gr='#2D7A3A',gl='#4CAF50',yw='#F59E0B',rd='#EF4444',bl='#3B82F6';
+
+// DAILY COST+CLICKS
+new Chart(document.getElementById('dlyC'),{type:'bar',data:{
+  labels:['Mar2','Mar3','Mar4','Mar5','Mar6','Mar7','Mar8','Mar9','Mar10','Mar11','Mar12','Mar13','Mar14','Mar15','Mar16','Mar17','Mar18','Mar19'],
+  datasets:[
+    {label:'Costo ($)',data:[4.14,55.97,53.95,92.07,10.49,13.69,56.43,65.58,94.87,72.99,57.42,49.07,33.10,42.58,47.60,25.30,26.66,99.97],
+     backgroundColor:'rgba(45,122,58,0.75)',yAxisID:'y',borderRadius:4},
+    {label:'Clics',data:[1,8,8,8,5,3,6,9,11,18,13,9,5,6,9,6,6,9],
+     type:'line',borderColor:yw,backgroundColor:'rgba(245,158,11,0.08)',borderWidth:2.5,pointRadius:4,fill:true,yAxisID:'y1'}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{position:'top'}},
+  scales:{y:{position:'left',title:{display:true,text:'Costo ($)'},grid:{color:'#F3F4F6'}},
+          y1:{position:'right',title:{display:true,text:'Clics'},grid:{drawOnChartArea:false}}}}});
+
+// CONVERSIONS
+new Chart(document.getElementById('cvnC'),{type:'bar',data:{
+  labels:['Mar2','Mar3','Mar4','Mar5','Mar6','Mar7','Mar8','Mar9','Mar10','Mar11','Mar12','Mar13','Mar14','Mar15','Mar16','Mar17','Mar18','Mar19'],
+  datasets:[{label:'Conversiones',data:[0,0,1,1,0,0,2,2,0,1,1,1,1,0,0,1,0,0],
+    backgroundColor:(ctx)=>ctx.raw>0?gl:'#E5E7EB',borderRadius:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+  scales:{y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:'#F3F4F6'}}}}});
+
+// DEVICE CLICKS DONUT
+new Chart(document.getElementById('dvClk'),{type:'doughnut',data:{
+  labels:['Mobile (106)','Desktop (30)','Tablet (4)'],
+  datasets:[{data:[106,30,4],backgroundColor:[yw,bl,'#9CA3AF'],borderWidth:2,borderColor:'white'}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+
+// DEVICE CPA
+new Chart(document.getElementById('dvCpa'),{type:'bar',data:{
+  labels:['Mobile','Desktop','Tablet'],
+  datasets:[{label:'CPA ($)',data:[115.70,48.61,13.25],
+    backgroundColor:[rd,bl,'#9CA3AF'],borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false}},
+  scales:{y:{beginAtZero:true,grid:{color:'#F3F4F6'},title:{display:true,text:'CPA ($)'}}}}});
+
+// HOURLY
+const hLbl=Array.from({length:24},(_,i)=>i+'h');
+const hClk=[3,0,1,0,0,1,0,3,13,7,19,16,15,7,5,12,4,5,4,3,2,2,2,3];
+const hCon=[0,0,0,0,0,0,0,0,1,0,0,3,2,0,0,1,1,0,0,0,0,0,0,0];
+new Chart(document.getElementById('hrC'),{type:'bar',data:{labels:hLbl,
+  datasets:[
+    {label:'Clics',data:hClk,backgroundColor:'rgba(59,130,246,0.6)',yAxisID:'y',borderRadius:4},
+    {label:'Conversiones',data:hCon,type:'line',borderColor:gl,borderWidth:2.5,
+     pointRadius:5,fill:false,yAxisID:'y1',pointBackgroundColor:gl}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+  scales:{y:{grid:{color:'#F3F4F6'},title:{display:true,text:'Clics'}},
+          y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Conv.'},min:0,max:4}}}});
+
+// DAY OF WEEK
+new Chart(document.getElementById('dowC'),{type:'bar',data:{
+  labels:['Lun','Mar','Mie','Jue','Vie','Sab','Dom'],
+  datasets:[
+    {label:'Costo ($)',data:[117.32,176.14,153.60,249.47,59.56,46.79,99.01],
+     backgroundColor:'rgba(45,122,58,0.7)',borderRadius:6,yAxisID:'y'},
+    {label:'Conversiones',data:[2,1,2,2,1,1,2],type:'line',
+     borderColor:yw,borderWidth:2.5,pointRadius:5,fill:false,yAxisID:'y1',pointBackgroundColor:yw}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+  scales:{y:{grid:{color:'#F3F4F6'},title:{display:true,text:'Costo ($)'}},
+          y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Conv.'},min:0,max:4}}}});
+
+// ASSETS HEADLINE
+new Chart(document.getElementById('asstC'),{type:'bar',indexAxis:'y',data:{
+  labels:['Professional Lawn Mowing','Reliable & Affordable Care','Top-Rated Lawn Care Service',
+          'Affordable Lawn Care','Lawn Mowing Services Near Me','Local Lawn Mowing Services',
+          'Landscaping','Book Your Lawn Service Now','{Keyword:Lawn Care Services}',
+          'Landscaping services','Total Landscape Solutions','Complete Yard Maintenance',
+          'Full Service Landscaping','Landscaping & Yard Care','Reliable Lawn Care Service'],
+  datasets:[{label:'CTR (%)',
+    data:[5.98,5.91,5.16,4.92,4.75,4.46,4.35,3.74,3.69,3.38,3.26,3.23,2.92,2.21,1.61],
+    backgroundColor:['#166534','#166534','#166534','#2D7A3A','#2D7A3A','#2D7A3A','#2D7A3A',
+                     '#4CAF50','#4CAF50','#4CAF50','#4CAF50','#4CAF50','#F59E0B','#EF4444','#EF4444'],
+    borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false}},
+  scales:{x:{beginAtZero:true,max:7,title:{display:true,text:'CTR (%)'},grid:{color:'#F3F4F6'}},
+          y:{ticks:{font:{size:11}}}}}});
+
+// GEO CHART
+new Chart(document.getElementById('geoC'),{type:'bar',data:{
+  labels:['Fort Myers','Cape Coral','Port Charlotte','Sarasota','Punta Gorda','North Port','Naples','Venice','Englewood','Lehigh Acres'],
+  datasets:[
+    {label:'Costo ($)',data:[238.15,140.01,100.53,94.94,89.16,58.37,58.21,46.24,45.13,24.56],
+     backgroundColor:'rgba(45,122,58,0.7)',yAxisID:'y',borderRadius:4},
+    {label:'Conversiones',data:[2,2,3,3,0,0,0,0,0,1],
+     type:'line',borderColor:yw,borderWidth:2.5,pointRadius:6,fill:false,
+     yAxisID:'y1',pointBackgroundColor:(ctx)=>ctx.raw>0?gl:rd}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+  scales:{y:{grid:{color:'#F3F4F6'},title:{display:true,text:'Costo ($)'}},
+          y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Conv.'},min:0,max:4}}}});
+</script>
+</body></html>
