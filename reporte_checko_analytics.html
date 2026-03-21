@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Google Ads — Checko Analytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --success: #34a853;
+    --warning: #fbbc04;
+    --danger: #ea4335;
+    --dark: #1e2a3a;
+    --light: #f8f9fa;
+    --card-bg: #ffffff;
+    --border: #e8eaed;
+    --text: #202124;
+    --muted: #5f6368;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Google Sans', Roboto, Arial, sans-serif; background: #f1f3f4; color: var(--text); }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 28px 40px; }
+  .header h1 { font-size: 26px; font-weight: 600; }
+  .header p { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .header .meta { display: flex; gap: 24px; margin-top: 12px; font-size: 13px; opacity: 0.9; }
+  .header .meta span { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; }
+
+  /* Navigation */
+  .nav { background: white; border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; gap: 4px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .nav button { padding: 14px 18px; border: none; background: none; cursor: pointer; font-size: 14px; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; font-weight: 500; }
+  .nav button.active, .nav button:hover { color: var(--primary); border-bottom-color: var(--primary); }
+
+  /* Content */
+  .content { padding: 28px 40px; max-width: 1280px; margin: 0 auto; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 20px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+  .kpi-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-card .value { font-size: 28px; font-weight: 700; color: var(--dark); line-height: 1; }
+  .kpi-card .sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .kpi-card.alert-red { border-left: 4px solid var(--danger); }
+  .kpi-card.alert-green { border-left: 4px solid var(--success); }
+  .kpi-card.alert-yellow { border-left: 4px solid var(--warning); }
+
+  /* Charts */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--dark); }
+  .chart-card canvas { max-height: 280px; }
+
+  /* Actions */
+  .actions-grid { display: flex; flex-direction: column; gap: 12px; }
+  .action-item { background: white; border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 14px; }
+  .action-item .priority { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .action-item.red .priority { background: #fce8e6; color: var(--danger); }
+  .action-item.yellow .priority { background: #fef7e0; color: #f29900; }
+  .action-item.green .priority { background: #e6f4ea; color: var(--success); }
+  .action-item .body .title { font-weight: 600; font-size: 14px; color: var(--dark); }
+  .action-item .body .desc { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+  .badge.red { background: #fce8e6; color: var(--danger); }
+  .badge.yellow { background: #fef7e0; color: #f29900; }
+  .badge.green { background: #e6f4ea; color: var(--success); }
+
+  /* Tables */
+  .table-wrap { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; }
+  .table-wrap h3 { padding: 16px 20px; font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #f8f9fa; padding: 11px 16px; text-align: left; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
+  td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid #f1f3f4; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag.broad { background: #e8f0fe; color: #1967d2; }
+  .tag.red { background: #fce8e6; color: var(--danger); }
+  .tag.green { background: #e6f4ea; color: var(--success); }
+  .tag.yellow { background: #fef7e0; color: #f29900; }
+
+  /* Alert box */
+  .alert-box { border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; display: flex; gap: 12px; align-items: flex-start; }
+  .alert-box.red { background: #fce8e6; border-left: 4px solid var(--danger); }
+  .alert-box.yellow { background: #fef7e0; border-left: 4px solid var(--warning); }
+  .alert-box.blue { background: #e8f0fe; border-left: 4px solid var(--primary); }
+  .alert-box .icon { font-size: 18px; }
+
+  /* Section title */
+  .section-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+  @media (max-width: 768px) {
+    .content { padding: 16px; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .header { padding: 20px 16px; }
+    .nav { padding: 0 8px; overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📊 Reporte Google Ads — Checko Analytics</h1>
+  <p>Campaña: [BÚSQUEDA] - GENERAL &nbsp;|&nbsp; Elaborado por el equipo de pauta</p>
+  <div class="meta">
+    <span>📅 Período: 21 Ene – 19 Mar 2026</span>
+    <span>💰 Presupuesto diario: S/ 40</span>
+    <span>🎯 Objetivo: Solicitudes de presupuesto</span>
+    <span>⚙️ Estrategia: Maximizar conversiones</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="active" onclick="showTab('overview')">📈 Resumen</button>
+  <button onclick="showTab('keywords')">🔑 Keywords</button>
+  <button onclick="showTab('devices')">📱 Dispositivos & Horarios</button>
+  <button onclick="showTab('ads')">📝 Anuncios</button>
+  <button onclick="showTab('actions')">⚡ Plan de Acción</button>
+</div>
+
+<div class="content">
+
+<!-- ===================== TAB: OVERVIEW ===================== -->
+<div id="tab-overview" class="tab-content active">
+  <div class="alert-box yellow">
+    <span class="icon">⚠️</span>
+    <div><strong>Alerta Clave:</strong> El Search Impression Share es de solo <strong>10%</strong>. Esto significa que el anuncio solo aparece en <strong>1 de cada 10 búsquedas relevantes</strong>. El presupuesto y la calidad de los anuncios están limitando la visibilidad de forma crítica.</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card alert-green">
+      <div class="label">Impresiones</div>
+      <div class="value">16,284</div>
+      <div class="sub">Veces que apareció el anuncio</div>
+    </div>
+    <div class="kpi-card alert-green">
+      <div class="label">Clics</div>
+      <div class="value">1,024</div>
+      <div class="sub">Visitas al sitio web</div>
+    </div>
+    <div class="kpi-card alert-green">
+      <div class="label">CTR</div>
+      <div class="value">6.29%</div>
+      <div class="sub">Benchmark: ~5% ✅ Bueno</div>
+    </div>
+    <div class="kpi-card alert-yellow">
+      <div class="label">CPC Promedio</div>
+      <div class="value">S/ 2.07</div>
+      <div class="sub">Costo por clic</div>
+    </div>
+    <div class="kpi-card alert-yellow">
+      <div class="label">Inversión Total</div>
+      <div class="value">S/ 2,120</div>
+      <div class="sub">En ~59 días activos</div>
+    </div>
+    <div class="kpi-card alert-green">
+      <div class="label">Conversiones</div>
+      <div class="value">19</div>
+      <div class="sub">Solicitudes de presupuesto</div>
+    </div>
+    <div class="kpi-card alert-yellow">
+      <div class="label">Costo / Lead</div>
+      <div class="value">S/ 111.56</div>
+      <div class="sub">Meta sugerida: &lt; S/ 80</div>
+    </div>
+    <div class="kpi-card alert-red">
+      <div class="label">Imp. Share</div>
+      <div class="value">10%</div>
+      <div class="sub">⚠️ Muy bajo — meta: &gt;40%</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h3>📅 Clics y Conversiones por Día (Feb – Mar 2026)</h3>
+      <canvas id="chartTrend"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>📅 Evolución Mensual — Inversión y Leads</h3>
+      <canvas id="chartMonthly"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>💰 CPA por Mes (Costo por Lead)</h3>
+      <canvas id="chartCPA"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB: KEYWORDS ===================== -->
+<div id="tab-keywords" class="tab-content">
+  <div class="alert-box red">
+    <span class="icon">🚨</span>
+    <div><strong>Problema crítico:</strong> El <strong>100% de las keywords están en concordancia AMPLIA</strong>. Esto permite que el anuncio aparezca ante búsquedas muy diferentes a las deseadas, desperdiciando presupuesto en clics no calificados. Se deben agregar keywords en concordancia de frase o exacta.</div>
+  </div>
+
+  <div class="table-wrap">
+    <h3>🏆 Top Keywords por Conversiones</h3>
+    <table>
+      <thead><tr>
+        <th>Keyword</th><th>Tipo</th><th>Clics</th><th>Costo (S/)</th><th>Leads</th><th>CPA (S/)</th><th>CTR</th><th>Nivel Calidad</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>gestión de datos</strong></td><td><span class="tag broad">AMPLIA</span></td><td>128</td><td>393.81</td><td><strong>5</strong></td><td>78.76</td><td>5.58%</td><td><span class="tag yellow">Sin datos</span></td></tr>
+        <tr><td><strong>ciencia de datos para negocios</strong></td><td><span class="tag broad">AMPLIA</span></td><td>66</td><td>220.71</td><td><strong>4</strong></td><td>55.18</td><td>3.82%</td><td><span class="tag yellow">Sin datos</span></td></tr>
+        <tr><td><strong>big data y análisis de datos</strong></td><td><span class="tag broad">AMPLIA</span></td><td>97</td><td>244.63</td><td><strong>3</strong></td><td>81.54</td><td>5.39%</td><td><span class="tag yellow">Sin datos</span></td></tr>
+        <tr><td><strong>soluciones de business intelligence</strong></td><td><span class="tag broad">AMPLIA</span></td><td>80</td><td>211.09</td><td><strong>3</strong></td><td>70.36</td><td>6.50%</td><td><span class="tag yellow">Sin datos</span></td></tr>
+        <tr><td>consultoría análisis de datos</td><td><span class="tag broad">AMPLIA</span></td><td>56</td><td>186.74</td><td>2</td><td>93.37</td><td>5.26%</td><td><span class="tag green">5/10</span></td></tr>
+        <tr><td>análisis de datos para empresas</td><td><span class="tag broad">AMPLIA</span></td><td>39</td><td>100.89</td><td>1</td><td>100.89</td><td>4.71%</td><td><span class="tag red">1/10 ⚠️</span></td></tr>
+        <tr><td>empresas de business intelligence</td><td><span class="tag broad">AMPLIA</span></td><td>76</td><td>176.88</td><td>1</td><td>176.88</td><td>5.68%</td><td><span class="tag yellow">Sin datos</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <h3>🗑️ Términos de Búsqueda con Gasto sin Resultados (Pendientes de Excluir)</h3>
+    <table>
+      <thead><tr><th>Término Buscado</th><th>Clics</th><th>Costo (S/)</th><th>Leads</th><th>Estado</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td>software de ventas</td><td>2</td><td>27.88</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>ventas apalancadas</td><td>2</td><td>27.76</td><td>1*</td><td><span class="tag red">Activo</span></td><td>❌ Excluir (irrelevante)</td></tr>
+        <tr><td>marketing com</td><td>1</td><td>9.93</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>growth partner peru</td><td>1</td><td>9.62</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>reporte empresarial</td><td>1</td><td>8.15</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>investigacion de productos y prueba de mercado</td><td>5</td><td>7.38</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>aplicaciones para analizar datos</td><td>1</td><td>7.32</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>dashboard presupuesto</td><td>2</td><td>7.31</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>web scraping</td><td>2</td><td>6.74</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>métricas redes sociales</td><td>1</td><td>6.30</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>ecommerce</td><td>1</td><td>5.82</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>lampyre osint</td><td>1</td><td>5.80</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+        <tr><td>base de datos</td><td>1</td><td>5.86</td><td>0</td><td><span class="tag red">Activo</span></td><td>❌ Excluir</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#5f6368;padding:10px 16px;">*1 conversión en "ventas apalancadas" probablemente accidental — término irrelevante para el servicio</p>
+  </div>
+
+  <div class="chart-card">
+    <h3>📊 Costo vs Conversiones por Keyword</h3>
+    <canvas id="chartKeywords" style="max-height:300px"></canvas>
+  </div>
+</div>
+
+<!-- ===================== TAB: DEVICES & HOURS ===================== -->
+<div id="tab-devices" class="tab-content">
+  <div class="alert-box blue">
+    <span class="icon">💡</span>
+    <div><strong>Hallazgo:</strong> El <strong>Desktop genera mejor CPA (S/ 99.56)</strong> que Mobile (S/ 135.98). Sin embargo, Mobile tiene mayor CTR (9.24% vs 4.51%). Esto sugiere que el móvil atrae clics pero la landing no convierte bien en ese dispositivo.</div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>📱 Clics por Dispositivo</h3>
+      <canvas id="chartDevClicks"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>🎯 CPA por Dispositivo (S/)</h3>
+      <canvas id="chartDevCPA"></canvas>
+    </div>
+    <div class="chart-card full">
+      <h3>⏰ Conversiones por Hora del Día</h3>
+      <canvas id="chartHours" style="max-height:260px"></canvas>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <h3>📅 Conversiones por Día de Semana</h3>
+    <table>
+      <thead><tr><th>Día</th><th>Conversiones</th><th>Clics</th><th>Inversión (S/)</th><th>Performance</th></tr></thead>
+      <tbody>
+        <tr><td>Jueves</td><td><strong>5</strong></td><td>176</td><td>362.57</td><td>⭐⭐⭐⭐⭐ Mejor día</td></tr>
+        <tr><td>Martes</td><td><strong>4</strong></td><td>95</td><td>292.56</td><td>⭐⭐⭐⭐ Muy bueno</td></tr>
+        <tr><td>Lunes</td><td><strong>4</strong></td><td>125</td><td>325.93</td><td>⭐⭐⭐⭐ Muy bueno</td></tr>
+        <tr><td>Miércoles</td><td><strong>3</strong></td><td>98</td><td>243.09</td><td>⭐⭐⭐ Bueno</td></tr>
+        <tr><td>Viernes</td><td><strong>2</strong></td><td>176</td><td>387.30</td><td>⭐⭐ Regular</td></tr>
+        <tr><td>Sábado</td><td><strong>1</strong></td><td>164</td><td>270.84</td><td>⭐ Bajo</td></tr>
+        <tr><td>Domingo</td><td><strong>0</strong></td><td>190</td><td>237.38</td><td>🚫 Sin conversiones</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===================== TAB: ADS ===================== -->
+<div id="tab-ads" class="tab-content">
+  <div class="alert-box yellow">
+    <span class="icon">⚠️</span>
+    <div><strong>Calidad del anuncio: AVERAGE</strong> — Google recomienda llegar a <strong>EXCELLENT</strong> para maximizar el rendimiento y reducir el CPC. Se deben agregar más variantes de títulos únicos y hacer pin de los mejores.</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card alert-yellow">
+      <div class="label">Ad Strength</div>
+      <div class="value" style="font-size:20px;">AVERAGE</div>
+      <div class="sub">⚠️ Meta: EXCELLENT</div>
+    </div>
+    <div class="kpi-card alert-green">
+      <div class="label">CTR del Anuncio</div>
+      <div class="value">6.29%</div>
+      <div class="sub">Buen nivel general</div>
+    </div>
+    <div class="kpi-card alert-yellow">
+      <div class="label">Títulos activos</div>
+      <div class="value">15</div>
+      <div class="sub">Todos en estado PENDING</div>
+    </div>
+    <div class="kpi-card alert-green">
+      <div class="label">Landing Page</div>
+      <div class="value" style="font-size:14px; margin-top:4px;">checkoanalytics.com</div>
+      <div class="sub">⚠️ Sin datos de velocidad</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <h3>📊 CTR por Título (Headlines) — Mejores vs Peores</h3>
+      <canvas id="chartAssets" style="max-height:320px"></canvas>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <h3>✍️ Títulos Activos — Rendimiento</h3>
+    <table>
+      <thead><tr><th>Título</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td>Consultoría comercial en Lima</td><td>2,865</td><td>212</td><td><strong>7.40%</strong></td><td>⭐ Mejor</td></tr>
+        <tr><td>Consultoría en analítica</td><td>4,007</td><td>267</td><td><strong>6.66%</strong></td><td>⭐ Mejor</td></tr>
+        <tr><td>Reportes de ventas mensuales</td><td>1,613</td><td>107</td><td><strong>6.63%</strong></td><td>⭐ Bueno</td></tr>
+        <tr><td>Reportes de Análisis de Datos</td><td>3,677</td><td>220</td><td>5.98%</td><td>✅ Normal</td></tr>
+        <tr><td>Dashboards comerciales</td><td>5,522</td><td>322</td><td>5.83%</td><td>✅ Normal</td></tr>
+        <tr><td>Analítica de Ventas</td><td>1,562</td><td>91</td><td>5.83%</td><td>✅ Normal</td></tr>
+        <tr><td>Consultoría de Ventas</td><td>1,886</td><td>94</td><td>4.98%</td><td>⚠️ Bajo</td></tr>
+        <tr><td>Analítica de Ventas Efectiva</td><td>1,215</td><td>57</td><td>4.69%</td><td>🔴 Reemplazar</td></tr>
+        <tr><td>Mejora tus Ventas Corporativas</td><td>885</td><td>37</td><td>4.18%</td><td>🔴 Reemplazar</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <h3>📋 Descripciones — Rendimiento</h3>
+    <table>
+      <thead><tr><th>Descripción</th><th>Impresiones</th><th>Clics</th><th>CTR</th></tr></thead>
+      <tbody>
+        <tr><td>Expertos en analítica de ventas y consultoría en analítica comercial. Automatiza Ventas.</td><td>8,835</td><td>616</td><td><strong>6.97%</strong> ⭐</td></tr>
+        <tr><td>Servicios de análisis de datos para empresas: outsourcing de reportes de ventas.</td><td>6,309</td><td>424</td><td>6.72%</td></tr>
+        <tr><td>Dashboards comerciales y visualización de datos de ventas. Optimiza tu área Comercial.</td><td>5,347</td><td>281</td><td>5.26%</td></tr>
+        <tr><td>Consultoría Comercial: seguimiento de ventas con reportes claros para el éxito empresarial</td><td>4,710</td><td>261</td><td>5.54%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===================== TAB: ACTIONS ===================== -->
+<div id="tab-actions" class="tab-content">
+  <p class="section-title">⚡ Plan de Acción — Prioridades Inmediatas</p>
+
+  <div class="alert-box blue">
+    <span class="icon">📌</span>
+    <div>Las acciones están organizadas por impacto y urgencia. Las 🔴 <strong>Urgentes</strong> deben ejecutarse esta semana. Las 🟡 <strong>Importantes</strong> en los próximos 7–14 días. Las 🟢 <strong>Mejoras</strong> son optimizaciones continuas.</div>
+  </div>
+
+  <div class="actions-grid">
+
+    <div class="action-item red">
+      <div class="priority">🔴</div>
+      <div class="body">
+        <div class="title">Excluir términos de búsqueda irrelevantes <span class="badge red">URGENTE</span></div>
+        <div class="desc">Agregar como keywords negativas: <em>software de ventas, ventas apalancadas, marketing com, growth partner peru, web scraping, ecommerce, base de datos, lampyre osint, dashboard presupuesto, métricas redes sociales, investigación de productos, reporte empresarial, aplicaciones para analizar datos.</em><br>
+        💸 Ahorro estimado: S/ 120–150 de gasto inútil ya registrado. Previene desperdicio futuro.</div>
+      </div>
+    </div>
+
+    <div class="action-item red">
+      <div class="priority">🔴</div>
+      <div class="body">
+        <div class="title">Pausar keywords con Quality Score = 1 (BELOW AVERAGE) <span class="badge red">URGENTE</span></div>
+        <div class="desc">Las keywords <em>analisis de big data</em>, <em>visualización de datos</em> y <em>analisis de datos para empresas</em> tienen QS=1, lo que significa que Google las penaliza con CPCs más altos y menor visibilidad. Pausar o reescribir con mejor relevancia de anuncio y landing.</div>
+      </div>
+    </div>
+
+    <div class="action-item red">
+      <div class="priority">🔴</div>
+      <div class="body">
+        <div class="title">Aumentar Search Impression Share del 10% al 40%+ <span class="badge red">URGENTE</span></div>
+        <div class="desc">Solo aparecemos en 1 de cada 10 búsquedas. Acciones: (1) Evaluar aumentar presupuesto diario de S/40 a S/55–70 si el CPA se mantiene aceptable; (2) Mejorar el Ad Strength de AVERAGE a EXCELLENT para mejorar el Ad Rank sin pagar más; (3) Revisar segmentación geográfica — puede estar muy amplia.</div>
+      </div>
+    </div>
+
+    <div class="action-item yellow">
+      <div class="priority">🟡</div>
+      <div class="body">
+        <div class="title">Agregar keywords en concordancia exacta y frase <span class="badge yellow">IMPORTANTE</span></div>
+        <div class="desc">Los mejores términos que convierten deben agregarse en exacta o frase: <em>"gestión de datos", "ciencia de datos para negocios", "soluciones de business intelligence"</em>. Esto reduce la cantidad de búsquedas irrelevantes y mejora el Quality Score. Mantener AMPLIA solo para descubrimiento.</div>
+      </div>
+    </div>
+
+    <div class="action-item yellow">
+      <div class="priority">🟡</div>
+      <div class="body">
+        <div class="title">Mejorar Ad Strength de AVERAGE a EXCELLENT <span class="badge yellow">IMPORTANTE</span></div>
+        <div class="desc">Acciones concretas: (1) Reemplazar los títulos con CTR bajo: <em>"Mejora tus Ventas Corporativas" (4.18%)</em> y <em>"Analítica de Ventas Efectiva" (4.69%)</em>; (2) Añadir al menos 3 nuevos títulos únicos que incluyan keywords principales; (3) Hacer PIN del título de mayor CTR: <em>"Consultoría comercial en Lima"</em> en posición 1.</div>
+      </div>
+    </div>
+
+    <div class="action-item yellow">
+      <div class="priority">🟡</div>
+      <div class="body">
+        <div class="title">Reducir puja en Mobile en -20% <span class="badge yellow">IMPORTANTE</span></div>
+        <div class="desc">Desktop tiene CPA de S/ 99.56 vs Mobile S/ 135.98. El tráfico móvil está costando 37% más por lead. Aplicar ajuste de puja de -20% en dispositivos móviles para redistribuir el presupuesto hacia desktop donde se convierten mejor. Monitorear por 2 semanas antes de ajustar más.</div>
+      </div>
+    </div>
+
+    <div class="action-item yellow">
+      <div class="priority">🟡</div>
+      <div class="body">
+        <div class="title">Activar programación de anuncios — enfocar en horas de conversión <span class="badge yellow">IMPORTANTE</span></div>
+        <div class="desc">Las conversiones ocurren principalmente entre las <strong>10:00 – 17:00 horas</strong> de lunes a jueves. Reducir puja o pausar los horarios nocturnos (00:00–07:00) donde se genera gasto sin conversiones. Los domingos tampoco generan ninguna conversión — considerar pausar.</div>
+      </div>
+    </div>
+
+    <div class="action-item green">
+      <div class="priority">🟢</div>
+      <div class="body">
+        <div class="title">Crear landing page dedicada (no usar homepage) <span class="badge green">OPTIMIZACIÓN</span></div>
+        <div class="desc">Actualmente todos los clics van a la homepage <em>checkoanalytics.com/</em>. Una landing específica con la propuesta de valor (análisis de datos / reportes) y un formulario claro podría mejorar la tasa de conversión del ~1.86% actual. Además, no se tienen datos de velocidad o mobile-friendliness — verificar urgente con Google PageSpeed.</div>
+      </div>
+    </div>
+
+    <div class="action-item green">
+      <div class="priority">🟢</div>
+      <div class="body">
+        <div class="title">Agregar extensiones de anuncio (sitelinks, callouts, llamada) <span class="badge green">OPTIMIZACIÓN</span></div>
+        <div class="desc">No se detectaron extensiones activas en los datos. Agregar: (1) <strong>Sitelinks</strong>: "Ver casos de éxito", "Solicitar demo", "¿Qué incluye?"; (2) <strong>Callouts</strong>: "Más de 50 empresas", "Resultados en 30 días", "Sin contrato largo"; (3) <strong>Llamada</strong>: si tienen número disponible para contacto directo. Las extensiones aumentan el CTR entre 10–15%.</div>
+      </div>
+    </div>
+
+    <div class="action-item green">
+      <div class="priority">🟢</div>
+      <div class="body">
+        <div class="title">Configurar seguimiento de conversiones enriquecido y CRM <span class="badge green">OPTIMIZACIÓN</span></div>
+        <div class="desc">Actualmente se registra solo "Solicitud de presupuesto" con valor $0. Mejorar: (1) Asignar valor monetario a cada lead según ticket promedio del servicio; (2) Agregar micro-conversiones (scroll, tiempo en página, clic en WhatsApp); (3) Importar conversiones offline desde CRM para que Google Ads aprenda de los leads que realmente cierran.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Chart defaults
+Chart.defaults.font.family = "Google Sans, Roboto, Arial, sans-serif";
+Chart.defaults.color = '#5f6368';
+
+// TREND CHART
+const trendCtx = document.getElementById('chartTrend').getContext('2d');
+new Chart(trendCtx, {
+  type: 'bar',
+  data: {
+    labels: ["01/02", "02/02", "03/02", "04/02", "05/02", "06/02", "07/02", "08/02", "09/02", "10/02", "12/02", "13/02", "14/02", "15/02", "16/02", "17/02", "18/02", "19/02", "20/02", "21/02", "22/02", "23/02", "24/02", "25/02", "26/02", "27/02", "28/02", "01/03", "02/03", "03/03", "04/03", "05/03", "06/03", "07/03", "08/03", "09/03", "10/03", "11/03", "12/03", "13/03", "14/03", "15/03", "16/03", "17/03", "18/03", "19/03"],
+    datasets: [{
+      label: 'Clics',
+      data: [8, 8, 5, 22, 25, 18, 14, 15, 30, 15, 7, 12, 16, 14, 17, 15, 8, 16, 19, 17, 8, 12, 12, 15, 13, 13, 10, 5, 20, 19, 17, 14, 12, 9, 13, 12, 12, 13, 7, 14, 14, 14, 22, 13, 17, 11],
+      backgroundColor: 'rgba(26,115,232,0.15)',
+      borderColor: '#1a73e8',
+      borderWidth: 2,
+      yAxisID: 'y',
+      type: 'bar'
+    },{
+      label: 'Conversiones',
+      data: [0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 2.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0],
+      backgroundColor: '#34a853',
+      borderColor: '#2d8e47',
+      borderWidth: 2,
+      yAxisID: 'y1',
+      type: 'line',
+      pointRadius: 5,
+      pointBackgroundColor: '#34a853',
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'Clics' } },
+      y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'Conversiones' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } }
+    }
+  }
+});
+
+// MONTHLY CHART
+const monthCtx = document.getElementById('chartMonthly').getContext('2d');
+new Chart(monthCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Enero 2026', 'Febrero 2026', 'Marzo 2026 (parcial)'],
+    datasets: [{
+      label: 'Inversión (S/)',
+      data: [250.39, 1082.26, 787.05],
+      backgroundColor: ['rgba(26,115,232,0.6)','rgba(26,115,232,0.7)','rgba(26,115,232,0.8)'],
+      yAxisID: 'y'
+    },{
+      label: 'Leads',
+      data: [0, 9, 10],
+      backgroundColor: '#34a853',
+      type: 'line',
+      yAxisID: 'y1',
+      tension: 0.4,
+      pointRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'Inversión (S/)' } },
+      y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'Leads' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } }
+    }
+  }
+});
+
+// CPA CHART
+const cpaCtx = document.getElementById('chartCPA').getContext('2d');
+new Chart(cpaCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Febrero', 'Marzo (parcial)'],
+    datasets: [{
+      label: 'CPA (S/)',
+      data: [120.25, 78.70],
+      backgroundColor: ['rgba(251,188,4,0.7)','rgba(52,168,83,0.7)'],
+      borderColor: ['#fbbc04','#34a853'],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => 'S/ ' + ctx.parsed.y } }
+    },
+    scales: { y: { beginAtZero: true, title: { display: true, text: 'S/' } } }
+  }
+});
+
+// KEYWORDS CHART
+const kwCtx = document.getElementById('chartKeywords').getContext('2d');
+new Chart(kwCtx, {
+  type: 'bar',
+  data: {
+    labels: ['gestión de datos','ciencia de datos\npara negocios','big data y\nanálisis de datos','soluciones de\nbusiness intel.','consultoría\nanálisis datos','análisis datos\npara empresas','empresas de\nbusiness intel.'],
+    datasets: [{
+      label: 'Costo (S/)',
+      data: [393.81, 220.71, 244.63, 211.09, 186.74, 100.89, 176.88],
+      backgroundColor: 'rgba(26,115,232,0.6)',
+      yAxisID: 'y'
+    },{
+      label: 'Conversiones',
+      data: [5, 4, 3, 3, 2, 1, 1],
+      backgroundColor: '#34a853',
+      type: 'line',
+      yAxisID: 'y1',
+      pointRadius: 6,
+      tension: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'Costo (S/)' } },
+      y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'Conversiones' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } }
+    }
+  }
+});
+
+// DEVICE CLICKS
+const devClk = document.getElementById('chartDevClicks').getContext('2d');
+new Chart(devClk, {
+  type: 'doughnut',
+  data: {
+    labels: ['Desktop', 'Mobile', 'Tablet'],
+    datasets: [{ data: [460, 554, 10], backgroundColor: ['#1a73e8','#34a853','#fbbc04'] }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+});
+
+// DEVICE CPA
+const devCPA = document.getElementById('chartDevCPA').getContext('2d');
+new Chart(devCPA, {
+  type: 'bar',
+  data: {
+    labels: ['Desktop', 'Mobile'],
+    datasets: [{
+      label: 'CPA (S/)',
+      data: [99.56, 135.98],
+      backgroundColor: ['rgba(26,115,232,0.7)', 'rgba(234,67,53,0.7)'],
+      borderColor: ['#1a73e8','#ea4335'],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => 'S/ ' + ctx.parsed.y } }
+    },
+    scales: { y: { beginAtZero: false, min: 70, title: { display: true, text: 'S/' } } }
+  }
+});
+
+// HOURS CHART
+const hCtx = document.getElementById('chartHours').getContext('2d');
+new Chart(hCtx, {
+  type: 'bar',
+  data: {
+    labels: Array.from({length:24}, (_,i) => i+'h'),
+    datasets: [{
+      label: 'Conversiones',
+      data: [1,0,0,0,0,0,0,0,0,0,1,3,3,3,2,0,2,2,0,0,1,0,0,1],
+      backgroundColor: Array.from({length:24}, (_,i) => {
+        const conv = [1,0,0,0,0,0,0,0,0,0,1,3,3,3,2,0,2,2,0,0,1,0,0,1][i];
+        return conv > 2 ? 'rgba(52,168,83,0.8)' : conv > 0 ? 'rgba(26,115,232,0.7)' : 'rgba(200,200,200,0.4)';
+      })
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' conversiones' } }
+    },
+    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, title: { display: true, text: 'Conversiones' } } }
+  }
+});
+
+// ASSETS CHART
+const aCtx = document.getElementById('chartAssets').getContext('2d');
+new Chart(aCtx, {
+  type: 'bar',
+  indexAxis: 'y',
+  data: {
+    labels: [
+      'Consultoría comercial en Lima','Consultoría en analítica','Rep. de ventas mensuales',
+      'Reportes de Análisis de Datos','Dashboards comerciales',
+      'Analítica de Ventas','Consultoría de Ventas','Analítica de Ventas Efectiva','Mejora tus Ventas Corporativas'
+    ],
+    datasets: [{
+      label: 'CTR (%)',
+      data: [7.40, 6.66, 6.63, 5.98, 5.83, 5.83, 4.98, 4.69, 4.18],
+      backgroundColor: [
+        'rgba(52,168,83,0.8)','rgba(52,168,83,0.7)','rgba(52,168,83,0.6)',
+        'rgba(26,115,232,0.6)','rgba(26,115,232,0.55)',
+        'rgba(26,115,232,0.5)','rgba(251,188,4,0.7)','rgba(234,67,53,0.6)','rgba(234,67,53,0.8)'
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.x + '% CTR' } }
+    },
+    scales: {
+      x: { beginAtZero: true, title: { display: true, text: 'CTR (%)' } },
+      y: { ticks: { font: { size: 12 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
