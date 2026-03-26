@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Performance – ISO Flash | Google Ads</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --primary: #0B2545;
+    --accent: #E63946;
+    --flash: #F4A261;
+    --green: #2A9D8F;
+    --light: #F8F9FA;
+    --border: #DEE2E6;
+    --text: #212529;
+    --muted: #6C757D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F0F4F8; color: var(--text); font-size: 14px; }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1C3F6E 100%);
+    color: white;
+    padding: 32px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-left h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-left .sub { font-size: 13px; opacity: 0.75; margin-top: 4px; }
+  .badge-flash { background: var(--flash); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+  .badge-period { background: rgba(255,255,255,0.15); color: white; padding: 6px 14px; border-radius: 6px; font-size: 12px; margin-top: 8px; display: inline-block; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  .section-title {
+    font-size: 15px; font-weight: 700; color: var(--primary);
+    border-left: 4px solid var(--flash); padding-left: 12px; margin: 28px 0 16px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 8px; }
+  .kpi-card {
+    background: white; border-radius: 10px; padding: 20px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--primary);
+  }
+  .kpi-card.accent { border-top-color: var(--accent); }
+  .kpi-card.green  { border-top-color: var(--green); }
+  .kpi-card.flash  { border-top-color: var(--flash); }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* Charts section */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .chart-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .chart-card h4 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 16px; }
+
+  /* Table */
+  .table-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--primary); color: white; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  th:first-child { border-radius: 0; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F8F9FA; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .badge-ok { background: #D4EDDA; color: #155724; }
+  .badge-warn { background: #FFF3CD; color: #856404; }
+  .badge-bad { background: #F8D7DA; color: #721C24; }
+  .badge-pause { background: #E2E3E5; color: #383D41; }
+
+  /* Alertas */
+  .alert { border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
+  .alert-danger { background: #FFF0F0; border-left: 4px solid var(--accent); }
+  .alert-warning { background: #FFFBF0; border-left: 4px solid var(--flash); }
+  .alert-success { background: #F0FFF8; border-left: 4px solid var(--green); }
+  .alert-icon { font-size: 18px; line-height: 1.4; }
+  .alert-body strong { display: block; font-size: 13px; margin-bottom: 3px; color: var(--primary); }
+  .alert-body p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Plan de acción */
+  .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .action-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .action-card h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .action-num { background: var(--primary); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .action-list { list-style: none; }
+  .action-list li { padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); display: flex; gap: 8px; }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li::before { content: '→'; color: var(--flash); font-weight: 700; }
+
+  /* Copies */
+  .copy-card { background: linear-gradient(135deg, #0B2545 0%, #1C3F6E 100%); border-radius: 10px; padding: 20px; color: white; margin-bottom: 24px; }
+  .copy-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 16px; color: var(--flash); text-transform: uppercase; letter-spacing: 0.5px; }
+  .copy-tag { display: inline-block; background: rgba(244,162,97,0.2); border: 1px solid var(--flash); color: var(--flash); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; margin: 4px 3px; }
+  .copy-desc { font-size: 12px; opacity: 0.8; line-height: 1.5; margin: 10px 0; }
+  .copy-desc span { color: var(--flash); font-weight: 700; }
+
+  /* Proyección */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .proj-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .proj-card h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+  .proj-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .proj-row:last-child { border-bottom: none; }
+  .proj-row .label { color: var(--muted); }
+  .proj-row .val-before { color: var(--muted); font-weight: 600; }
+  .proj-row .val-after { color: var(--green); font-weight: 700; }
+  .proj-row .val-bad { color: var(--accent); font-weight: 700; }
+  .proj-delta { font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-left: 6px; }
+  .delta-up { background: #D4EDDA; color: #155724; }
+  .delta-down { background: #F8D7DA; color: #721C24; }
+
+  .footer { background: var(--primary); color: rgba(255,255,255,0.6); text-align: center; padding: 16px; font-size: 11px; margin-top: 32px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .charts-row, .actions-grid, .proj-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>⚡ ISO Flash — Reporte Google Ads</h1>
+    <div class="sub">Campaña [Search] ISO FLASH · certificacionesperu.com</div>
+    <div class="badge-period">📅 1 de marzo – 25 de marzo de 2026 · Generado: 26 mar 2026</div>
+  </div>
+  <div style="text-align:right">
+    <div class="badge-flash">ISO FLASH</div>
+    <div style="font-size:11px; opacity:0.6; margin-top:8px;">Reporte preparado por<br>Equipo de Pauta Digital</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== KPI CARDS ===== -->
+  <div class="section-title">📊 Resumen de Performance (Mar 4–25)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Inversión Total</div>
+      <div class="kpi-value">S/ 893</div>
+      <div class="kpi-sub">S/ 40.61 / día promedio</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="kpi-label">Conversiones</div>
+      <div class="kpi-value">54</div>
+      <div class="kpi-sub">2.45 leads/día promedio</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">CPA Promedio</div>
+      <div class="kpi-value">S/ 16.54</div>
+      <div class="kpi-sub">Tendencia positiva semana a semana</div>
+    </div>
+    <div class="kpi-card flash">
+      <div class="kpi-label">CTR / CPC</div>
+      <div class="kpi-value">7.63%</div>
+      <div class="kpi-sub">CPC prom. S/ 2.17 · ~412 clicks</div>
+    </div>
+  </div>
+
+  <!-- ===== CHARTS ===== -->
+  <div class="section-title">📈 Evolución Diaria</div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <h4>Conversiones por Día</h4>
+      <canvas id="chartConv" height="180"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4>Inversión por Día (S/)</h4>
+      <canvas id="chartCost" height="180"></canvas>
+    </div>
+  </div>
+
+  <!-- ===== AD GROUP TABLE ===== -->
+  <div class="section-title">🗂️ Rendimiento por Grupo de Anuncios</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Grupo de Anuncios</th>
+          <th>Inversión (S/)</th>
+          <th>Impresiones</th>
+          <th>Clicks est.</th>
+          <th>CTR</th>
+          <th>CPC</th>
+          <th>Conversiones</th>
+          <th>CPA (S/)</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>06_ISO_General</strong></td>
+          <td>386.79</td><td>1,811</td><td>167</td><td>9.22%</td><td>2.32</td>
+          <td><strong>20</strong></td><td>19.34</td>
+        </tr>
+        <tr>
+          <td><strong>05_ISO37001_Antisoborno</strong></td>
+          <td>165.67</td><td>1,205</td><td>84</td><td>6.97%</td><td>1.97</td>
+          <td><strong>15</strong></td><td>11.04</td>
+        </tr>
+        <tr>
+          <td><strong>01_ISO9001_Calidad</strong></td>
+          <td>115.86</td><td>912</td><td>52</td><td>5.70%</td><td>2.23</td>
+          <td><strong>11</strong></td><td>10.53</td>
+        </tr>
+        <tr>
+          <td><strong>03_ISO45001_SST</strong></td>
+          <td>68.87</td><td>450</td><td>37</td><td>8.22%</td><td>1.86</td>
+          <td><strong>2</strong></td><td>34.44</td>
+        </tr>
+        <tr>
+          <td><strong>02_ISO14001_Ambiental</strong></td>
+          <td>66.55</td><td>666</td><td>41</td><td>6.16%</td><td>1.62</td>
+          <td><strong>3</strong></td><td>22.18</td>
+        </tr>
+        <tr>
+          <td><strong>04_ISO27001_SegInfo</strong></td>
+          <td>36.40</td><td>224</td><td>18</td><td>8.04%</td><td>2.02</td>
+          <td><strong>3</strong></td><td>12.13</td>
+        </tr>
+        <tr>
+          <td><strong>ISO 9001 – Calidad</strong></td>
+          <td>42.73</td><td>132</td><td>12</td><td>9.09%</td><td>3.56</td>
+          <td><strong>0</strong></td><td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== NUEVO COPY ===== -->
+  <div class="section-title">✍️ Optimización de Mensajes — ISO Flash</div>
+  <div class="copy-card">
+    <h4>⚡ Nuevos Titulares Propuestos</h4>
+    <div style="margin-bottom:16px">
+      <div class="copy-tag">Certifícate en Tiempo Récord</div>
+      <div class="copy-tag">ISO Flash: Certifica Rápido</div>
+      <div class="copy-tag">Certifica tu ISO Antes del Siguiente Concurso</div>
+      <div class="copy-tag">Certificación ISO Express Perú</div>
+      <div class="copy-tag">No Pierdas Licitaciones por Falta de ISO</div>
+      <div class="copy-tag">Certifica ISO en Tiempo Récord</div>
+      <div class="copy-tag">{KeyWord:Certificación ISO Rápida}</div>
+      <div class="copy-tag">ISO Lista para tu Próxima Licitación</div>
+    </div>
+    <h4 style="margin-top:16px">📝 Descripciones Recomendadas</h4>
+    <div class="copy-desc">
+      <span>Desc 1:</span> "Certificamos tu empresa en tiempo récord. Proceso ágil, sin burocracia y listo para que puedas licitar. ¡Cotiza hoy!"
+    </div>
+    <div class="copy-desc">
+      <span>Desc 2:</span> "ISO Flash: la certificación más rápida de Perú. Formatos listos, proceso express. No dejes pasar oportunidades por falta de certificación."
+    </div>
+    <div class="copy-desc">
+      <span>Desc 3:</span> "¿Tienes una licitación próxima? Te certificamos rápido. Proceso simplificado para MYPEs. Escríbenos y recibe tu cronograma hoy."
+    </div>
+    
+  </div>
+
+  <!-- ===== PROYECCIÓN ===== -->
+  <div class="section-title">🔮 Proyección: Resto de Marzo + Abril</div>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <h4>📅 Proyección Resto de Marzo (Mar 26–31)</h4>
+      <div class="proj-row">
+        <span class="label">Escenario</span>
+        <span class="val-before">Tendencia actual</span>
+        <span class="val-after">Con optimización ⚡</span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Conversiones estimadas</span>
+        <span class="val-before">~15</span>
+        <span class="val-after">~18 <span class="proj-delta delta-up">+20%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Inversión estimada</span>
+        <span class="val-before">S/ 244</span>
+        <span class="val-after">S/ 238 <span class="proj-delta delta-up">-2%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">CPA estimado</span>
+        <span class="val-before">S/ 16.27</span>
+        <span class="val-after">S/ 13.22 <span class="proj-delta delta-up">-19%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Total Marzo (conversiones)</span>
+        <span class="val-before">~69</span>
+        <span class="val-after"><strong>~72</strong></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Total Marzo (inversión)</span>
+        <span class="val-before">S/ 1,137</span>
+        <span class="val-after"><strong>S/ 1,131</strong></span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <h4>📅 Abril 2026 — Proyección Completa (30 días)</h4>
+      <div class="proj-row">
+        <span class="label">Escenario</span>
+        <span class="val-before">Tendencia actual</span>
+        <span class="val-after">Con optimización ⚡</span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Conversiones/día</span>
+        <span class="val-before">2.45</span>
+        <span class="val-after">3.06 <span class="proj-delta delta-up">+25%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Total conversiones</span>
+        <span class="val-before">~74</span>
+        <span class="val-after"><strong>~92</strong> <span class="proj-delta delta-up">+24%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">Inversión mensual</span>
+        <span class="val-before">S/ 1,218</span>
+        <span class="val-after">S/ 1,200</span>
+      </div>
+      <div class="proj-row">
+        <span class="label">CPA proyectado</span>
+        <span class="val-before">S/ 16.46</span>
+        <span class="val-after"><strong style="color:#2A9D8F">S/ 13.04</strong> <span class="proj-delta delta-up">-21%</span></span>
+      </div>
+      <div class="proj-row">
+        <span class="label">CTR estimado</span>
+        <span class="val-before">7.63%</span>
+        <span class="val-after">9.1% <span class="proj-delta delta-up">+1.5pp</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px">
+    <div class="chart-card">
+      <h4>Proyección de Conversiones: Tendencia Real + Proyectado</h4>
+      <canvas id="chartProj" height="120"></canvas>
+    </div>
+  </div>
+
+  
+</div><!-- /container -->
+
+<div class="footer">
+  Reporte generado el 26 de marzo de 2026 · ISO Flash / certificacionesperu.com · [Search] ISO FLASH · Equipo de Pauta Digital
+</div>
+
+<script>
+// Daily conversions chart
+const labelsConv = ['04M','05M','06M','07M','08M','09M','10M','11M','12M','13M','16M','17M','18M','19M','20M','23M','24M','25M'];
+const dataConv   = [0,3,4,0,4,4,4,4,1,1,2,3,6,3,4,4,2,5];
+const dataCost   = [53.26,57.28,49.45,22.45,43.92,77.08,49.99,47.58,50.55,53.05,17.63,58.43,97.87,58.53,46.11,37.92,34.97,37.33];
+
+new Chart(document.getElementById('chartConv'), {
+  type: 'bar',
+  data: {
+    labels: labelsConv,
+    datasets: [{
+      label: 'Conversiones',
+      data: dataConv,
+      backgroundColor: dataConv.map(v => v >= 4 ? 'rgba(42,157,143,0.85)' : v === 0 ? 'rgba(230,57,70,0.7)' : 'rgba(244,162,97,0.8)'),
+      borderRadius: 4
+    },{
+      label: 'Promedio',
+      data: new Array(18).fill(2.45),
+      type: 'line',
+      borderColor: '#0B2545',
+      borderDash: [4,3],
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: true, position: 'bottom' } }, scales: { y: { beginAtZero: true, max: 8 } } }
+});
+
+new Chart(document.getElementById('chartCost'), {
+  type: 'line',
+  data: {
+    labels: labelsConv,
+    datasets: [{
+      label: 'Inversión S/',
+      data: dataCost,
+      borderColor: '#0B2545',
+      backgroundColor: 'rgba(11,37,69,0.08)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 4,
+      pointBackgroundColor: '#E63946'
+    },{
+      label: 'Promedio S/40.61',
+      data: new Array(18).fill(40.61),
+      borderColor: '#F4A261',
+      borderDash: [4,3],
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: true, position: 'bottom' } }, scales: { y: { beginAtZero: false } } }
+});
+
+// Projection chart
+const allLabels = ['04M','05M','06M','07M','08M','09M','10M','11M','12M','13M','16M','17M','18M','19M','20M','23M','24M','25M','26M','27M','28M','29M','30M','31M',
+                   '01A','02A','05A','06A','07A','08A','09A','12A','13A','14A','15A','16A','19A','20A','21A','22A','23A','26A','27A','28A','29A','30A'];
+const realData = [0,3,4,0,4,4,4,4,1,1,2,3,6,3,4,4,2,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+const noChange = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5];
+const withChange=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1];
+
+new Chart(document.getElementById('chartProj'), {
+  type: 'line',
+  data: {
+    labels: allLabels,
+    datasets: [
+      { label: 'Real', data: realData, borderColor:'#0B2545', borderWidth:2.5, pointRadius:3, fill:false, tension:0.3 },
+      { label: 'Sin cambios', data: noChange, borderColor:'#E63946', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
+      { label: 'Con optimización ⚡', data: withChange, borderColor:'#2A9D8F', borderDash:[5,4], borderWidth:2, pointRadius:0, fill:false }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      y: { beginAtZero: true, max: 8, title: { display: true, text: 'Conversiones/día' } },
+      x: { ticks: { maxTicksLimit: 15, font: { size: 10 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
