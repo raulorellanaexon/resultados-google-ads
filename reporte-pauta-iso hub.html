@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang='es' data-theme='light'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>reporte-pauta-iso</title>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap' rel='stylesheet'>
+<style>
+:root, [data-theme='light'] {
+  --bg:#f6f7fb; --surface:#ffffff; --surface-2:#eef2ff; --text:#172033; --muted:#667085; --line:#d9e0ee;
+  --primary:#1f5eff; --primary-2:#0e8a6a; --accent:#eef4ff; --shadow:0 10px 28px rgba(17,24,39,.08);
+  --radius:20px; --radius-sm:12px;
+}
+[data-theme='dark'] {
+  --bg:#0f1421; --surface:#141b2d; --surface-2:#18233b; --text:#eef2ff; --muted:#9aa7c2; --line:#293550;
+  --primary:#77a0ff; --primary-2:#44c59f; --accent:#13203f; --shadow:0 10px 28px rgba(0,0,0,.28);
+}
+* {box-sizing:border-box}
+body {margin:0; font-family:'Instrument Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.55;}
+.container {max-width:1120px; margin:0 auto; padding:32px 20px 60px;}
+.header {display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:24px;}
+.logo {display:flex; gap:14px; align-items:center;}
+.logo-mark {width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:white;box-shadow:var(--shadow)}
+.logo-mark svg {width:26px;height:26px}
+.eyebrow {color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+h1 {font-family:'Newsreader',serif;font-size:clamp(2rem,4vw,3.8rem);line-height:1.02;margin:0 0 10px}
+.lead {max-width:780px;color:var(--muted);font-size:1.05rem;margin:0}
+.toggle {border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 14px;cursor:pointer}
+.grid {display:grid; gap:18px;}
+.summary {grid-template-columns:repeat(4,1fr); margin:26px 0;}
+.card {background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px;}
+.kpi .label {font-size:.82rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:10px;}
+.kpi .value {font-size:2rem; font-weight:700; margin-bottom:6px;}
+.kpi .note {color:var(--muted); font-size:.95rem;}
+.section {margin-top:22px;}
+.section h2 {font-size:1.3rem; margin:0 0 12px;}
+.section p {margin:0 0 12px; color:var(--muted);}
+.highlight {background:linear-gradient(180deg,var(--surface),var(--surface-2));}
+.two {grid-template-columns:1.2fr .8fr; align-items:start;}
+.services {grid-template-columns:repeat(3,1fr);}
+.service-card h3 {margin:0 0 8px; font-size:1rem;}
+.service-card p {margin:0; color:var(--muted); font-size:.95rem;}
+.table-wrap {overflow:auto;}
+table {width:100%; border-collapse:collapse; font-size:.95rem;}
+th,td {padding:14px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+th {font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
+.badge {display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:8px 12px; background:var(--accent); color:var(--primary); font-weight:700; font-size:.86rem;}
+ul {padding-left:18px; margin:10px 0 0; color:var(--muted);}
+li + li {margin-top:8px;}
+.footer-note {margin-top:18px; color:var(--muted); font-size:.92rem;}
+.cta-box {display:grid; gap:10px;}
+.small {font-size:.93rem;color:var(--muted);}
+@media (max-width: 920px) { .summary,.services,.two {grid-template-columns:1fr 1fr;} }
+@media (max-width: 700px) { .header,.summary,.services,.two {grid-template-columns:1fr; display:grid;} .header {display:grid;} h1 {font-size:2.4rem} }
+@media print { .toggle {display:none} body {background:#fff} .card {box-shadow:none} .container {max-width:none; padding:12px} }
+</style>
+</head>
+<body>
+<div class='container'>
+  <div class='header'>
+    <div>
+      <div class='eyebrow'>Reporte ejecutivo Google Ads</div>
+      <div class='logo'>
+        <div class='logo-mark' aria-hidden='true'>
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M5 17V7l7-4 7 4v10l-7 4-7-4Z'/><path d='M9 12h6M12 9v6'/></svg>
+        </div>
+        <div>
+          <h1>Estructura de pauta ISO HUB</h1>
+          <p class='lead'>Propuesta orientada a generar leads mediante pauta Search, dirigiendo todo el tráfico a la landing del servicio correspondiente. La certificación se comunica como resultado, no como único beneficio.</p>
+        </div>
+      </div>
+    </div>
+    <button class='toggle' data-theme-toggle aria-label='Cambiar tema'>🌙</button>
+  </div>
+
+  <section class='grid summary'>
+    <div class='card kpi'><div class='label'>Objetivo</div><div class='value'>Leads</div><div class='note'>Captar empresas interesadas en implementación y certificación ISO.</div></div>
+    <div class='card kpi'><div class='label'>Inversión diaria</div><div class='value'>S/ 50</div><div class='note'>Tope operativo diario planteado por el cliente.</div></div>
+    <div class='card kpi'><div class='label'>Proyección 30 días</div><div class='value'>S/ 1500</div><div class='note'>Proyección referencial para 30 días de pauta.</div></div>
+    <div class='card kpi'><div class='label'>Enfoque</div><div class='value'>Search</div><div class='note'>Alta intención y control del gasto desde el día 1.</div></div>
+  </section>
+
+  <section class='grid two section'>
+    <div class='card highlight'>
+      <span class='badge'>Diagnóstico rápido</span>
+      <h2 style='margin-top:12px'>Lo que proponemos activar</h2>
+      <p>Una campaña de búsqueda con 6 grupos de anuncios, uno por servicio, alineados con la estructura actual de la web para mantener relevancia entre keyword, anuncio y landing.</p>
+      <div class='grid services'>
+        <div class='service-card'><h3>ISO 9001</h3><p>Captar demanda de gestión de calidad e implementación.</p></div><div class='service-card'><h3>ISO 14001</h3><p>Captar empresas con foco en cumplimiento y gestión ambiental.</p></div><div class='service-card'><h3>ISO 45001</h3><p>Captar intención relacionada con SST, prevención y auditoría.</p></div><div class='service-card'><h3>ISO 27001</h3><p>Captar demanda de seguridad de la información y SGSI.</p></div><div class='service-card'><h3>ISO 37001</h3><p>Captar búsquedas de antisoborno, compliance y transparencia.</p></div><div class='service-card'><h3>ISO General</h3><p>Cubrir búsquedas amplias y derivar a la norma adecuada.</p></div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class='section'>
+    <div class='card'>
+      <span class='badge'>Arquitectura recomendada</span>
+      <div class='table-wrap' style='margin-top:12px'>
+        <table>
+          <thead>
+            <tr><th>Campaña</th><th>Tipo de pauta</th><th>Destino</th><th>Mensaje central</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Search | ISO | Leads</td><td>Solo Search</td><td>Landing del servicio</td><td>Implementación sólida, mejora de gestión y certificación como resultado</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class='table-wrap' style='margin-top:14px'>
+        <table>
+          <thead>
+            <tr><th>Grupo</th><th>Asignación inicial</th><th>Razón</th></tr>
+          </thead>
+          <tbody><tr><td>ISO 9001</td><td>25%</td><td>Mayor amplitud de demanda y enfoque operativo.</td></tr><tr><td>ISO 27001</td><td>20%</td><td>Alta intención B2B y valor percibido.</td></tr><tr><td>ISO 45001</td><td>15%</td><td>Demanda estable por cumplimiento y seguridad.</td></tr><tr><td>ISO General</td><td>15%</td><td>Captura genérica y redistribuye a servicios.</td></tr><tr><td>ISO 14001</td><td>15%</td><td>Demanda especializada por cumplimiento ambiental.</td></tr><tr><td>ISO 37001</td><td>10%</td><td>Demanda más nicho, pero valiosa.</td></tr></tbody>
+        </table>
+      </div>
+      <p class='footer-note'>La distribución es inicial y debe ajustarse según costo por lead, calidad del lead y términos de búsqueda reales en los primeros 7 a 14 días.</p>
+    </div>
+  </section>
+
+  <section class='grid two section'>
+    <div class='card'>
+      <span class='badge'>Mensajes de anuncio</span>
+      <ul>
+        <li>Usar 3 títulos con keyword dinámica por grupo.</li>
+        <li>Complementar con mensajes de orden, control, mejora y auditoría.</li>
+        <li>Evitar promesas vagas como “solo certificación rápida”.</li>
+        <li>CTA recomendado: Solicita diagnóstico o Agenda una evaluación.</li>
+      </ul>
+    </div>
+    <div class='card'>
+      <span class='badge'>Dirección del tráfico</span>
+      <ul>
+        <li>Tipo de pauta: solo Search.</li>
+        <li>Todo el tráfico debe dirigirse a la landing del servicio buscado.</li>
+        <li>Cada grupo de anuncios debe enviar a su landing específica cuando exista.</li>
+        <li>La coherencia keyword + anuncio + landing debe sostener el nivel de calidad.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class='section'>
+    <div class='card highlight'>
+      <span class='badge'>Proyección de resultados</span>
+      <h2 style='margin-top:12px'>Escenarios referenciales con S/ 50 diarios</h2>
+      <p>La proyección no es una promesa de resultado. Se basa en tres escenarios de operación para estimar clicks, leads y costo por lead durante 30 días.</p>
+      <div class='table-wrap'>
+        <table>
+          <thead>
+            <tr><th>Escenario</th><th>CPC supuesto</th><th>CVR supuesto</th><th>Clicks / 30 días</th><th>Leads / 30 días</th><th>CPL proyectado</th></tr>
+          </thead>
+          <tbody><tr><td>Conservador</td><td>S/ 2.8</td><td>5.0%</td><td>536</td><td>27</td><td>S/ 56.0</td></tr><tr><td>Base</td><td>S/ 2.2</td><td>7.0%</td><td>682</td><td>48</td><td>S/ 31.4</td></tr><tr><td>Optimizado</td><td>S/ 1.8</td><td>9.0%</td><td>833</td><td>75</td><td>S/ 20.0</td></tr></tbody>
+        </table>
+      </div>
+      <p class='footer-note'>Escenario base recomendado para conversación comercial: entre 45 y 50 leads mensuales si la landing, el tracking y la calidad del tráfico acompañan. Si la intención de búsqueda es más fría o la fricción del formulario es alta, el escenario conservador será más realista.</p>
+    </div>
+  </section>
+
+  <section class='grid two section'>
+    <div class='card'>
+      <span class='badge'>Rutina de optimización</span>
+      <ul>
+        <li>Día 1–3: validación de estructura, anuncios y negativos base.</li>
+        <li>Día 4–7: limpieza de términos, ajustes de puja y revisión de CTR.</li>
+        <li>Día 8–14: redistribución de presupuesto a los grupos más eficientes.</li>
+        <li>Mensual: revisión de narrativa comercial, anuncios y oportunidades de expansión.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+<script>
+(function(){
+  const btn = document.querySelector('[data-theme-toggle]');
+  const root = document.documentElement;
+  let mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  root.setAttribute('data-theme', mode);
+  btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+  btn.addEventListener('click', () => {
+    mode = mode === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', mode);
+    btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+  });
+})();
+</script>
+</body>
+</html>
