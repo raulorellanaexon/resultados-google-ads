@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Rendimiento - LARKANA</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { border-bottom: 2px solid #004a99; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #004a99; margin: 0; font-size: 24px; }
+        .period { font-size: 14px; color: #666; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1-fr); gap: 15px; margin-bottom: 30px; }
+        .kpi-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
+        .kpi-card h3 { margin: 0; font-size: 14px; color: #777; text-transform: uppercase; }
+        .kpi-card p { margin: 10px 0 0; font-size: 24px; font-weight: bold; color: #004a99; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #004a99; color: white; text-align: left; padding: 12px; font-size: 14px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        tr:hover { background: #f1f1f1; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; background: #d4edda; color: #155724; }
+        .action-items { background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 5px solid #ffc107; margin-top: 30px; }
+        .action-items h2 { margin-top: 0; font-size: 18px; color: #856404; }
+        .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LARKANA - Resumen de Reinicio</h1>
+            <div class="period">Periodo: 07 Abr - 12 Abr, 2026</div>
+        </div>
+
+        <p>Tras el reinicio de las campañas el pasado 7 de abril, la pauta ha vuelto a estabilizarse. Hemos logrado reactivar el flujo de leads manteniendo el control de la inversión.</p>
+
+        <div class="kpi-grid" style="display: flex; justify-content: space-between;">
+            <div class="kpi-card" style="flex: 1; margin: 5px;">
+                <h3>Inversión</h3>
+                <p>$287.04</p>
+            </div>
+            <div class="kpi-card" style="flex: 1; margin: 5px;">
+                <h3>Leads</h3>
+                <p>4</p>
+            </div>
+            <div class="kpi-card" style="flex: 1; margin: 5px;">
+                <h3>Costo/Lead</h3>
+                <p>$71.76</p>
+            </div>
+            <div class="kpi-card" style="flex: 1; margin: 5px;">
+                <h3>CTR</h3>
+                <p>2.93%</p>
+            </div>
+        </div>
+
+        <h2>Rendimiento por Estrategia</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Campaña</th>
+                    <th>Clics</th>
+                    <th>Costo</th>
+                    <th>Leads</th>
+                    <th>CPA</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>[BUSQUEDA] Diseño + Obra</td>
+                    <td>79</td>
+                    <td>$176.64</td>
+                    <td>2</td>
+                    <td>$88.32</td>
+                    <td><span class="status-badge">Estabilizando</span></td>
+                </tr>
+                <tr>
+                    <td>[P.Max] Diseño + Obra</td>
+                    <td>102</td>
+                    <td>$75.87</td>
+                    <td>2</td>
+                    <td>$37.94</td>
+                    <td><span class="status-badge">Eficiente</span></td>
+                </tr>
+                <tr>
+                    <td>[ReM PMAX] Remarketing</td>
+                    <td>77</td>
+                    <td>$34.53</td>
+                    <td>0</td>
+                    <td>-</td>
+                    <td><span class="status-badge">Aprendizaje</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="action-items">
+            <h2>Próximos Pasos (Semana 2)</h2>
+            <ul>
+                <li><strong>Optimización de P.Max:</strong> Reforzar los activos (imágenes/textos) que están generando el lead más económico ($37.94).</li>
+                <li><strong>Filtro de Búsqueda:</strong> Revisar términos de búsqueda para eliminar tráfico irrelevante y bajar el costo por lead en esta campaña.</li>
+                <li><strong>Calidad de Lead:</strong> Necesitamos validar con el equipo comercial si los 4 leads recibidos cumplen con el perfil deseado.</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Generado por el Equipo Senior de Google Ads
+        </div>
+    </div>
+</body>
+</html>
