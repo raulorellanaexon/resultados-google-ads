@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; }
+    .container { max-width: 800px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 8px; border-top: 10px solid #1a73e8; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h1 { color: #1a73e8; text-align: center; }
+    .kpi-box { display: flex; justify-content: space-around; margin: 20px 0; background: #e8f0fe; padding: 20px; border-radius: 8px; }
+    .kpi-item { text-align: center; }
+    .kpi-value { font-size: 24px; font-weight: bold; color: #1a73e8; }
+    .kpi-label { font-size: 14px; color: #555; }
+    .status-positive { color: #28a745; font-weight: bold; }
+    .action-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .action-table th, .action-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    .action-table th { background-color: #f8f9fa; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    .high { background-color: #f8d7da; color: #721c24; }
+    .low { background-color: #d4edda; color: #155724; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Reporte Semanal: Estudio Delgado</h1>
+    <p>Hola, equipo. Compartimos los resultados de la semana del <strong>06 al 12 de abril</strong>. Hemos mantenido un ritmo de crecimiento constante, optimizando cada sol invertido.</p>
+    
+    <div class="kpi-box">
+        <div class="kpi-item">
+            <div class="kpi-value">28</div>
+            <div class="kpi-label">Leads Totales</div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-value">$24.34</div>
+            <div class="kpi-label">CPA Promedio</div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-value">92.7%</div>
+            <div class="kpi-label">Uso de Presupuesto</div>
+        </div>
+    </div>
+
+    <p><strong>Lo que logramos:</strong> La campaña de <span class="status-positive">Performance Max (General)</span> ha sido extraordinariamente eficiente, logrando un costo por lead de solo <strong>$17.17</strong>. Esto nos permite capturar volumen a un precio muy competitivo.</p>
+
+    <h3>Próximas Acciones de Mejora</h3>
+    <table class="action-table">
+        <thead>
+            <tr>
+                <th>Acción</th>
+                <th>Prioridad</th>
+                <th>Objetivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reducir inversión los días lunes</td>
+                <td><span class="badge high">Alta</span></td>
+                <td>Eliminar gasto ineficiente y moverlo a días top (Miércoles/Martes).</td>
+            </tr>
+            <tr>
+                <td>Optimizar copies en "Lima Top"</td>
+                <td><span class="badge">Media</span></td>
+                <td>Mejorar el porcentaje de clics (CTR) en zonas exclusivas.</td>
+            </tr>
+            <tr>
+                <td>Refuerzo de "Abogado Inmobiliario"</td>
+                <td><span class="badge low">Foco</span></td>
+                <td>Asegurar el 100% de visibilidad en el término más rentable.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px; font-size: 0.9em; color: #777;"><em>El presupuesto se mantiene bajo control estricto. No se requiere inversión adicional para estas optimizaciones.</em></p>
+</div>
+</body>
+</html>
