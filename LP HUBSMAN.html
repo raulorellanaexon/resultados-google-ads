@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hubsman | Plataforma de gestión con IA</title>
+  <meta
+    name="description"
+    content="Hubsman conecta calidad, riesgos, procesos e indicadores en una sola plataforma con inteligencia artificial integrada."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary-color:#C2DF93;
+      --secondary-color:#E3572B;
+      --primary-black-color:#063232;
+      --dark:#081a1a;
+      --dark-2:#0d2a2a;
+      --text:#5f6d6d;
+      --white:#ffffff;
+      --light:#f6f8f5;
+      --border:#dfe8dd;
+      --shadow:0 18px 60px rgba(6, 50, 50, 0.12);
+      --radius:24px;
+      --radius-sm:16px;
+      --container:1200px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Plus Jakarta Sans", sans-serif;
+      color:var(--primary-black-color);
+      background:#fff;
+      line-height:1.65;
+    }
+    h1,h2,h3,h4,h5,h6{
+      margin:0 0 14px;
+      font-family:"Kanit", sans-serif;
+      color:var(--primary-black-color);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+    }
+    p{margin:0 0 16px; color:var(--text)}
+    a{text-decoration:none; color:inherit}
+    img{max-width:100%; display:block}
+    ul{margin:0; padding:0; list-style:none}
+
+    .container,
+    .container-fluid{
+      width:min(var(--container), calc(100% - 32px));
+      margin:0 auto;
+    }
+    .container-fluid{width:min(1320px, calc(100% - 32px))}
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      margin-left:-15px;
+      margin-right:-15px;
+    }
+    [class*="col-"]{
+      padding-left:15px;
+      padding-right:15px;
+      width:100%;
+    }
+    .col-lg-4{width:33.333%}
+    .col-lg-8{width:66.666%}
+    .col-xl-3{width:25%}
+    .col-xl-4{width:33.333%}
+    .col-xl-5{width:41.666%}
+    .col-xl-6{width:50%}
+    .col-xl-7{width:58.333%}
+    .col-xl-8{width:66.666%}
+    .col-md-4{width:33.333%}
+    .col-md-6{width:50%}
+    .col-sm-12{width:100%}
+
+    .justify-content-center{justify-content:center}
+    .align-items-center{align-items:center}
+    .text-center{text-align:center}
+    .text-white h1,
+    .text-white h2,
+    .text-white h3,
+    .text-white h4,
+    .text-white p,
+    .text-white span,
+    .text-white li{color:#fff}
+    .mb-20{margin-bottom:20px}
+    .mb-30{margin-bottom:30px}
+    .mb-40{margin-bottom:40px}
+    .mb-50{margin-bottom:50px}
+    .mb-60{margin-bottom:60px}
+    .pt-100{padding-top:100px}
+    .pt-110{padding-top:110px}
+    .pt-115{padding-top:115px}
+    .pt-120{padding-top:120px}
+    .pb-80{padding-bottom:80px}
+    .pb-100{padding-bottom:100px}
+    .pb-120{padding-bottom:120px}
+
+    .section-title .sub-title{
+      display:inline-block;
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--secondary-color);
+      margin-bottom:12px;
+    }
+    .section-title h2{
+      font-size:48px;
+      margin-bottom:14px;
+    }
+    .section-title p{
+      max-width:760px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .theme-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:17px 28px;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:800;
+      border:0;
+      transition:.25s ease;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+    .theme-btn.style-one{
+      background:var(--primary-color);
+      color:var(--primary-black-color);
+    }
+    .theme-btn.style-one:hover{
+      background:var(--secondary-color);
+      color:#fff;
+    }
+    .theme-btn.outline{
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.25);
+      box-shadow:none;
+    }
+    .theme-btn.outline:hover{
+      background:#fff;
+      color:var(--primary-black-color);
+    }
+
+    .preloader,
+    .offcanvas-overlay{display:none}
+
+    .header-area{
+      position:sticky;
+      top:0;
+      z-index:99;
+      background:rgba(6,50,50,.92);
+      backdrop-filter:blur(10px);
+    }
+    .header-top-bar{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 0;
+    }
+    .top-left,
+    .top-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:18px;
+    }
+    .top-right{justify-content:flex-end}
+    .social-box a{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      margin-right:8px;
+      transition:.25s ease;
+    }
+    .social-box a:hover{background:var(--primary-color); color:var(--primary-black-color)}
+    .top-right span,
+    .top-right a{
+      color:rgba(255,255,255,.82);
+      font-size:14px;
+      font-weight:600;
+    }
+    .top-right i{margin-right:8px; color:var(--primary-color)}
+
+    .header-navigation{
+      padding:18px 0;
+    }
+    .primary-menu{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+    .site-branding .brand-logo{
+      font-family:"Kanit", sans-serif;
+      font-size:34px;
+      font-weight:800;
+      color:#fff;
+      letter-spacing:-0.03em;
+    }
+    .site-branding .brand-logo span{color:var(--primary-color)}
+    .main-menu ul{
+      display:flex;
+      align-items:center;
+      gap:28px;
+    }
+    .main-menu a{
+      color:#fff;
+      font-weight:700;
+      font-size:15px;
+      transition:.25s ease;
+    }
+    .main-menu a:hover{color:var(--primary-color)}
+    .nav-right-item{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .bizzen-hero{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg, #072121 0%, #0d2f2f 55%, #123b3b 100%);
+      padding:120px 0 90px;
+    }
+    .bizzen-herotwo{
+      position:relative;
+    }
+    .image-layer{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(194,223,147,.10), transparent 25%),
+        radial-gradient(circle at 82% 20%, rgba(227,87,43,.10), transparent 20%);
+      opacity:1;
+      pointer-events:none;
+    }
+    .hero-content h1{
+      color:#fff;
+      font-size:74px;
+      margin-bottom:20px;
+    }
+    .hero-content h1 span{color:var(--primary-color)}
+    .hero-content p{
+      color:rgba(255,255,255,.80);
+      max-width:620px;
+      font-size:18px;
+      margin-bottom:28px;
+    }
+    .hero-button-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      align-items:center;
+      margin-bottom:28px;
+    }
+    .bizzen-avatar-box ul{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .bizzen-avatar-box .avatar-stack{
+      display:flex;
+      align-items:center;
+    }
+    .bizzen-avatar-box .avatar{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:3px solid #fff;
+      margin-left:-10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:800;
+      color:var(--primary-black-color);
+      background:var(--primary-color);
+    }
+    .bizzen-avatar-box .avatar:first-child{margin-left:0}
+    .bizzen-avatar-box span{
+      color:#fff;
+      font-weight:700;
+    }
+
+    .play-box{
+      display:flex;
+      justify-content:center;
+    }
+    .hero-dashboard{
+      width:100%;
+      max-width:420px;
+      background:#fff;
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .hero-dashboard .dash-top{
+      padding:16px 20px;
+      border-bottom:1px solid #edf1ef;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .hero-dashboard .dots{
+      display:flex;
+      gap:8px;
+    }
+    .hero-dashboard .dots span{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#d9e4d5;
+      display:block;
+    }
+    .hero-dashboard .dash-body{padding:22px}
+    .hero-dashboard .ai-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      background:#eef7df;
+      color:var(--primary-black-color);
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:18px;
+    }
+    .kpi-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .kpi-card{
+      background:var(--light);
+      border:1px solid #e8eee6;
+      border-radius:18px;
+      padding:18px;
+    }
+    .kpi-card h4{
+      font-size:30px;
+      margin-bottom:6px;
+    }
+    .ask-box{
+      background:#092626;
+      border-radius:20px;
+      padding:18px;
+    }
+    .ask-box h5{
+      color:#fff;
+      font-size:18px;
+      margin-bottom:8px;
+    }
+    .ask-box p{
+      color:rgba(255,255,255,.78);
+      font-size:14px;
+      margin-bottom:10px;
+    }
+    .ask-box ul li{
+      color:#fff;
+      font-size:14px;
+      margin-bottom:8px;
+      position:relative;
+      padding-left:22px;
+    }
+    .ask-box ul li:before{
+      content:"✓";
+      position:absolute;
+      left:0;
+      top:0;
+      color:var(--primary-color);
+      font-weight:800;
+    }
+
+    .bizzen-featuresone{
+      background:#fff;
+    }
+    .features-wrapper .row{row-gap:24px}
+    .bizzen-features-item{
+      padding:28px 24px;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:#fff;
+      height:100%;
+      box-shadow:0 8px 30px rgba(6,50,50,.05);
+      transition:.25s ease;
+    }
+    .bizzen-features-item:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--shadow);
+    }
+    .bizzen-features-item .icon{
+      width:72px;
+      height:72px;
+      border-radius:18px;
+      background:#eef7df;
+      color:var(--primary-black-color);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:20px;
+    }
+    .bizzen-features-item h4{font-size:24px}
+
+    .bizzen-abouttwo{
+      background:linear-gradient(180deg, #f8fbf7 0%, #ffffff 100%);
+      position:relative;
+    }
+    .about-wrapper{
+      position:relative;
+      padding-top:10px;
+    }
+    .bizzen-image{
+      position:relative;
+    }
+    .bizzen-image.image-one,
+    .bizzen-image.image-two,
+    .bizzen-image.placeholder-box{
+      min-height:300px;
+      border-radius:28px;
+      background:linear-gradient(135deg, #d8ebb4 0%, #f7fbf0 100%);
+      box-shadow:var(--shadow);
+    }
+    .bizzen-image.image-two{
+      background:linear-gradient(135deg, #0a2f2f 0%, #174545 100%);
+      position:absolute;
+      right:0;
+      bottom:-20px;
+      width:46%;
+      min-height:230px;
+    }
+    .bizzen-image .placeholder-inner{
+      padding:34px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .bizzen-image.image-two .placeholder-inner h4,
+    .bizzen-image.image-two .placeholder-inner p{
+      color:#fff;
+    }
+    .bizzen-content-box{
+      position:relative;
+      z-index:2;
+    }
+    .bizzen-content-box h6{
+      font-size:20px;
+      margin-bottom:20px;
+      color:var(--primary-black-color);
+    }
+    .check-list li{
+      position:relative;
+      padding-left:28px;
+      margin-bottom:12px;
+      color:var(--primary-black-color);
+      font-weight:600;
+    }
+    .check-list li i{
+      position:absolute;
+      left:0;
+      top:4px;
+      color:var(--secondary-color);
+    }
+    .bizzen-experience-box{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:24px;
+      max-width:240px;
+      box-shadow:var(--shadow);
+      margin-top:30px;
+    }
+    .bizzen-experience-box h2{
+      font-size:48px;
+      margin-bottom:0;
+    }
+
+    .bizzen-company-sec{
+      background:#0b2424;
+    }
+    .clients-slider{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:18px;
+    }
+    .bizzen-client-item{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      min-height:110px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .bizzen-client-item span{
+      color:#fff;
+      font-family:"Kanit", sans-serif;
+      font-size:28px;
+      opacity:.82;
+    }
+
+    .bizzen-servicetwo{
+      background:linear-gradient(135deg, #062828 0%, #0b3434 100%);
+    }
+    .service-slider{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+    }
+    .bizzen-service-item{
+      background:#fff;
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      height:100%;
+    }
+    .bizzen-service-item .icon-count-wrap{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:26px 26px 0;
+    }
+    .bizzen-service-item .icon{
+      width:68px;
+      height:68px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eef7df;
+      color:var(--primary-black-color);
+      font-size:26px;
+    }
+    .bizzen-service-item .number{
+      font-family:"Kanit", sans-serif;
+      font-size:32px;
+      color:#d6dfd5;
+    }
+    .bizzen-service-item .content{
+      padding:18px 26px 28px;
+    }
+    .bizzen-service-item h4{
+      font-size:26px;
+      margin-bottom:10px;
+    }
+    .read-more{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      color:var(--secondary-color);
+      margin-top:10px;
+    }
+
+    .bizzen-weone{
+      background:#fff;
+    }
+    .bizzen-progress-item{
+      margin-top:24px;
+    }
+    .bizzen-skill-item{margin-bottom:20px}
+    .progress-title{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:8px;
+      font-weight:700;
+      color:var(--primary-black-color);
+    }
+    .progress{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background:#edf2ea;
+      overflow:hidden;
+    }
+    .progress-bar{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+    .about-check-list li{
+      font-size:15px;
+    }
+
+    .fact-section{
+      background:linear-gradient(180deg, #f7faf5 0%, #edf4eb 100%);
+      padding:90px 0 60px;
+    }
+    .bizzen-counter-item{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 8px 30px rgba(6,50,50,.05);
+      height:100%;
+    }
+    .bizzen-counter-item h2{
+      font-size:58px;
+      margin-bottom:10px;
+      color:var(--secondary-color);
+    }
+    .bizzen-counter-item h4{
+      font-size:24px;
+      margin-bottom:10px;
+    }
+
+    .pricing-section{
+      padding:115px 0 90px;
+      background:#fff;
+    }
+    .bizzen-pricing-item{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:34px;
+      position:relative;
+      box-shadow:0 10px 40px rgba(6,50,50,.06);
+      height:100%;
+    }
+    .bizzen-pricing-item .ribbon{
+      position:absolute;
+      top:20px;
+      right:20px;
+      background:var(--secondary-color);
+      color:#fff;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .pricing-header .price{
+      font-size:52px;
+      display:flex;
+      align-items:flex-end;
+      gap:6px;
+      margin-bottom:10px;
+    }
+    .pricing-header .currency{
+      font-size:26px;
+      line-height:1.2;
+    }
+    .pricing-header .duration{
+      font-size:16px;
+      font-family:"Plus Jakarta Sans", sans-serif;
+      color:var(--text);
+      margin-bottom:8px;
+    }
+    .pricing-header .plan{
+      font-size:26px;
+    }
+    .pricing-body h4{
+      font-size:20px;
+      margin-bottom:18px;
+    }
+    .pricing-body .check-list li{
+      font-size:15px;
+      margin-bottom:14px;
+    }
+    .pricing-footer{margin-top:22px}
+
+    .bizzen-testimonialtwo{
+      background:linear-gradient(135deg, #082626 0%, #0f3939 100%);
+    }
+    .testimonial-layout{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:34px;
+      align-items:center;
+    }
+    .testimonial-image{
+      min-height:420px;
+      border-radius:28px;
+      background:linear-gradient(135deg, #dceabf 0%, #f9fcf4 100%);
+      box-shadow:var(--shadow);
+      padding:30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+    }
+    .testimonial-image h3{font-size:36px}
+    .testimonial-slider-two{
+      display:grid;
+      gap:20px;
+    }
+    .bizzen-testimonial-item{
+      background:#fff;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+    .quote-ratings-wrap{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+    .ratings i{color:#ffb800}
+    .author-thumb-item{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-top:18px;
+    }
+    .author-thumb{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      background:#eef7df;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      color:var(--primary-black-color);
+    }
+
+    .faq-contact-section{
+      padding:115px 0 100px;
+      background:#fff;
+    }
+    .faq-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+      margin-top:34px;
+    }
+    details{
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:18px 22px;
+      background:#fff;
+      box-shadow:0 6px 20px rgba(6,50,50,.04);
+    }
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      font-size:18px;
+      color:var(--primary-black-color);
+      list-style:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{margin-top:12px; margin-bottom:0}
+
+    .consultation-cta{
+      margin-top:70px;
+      background:linear-gradient(135deg, #082626 0%, #154444 100%);
+      border-radius:32px;
+      padding:48px;
+    }
+    .consultation-cta h2{
+      color:#fff;
+      font-size:44px;
+      margin-bottom:0;
+    }
+
+    .main-footer{
+      position:relative;
+      background:#071d1d;
+      color:rgba(255,255,255,.76);
+      overflow:hidden;
+    }
+    .footer-widget-wrapper{
+      padding:90px 0 0;
+    }
+    .footer-about-widget .footer-logo{
+      font-family:"Kanit", sans-serif;
+      font-size:34px;
+      font-weight:800;
+      color:#fff;
+    }
+    .footer-about-widget .footer-logo span{color:var(--primary-color)}
+    .footer-widget-area{
+      margin-top:30px;
+    }
+    .footer-widget h2{
+      color:#fff;
+      font-size:24px;
+      margin-bottom:18px;
+    }
+    .footer-widget p,
+    .footer-widget li,
+    .footer-widget a{color:rgba(255,255,255,.74)}
+    .footer-social-widget .social-box a{
+      background:rgba(255,255,255,.08);
+    }
+    .copyright-area{
+      margin-top:60px;
+      padding:22px 0;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .copyright-text p,
+    .copyright-link a{
+      color:rgba(255,255,255,.72);
+      font-size:14px;
+    }
+    .copyright-link a{margin-left:18px}
+
+    @media (max-width: 1199px){
+      .col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8{width:100%}
+      .hero-content h1{font-size:58px}
+      .service-slider{grid-template-columns:repeat(2,1fr)}
+      .clients-slider{grid-template-columns:repeat(3,1fr)}
+      .testimonial-layout{grid-template-columns:1fr}
+    }
+    @media (max-width: 991px){
+      .col-lg-4,.col-lg-8,.col-md-4,.col-md-6{width:100%}
+      .main-menu{display:none}
+      .top-right{justify-content:flex-start; margin-top:10px}
+      .section-title h2{font-size:38px}
+      .hero-content h1{font-size:48px}
+      .bizzen-image.image-two{
+        position:relative;
+        width:100%;
+        margin-top:20px;
+        bottom:auto;
+      }
+      .faq-grid{grid-template-columns:1fr}
+      .consultation-cta{padding:34px}
+    }
+    @media (max-width: 767px){
+      .hero-content h1{font-size:40px}
+      .section-title h2{font-size:32px}
+      .service-slider,
+      .clients-slider,
+      .kpi-grid{
+        grid-template-columns:1fr;
+      }
+      .primary-menu{
+        flex-wrap:wrap;
+      }
+      .nav-right-item{
+        width:100%;
+        justify-content:flex-start;
+      }
+      .consultation-cta h2{font-size:32px}
+      .pricing-header .price{font-size:42px}
+      .bizzen-counter-item h2{font-size:46px}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header-area header-two">
+    <div class="header-top-bar">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-lg-4">
+            <div class="top-left">
+              <div class="social-box">
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="top-right">
+              <span><i class="far fa-envelope"></i>contacto@hubsman.com</span>
+              <span><i class="far fa-phone-alt"></i>Solicita una demo comercial</span>
+              <span><i class="far fa-map-marker-alt"></i>Plataforma para equipos en Latinoamérica</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-navigation">
+      <div class="container-fluid">
+        <div class="primary-menu">
+          <div class="site-branding">
+            <a class="brand-logo" href="#"><span>Hubs</span>man</a>
+          </div>
+
+          <nav class="main-menu">
+            <ul>
+              <li><a href="#inicio">Inicio</a></li>
+              <li><a href="#features">Beneficios</a></li>
+              <li><a href="#about">Plataforma</a></li>
+              <li><a href="#services">Módulos</a></li>
+              <li><a href="#planes">Planes</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="#contacto">Contacto</a></li>
+            </ul>
+          </nav>
+
+          <div class="nav-right-item">
+            <a href="#contacto" class="theme-btn style-one">Solicitar demo <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="bizzen-hero" id="inicio">
+    <div class="image-layer"></div>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-xl-6 col-lg-8">
+          <div class="hero-content">
+            <h1>Conecta <span>calidad</span>, <span>riesgos</span>, procesos e indicadores</h1>
+            <p>
+              Hubsman es una plataforma de gestión con inteligencia artificial integrada para empresas que quieren
+              ordenar su sistema, conectar información crítica y convertir ISO en una herramienta que sí se usa.
+            </p>
+
+            <div class="hero-button-wrap">
+              <a href="#contacto" class="theme-btn style-one">SOLICITAR DEMO <i class="far fa-arrow-right"></i></a>
+              <a href="#planes" class="theme-btn outline">PRUEBA 14 DÍAS <i class="far fa-arrow-right"></i></a>
+            </div>
+
+            <div class="bizzen-avatar-box">
+              <ul>
+                <li class="avatar-stack">
+                  <div class="avatar">QA</div>
+                  <div class="avatar">OP</div>
+                  <div class="avatar">BI</div>
+                </li>
+                <li><span>Equipos que necesitan control, trazabilidad y cumplimiento real</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 col-lg-4">
+          <div class="play-box">
+            <div class="hero-dashboard">
+              <div class="dash-top">
+                <strong>Vista integrada Hubsman</strong>
+                <div class="dots"><span></span><span></span><span></span></div>
+              </div>
+              <div class="dash-body">
+                <div class="ai-badge"><i class="fa-solid fa-sparkles"></i> Inteligencia artificial integrada</div>
+
+                <div class="kpi-grid">
+                  <div class="kpi-card">
+                    <h4>84%</h4>
+                    <p>Indicadores en meta</p>
+                  </div>
+                  <div class="kpi-card">
+                    <h4>12</h4>
+                    <p>Procesos críticos monitoreados</p>
+                  </div>
+                  <div class="kpi-card">
+                    <h4>7</h4>
+                    <p>Acciones vencidas detectadas</p>
+                  </div>
+                  <div class="kpi-card">
+                    <h4>3</h4>
+                    <p>Riesgos con impacto alto</p>
+                  </div>
+                </div>
+
+                <div class="ask-box">
+                  <h5>Pregúntale a tu sistema</h5>
+                  <p>Ejemplos de consultas que resuelve la IA:</p>
+                  <ul>
+                    <li>¿Qué procesos están fuera de meta?</li>
+                    <li>¿Qué riesgos afectan los objetivos?</li>
+                    <li>¿Qué acciones correctivas están vencidas?</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-featuresone pt-115" id="features">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+          <div class="section-title text-center mb-50">
+            <span class="sub-title">Beneficios clave</span>
+            <h2>Transforma tu sistema en una herramienta de decisión</h2>
+            <p>
+              La plataforma está diseñada para dejar atrás el archivo disperso y llevar tu gestión a una sola vista útil para dirección, operación y auditoría.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-wrapper">
+        <div class="row">
+          <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="bizzen-features-item style-one">
+              <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="content">
+                <h4>Todo conectado</h4>
+                <p>Relaciona procesos, riesgos, indicadores, objetivos y evidencias dentro de una misma plataforma.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="bizzen-features-item style-one">
+              <div class="icon"><i class="fa-solid fa-brain"></i></div>
+              <div class="content">
+                <h4>IA aplicada</h4>
+                <p>Consulta tu sistema con lenguaje natural y detecta brechas, desvíos y prioridades más rápido.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="bizzen-features-item style-one">
+              <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+              <div class="content">
+                <h4>Seguimiento real</h4>
+                <p>Monitorea metas, acciones vencidas y desempeño por área sin depender de hojas sueltas.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="bizzen-features-item style-one">
+              <div class="icon"><i class="fa-solid fa-shield-check"></i></div>
+              <div class="content">
+                <h4>Más control</h4>
+                <p>Convierte cumplimiento e ISO en una práctica operativa diaria, no en un esfuerzo previo a auditoría.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-abouttwo pt-115" id="about">
+    <div class="container">
+      <div class="about-wrapper">
+        <div class="bizzen-image image-one">
+          <div class="placeholder-inner">
+            <div>
+              <span class="sub-title" style="display:inline-block;color:var(--secondary-color);font-weight:800;letter-spacing:.1em;text-transform:uppercase;">ISO que se usa</span>
+              <h3 style="font-size:42px;max-width:520px;">Tu sistema deja de ser repositorio y se vuelve centro de control</h3>
+            </div>
+            <p style="max-width:520px;">
+              Diseñado para empresas que necesitan ordenar información, conectar equipos y tomar mejores decisiones con contexto.
+            </p>
+          </div>
+        </div>
+
+        <div class="bizzen-image image-two">
+          <div class="placeholder-inner">
+            <div>
+              <h4 style="font-size:28px;">Hubsman IA</h4>
+              <p>Consulta riesgos, procesos, metas, desvíos y acciones desde una sola interfaz.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:60px;">
+          <div class="col-lg-8">
+            <div class="section-title mb-60">
+              <span class="sub-title">Qué es Hubsman</span>
+              <h2>ISO que se usa, no que se archiva</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center">
+          <div class="col-xl-7 col-lg-6">
+            <div class="bizzen-content-box">
+              <div class="content-wrap">
+                <h6>
+                  Hubsman conecta calidad, riesgos, procesos, indicadores, objetivos y acciones para que tu empresa gestione con contexto y no por separado.
+                </h6>
+                <ul class="check-list style-one mb-40">
+                  <li><i class="fas fa-check-circle"></i>No es solo un repositorio documental.</li>
+                  <li><i class="fas fa-check-circle"></i>Centraliza información crítica en una sola vista.</li>
+                  <li><i class="fas fa-check-circle"></i>Ayuda a dirección y operación a trabajar con el mismo lenguaje.</li>
+                </ul>
+                <div class="bizzen-button">
+                  <a href="#services" class="theme-btn style-one">EXPLORAR MÓDULOS <i class="far fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-5 col-lg-6">
+            <div class="bizzen-experience-box">
+              <div class="content">
+                <h2>14</h2>
+                <p>días de prueba para validar el uso real de la plataforma</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-company-sec pt-120 pb-120">
+    <div class="container-fluid">
+      <div class="clients-slider">
+        <div class="bizzen-client-item"><span>Procesos</span></div>
+        <div class="bizzen-client-item"><span>Riesgos</span></div>
+        <div class="bizzen-client-item"><span>ISO</span></div>
+        <div class="bizzen-client-item"><span>KPIs</span></div>
+        <div class="bizzen-client-item"><span>Acciones</span></div>
+        <div class="bizzen-client-item"><span>IA</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-servicetwo pt-115 pb-120" id="services">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8">
+          <div class="section-title text-center mb-60 text-white">
+            <span class="sub-title">Módulos de la plataforma</span>
+            <h2>Todo tu sistema conectado en una sola herramienta</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-slider">
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-diagram-project"></i></div>
+            <div class="number">01</div>
+          </div>
+          <div class="content">
+            <h4>Gestión de procesos</h4>
+            <p>Documenta, organiza y conecta procesos con responsables, evidencias e indicadores operativos.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="number">02</div>
+          </div>
+          <div class="content">
+            <h4>Riesgos y desvíos</h4>
+            <p>Identifica riesgos, relaciona hallazgos y da seguimiento a planes correctivos desde una sola vista.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <div class="number">03</div>
+          </div>
+          <div class="content">
+            <h4>Indicadores y objetivos</h4>
+            <p>Monitorea metas, variaciones y desempeño por área con trazabilidad hacia la estrategia.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-list-check"></i></div>
+            <div class="number">04</div>
+          </div>
+          <div class="content">
+            <h4>Planes de acción</h4>
+            <p>Asigna tareas, vencimientos y responsables para que el sistema avance con seguimiento real.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-file-shield"></i></div>
+            <div class="number">05</div>
+          </div>
+          <div class="content">
+            <h4>Evidencias y control documental</h4>
+            <p>Centraliza soporte documental sin perder el contexto de cada proceso, hallazgo o meta.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <div class="bizzen-service-item style-two">
+          <div class="icon-count-wrap">
+            <div class="icon"><i class="fa-solid fa-sparkles"></i></div>
+            <div class="number">06</div>
+          </div>
+          <div class="content">
+            <h4>IA conversacional</h4>
+            <p>Pregunta qué procesos están fuera de meta, qué riesgos impactan objetivos o qué acciones están vencidas.</p>
+            <a href="#contacto" class="read-more style-one">VER DEMO <i class="far fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-weone pb-100 pt-110">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-xl-6">
+          <div class="bizzen-image placeholder-box">
+            <div class="placeholder-inner">
+              <div>
+                <span class="sub-title" style="display:inline-block;color:var(--secondary-color);font-weight:800;letter-spacing:.1em;text-transform:uppercase;">Visibilidad ejecutiva</span>
+                <h3 style="font-size:40px;max-width:480px;">Menos tiempo armando reportes. Más tiempo gestionando.</h3>
+              </div>
+              <p style="max-width:520px;">
+                Una sola plataforma para revisar contexto, avances, desviaciones, riesgos y resultados por área.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6">
+          <div class="bizzen-content-box">
+            <div class="section-title">
+              <span class="sub-title">Por qué funciona</span>
+              <h2>Conocimiento útil y control accionable</h2>
+            </div>
+
+            <p class="mb-30">
+              Hubsman está pensado para empresas que ya tienen un sistema, pero necesitan usarlo mejor:
+              menos fragmentación, más trazabilidad y más velocidad para responder con evidencia.
+            </p>
+
+            <div class="bizzen-progress-item">
+              <div class="bizzen-skill-item">
+                <div class="progress-title">
+                  <h6>Centralización del sistema</h6>
+                  <span>95%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width:95%"></div>
+                </div>
+              </div>
+
+              <div class="bizzen-skill-item">
+                <div class="progress-title">
+                  <h6>Seguimiento operativo</h6>
+                  <span>88%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width:88%"></div>
+                </div>
+              </div>
+
+              <div class="bizzen-skill-item">
+                <div class="progress-title">
+                  <h6>Consulta con IA</h6>
+                  <span>92%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width:92%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:22px;">
+              <div class="col-md-6">
+                <ul class="check-list about-check-list mb-30">
+                  <li><i class="fas fa-check-circle"></i>Seguimiento de responsables</li>
+                  <li><i class="fas fa-check-circle"></i>Alertas sobre vencimientos</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <ul class="check-list about-check-list mb-30">
+                  <li><i class="fas fa-check-circle"></i>Contexto para decisiones</li>
+                  <li><i class="fas fa-check-circle"></i>Trazabilidad para auditoría</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fact-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 col-md-6 col-sm-12">
+          <div class="bizzen-counter-item style-two mb-40">
+            <div class="content">
+              <h2>1</h2>
+              <h4>Plataforma central</h4>
+              <p>Procesos, riesgos, objetivos, indicadores y evidencias en una sola vista integrada.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 col-sm-12">
+          <div class="bizzen-counter-item style-two mb-40">
+            <div class="content">
+              <h2>14</h2>
+              <h4>Días de prueba</h4>
+              <p>Prueba el flujo real del sistema antes de tomar una decisión comercial.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 col-sm-12">
+          <div class="bizzen-counter-item style-two mb-40">
+            <div class="content">
+              <h2>24/7</h2>
+              <h4>Acceso disponible</h4>
+              <p>Consulta tu información cuando la necesites, desde operación o dirección.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 col-sm-12">
+          <div class="bizzen-counter-item style-two mb-40">
+            <div class="content">
+              <h2>AI</h2>
+              <h4>Asistente integrado</h4>
+              <p>Respuestas más rápidas para revisar metas, hallazgos, riesgos y seguimiento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-section" id="planes">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8">
+          <div class="section-title text-center mb-60">
+            <span class="sub-title">Planes de inicio</span>
+            <h2>Empieza de la forma que mejor encaje con tu operación</h2>
+            <p>
+              Mantengo la sección de la plantilla, pero la adapto a una lógica más creíble para Hubsman: demo, prueba y plan corporativo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-4">
+          <div class="bizzen-pricing-item style-one mb-40">
+            <div class="pricing-header">
+              <h2 class="price"><span class="currency">1</span>Sesión<span class="duration">Demo guiada</span></h2>
+              <h4 class="plan">Exploración</h4>
+              <p>Ideal para conocer la plataforma, el enfoque y resolver encaje con tu caso.</p>
+            </div>
+            <div class="pricing-body">
+              <h4>Incluye</h4>
+              <ul class="check-list style-one">
+                <li><i class="fas fa-badge-check"></i>Demo comercial</li>
+                <li><i class="fas fa-badge-check"></i>Recorrido por módulos</li>
+                <li><i class="fas fa-badge-check"></i>Q&A con tu equipo</li>
+                <li><i class="fas fa-badge-check"></i>Evaluación del caso de uso</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="#contacto" class="theme-btn style-one">Solicitar demo <i class="far fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+          <div class="bizzen-pricing-item style-one mb-40">
+            <div class="ribbon">Más solicitado</div>
+            <div class="pricing-header">
+              <h2 class="price"><span class="currency">14</span>Días<span class="duration">Prueba</span></h2>
+              <h4 class="plan">Validación</h4>
+              <p>Para equipos que quieren probar el flujo real de gestión antes de escalar.</p>
+            </div>
+            <div class="pricing-body">
+              <h4>Incluye</h4>
+              <ul class="check-list style-one">
+                <li><i class="fas fa-badge-check"></i>Acceso a plataforma</li>
+                <li><i class="fas fa-badge-check"></i>Revisión de estructura</li>
+                <li><i class="fas fa-badge-check"></i>Casos de uso prioritarios</li>
+                <li><i class="fas fa-badge-check"></i>Soporte de activación</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="#contacto" class="theme-btn style-one">Iniciar prueba <i class="far fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+          <div class="bizzen-pricing-item style-one mb-40">
+            <div class="pricing-header">
+              <h2 class="price"><span class="currency">B2B</span><span class="duration">Plan corporativo</span></h2>
+              <h4 class="plan">Escalamiento</h4>
+              <p>Para organizaciones que requieren más áreas, trazabilidad y adopción estructurada.</p>
+            </div>
+            <div class="pricing-body">
+              <h4>Incluye</h4>
+              <ul class="check-list style-one">
+                <li><i class="fas fa-badge-check"></i>Configuración por equipos</li>
+                <li><i class="fas fa-badge-check"></i>Mayor profundidad de uso</li>
+                <li><i class="fas fa-badge-check"></i>Acompañamiento de adopción</li>
+                <li><i class="fas fa-badge-check"></i>Escenario de crecimiento</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="#contacto" class="theme-btn style-one">Hablar con ventas <i class="far fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bizzen-testimonialtwo pb-120 pt-120">
+    <div class="container">
+      <div class="testimonial-layout">
+        <div class="testimonial-image">
+          <span class="sub-title" style="display:inline-block;color:var(--secondary-color);font-weight:800;letter-spacing:.1em;text-transform:uppercase;">Prueba social</span>
+          <h3>Equipos que necesitan orden, seguimiento y cumplimiento real</h3>
+          <p>
+            Esta sección conserva el estilo testimonial de la plantilla y la orienta a responsables de calidad, procesos y dirección.
+          </p>
+        </div>
+
+        <div class="bizzen-content-box">
+          <div class="section-title text-white mb-40">
+            <span class="sub-title">Testimonios</span>
+            <h2>Qué valoran los equipos al usar la plataforma</h2>
+          </div>
+
+          <div class="testimonial-slider-two">
+            <div class="bizzen-testimonial-item style-two">
+              <div class="testimonial-content">
+                <div class="quote-ratings-wrap">
+                  <div class="quote"><i class="fa-solid fa-quote-left"></i></div>
+                  <div class="ratings">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  “Antes teníamos indicadores, riesgos y acciones separados. Con Hubsman, todo quedó conectado y la dirección puede ver el estado real del sistema.”
+                </p>
+                <div class="author-thumb-item">
+                  <div class="author-thumb">QA</div>
+                  <div class="author-info">
+                    <h5>Responsable de Calidad</h5>
+                    <span class="position">Empresa industrial</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bizzen-testimonial-item style-two">
+              <div class="testimonial-content">
+                <div class="quote-ratings-wrap">
+                  <div class="quote"><i class="fa-solid fa-quote-left"></i></div>
+                  <div class="ratings">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  “La IA nos ayudó a responder más rápido qué estaba fuera de meta y qué acciones requerían seguimiento. Eso bajó bastante la fricción operativa.”
+                </p>
+                <div class="author-thumb-item">
+                  <div class="author-thumb">OP</div>
+                  <div class="author-info">
+                    <h5>Líder de Operaciones</h5>
+                    <span class="position">Empresa de servicios</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bizzen-testimonial-item style-two">
+              <div class="testimonial-content">
+                <div class="quote-ratings-wrap">
+                  <div class="quote"><i class="fa-solid fa-quote-left"></i></div>
+                  <div class="ratings">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  “Ya no usamos ISO solo para auditoría. Ahora el sistema sirve para seguimiento, contexto y toma de decisiones con evidencia.”
+                </p>
+                <div class="author-thumb-item">
+                  <div class="author-thumb">DIR</div>
+                  <div class="author-info">
+                    <h5>Dirección</h5>
+                    <span class="position">Empresa multiarea</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-contact-section" id="faq">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8">
+          <div class="section-title text-center mb-40">
+            <span class="sub-title">Preguntas frecuentes</span>
+            <h2>Resuelve dudas antes de agendar una demo</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <details open>
+          <summary>¿Hubsman reemplaza mis documentos actuales?</summary>
+          <p>No necesariamente. La idea es centralizar y conectar tu información actual para que sea útil para gestionar y no quede dispersa.</p>
+        </details>
+
+        <details>
+          <summary>¿Sirve para sistemas ISO?</summary>
+          <p>Sí. El enfoque de la plataforma está alineado con sistemas de gestión, cumplimiento, seguimiento, riesgos y mejora continua.</p>
+        </details>
+
+        <details>
+          <summary>¿La IA responde con mi propia información?</summary>
+          <p>Ese es el enfoque del producto: consultar tu sistema con base en los datos y relaciones de tu propia gestión.</p>
+        </details>
+
+        <details>
+          <summary>¿Qué áreas pueden usar la plataforma?</summary>
+          <p>Calidad, procesos, operaciones, dirección, compliance y equipos que necesiten visibilidad compartida.</p>
+        </details>
+
+        <details>
+          <summary>¿Puedo probarlo antes de contratar?</summary>
+          <p>Sí. Puedes solicitar una demo y evaluar el esquema de prueba de 14 días.</p>
+        </details>
+
+        <details>
+          <summary>¿Es solo para auditorías?</summary>
+          <p>No. La propuesta de valor apunta a usar el sistema en la operación diaria y en la toma de decisiones.</p>
+        </details>
+      </div>
+
+      <div class="consultation-cta" id="contacto">
+        <div class="row align-items-center">
+          <div class="col-xl-7">
+            <div class="section-title text-white text-center text-xl-start mb-40">
+              <h2>Solicita una demo y revisa cómo ordenar tu sistema en una sola plataforma</h2>
+            </div>
+          </div>
+
+          <div class="col-xl-5">
+            <div class="bizzen-button text-center text-xl-end mb-50">
+              <a href="mailto:contacto@hubsman.com" class="theme-btn style-one">CONTACTAR <i class="far fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="row-gap:20px;">
+          <div class="col-md-6">
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:24px;">
+              <h3 style="color:#fff;font-size:24px;">Qué revisamos en la demo</h3>
+              <ul class="check-list">
+                <li style="color:#fff;"><i class="fas fa-check-circle"></i>Cómo conectar procesos, riesgos e indicadores</li>
+                <li style="color:#fff;"><i class="fas fa-check-circle"></i>Cómo usar la IA dentro del sistema</li>
+                <li style="color:#fff;"><i class="fas fa-check-circle"></i>Qué estructura conviene según tu operación</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div style="background:#fff;border-radius:22px;padding:24px;">
+              <h3 style="font-size:24px;">Formulario rápido</h3>
+              <form>
+                <div style="display:grid;gap:12px;">
+                  <input type="text" placeholder="Nombre completo" style="width:100%;padding:14px 16px;border:1px solid #d9e4d5;border-radius:14px;font:inherit;">
+                  <input type="text" placeholder="Empresa" style="width:100%;padding:14px 16px;border:1px solid #d9e4d5;border-radius:14px;font:inherit;">
+                  <input type="email" placeholder="Correo corporativo" style="width:100%;padding:14px 16px;border:1px solid #d9e4d5;border-radius:14px;font:inherit;">
+                  <textarea placeholder="Cuéntanos qué quieres resolver" style="width:100%;padding:14px 16px;border:1px solid #d9e4d5;border-radius:14px;font:inherit;min-height:110px;resize:vertical;"></textarea>
+                  <button type="submit" class="theme-btn style-one" style="justify-content:center;">SOLICITAR DEMO <i class="far fa-arrow-right"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <div class="footer-widget-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="footer-widget footer-about-widget pt-100">
+              <div class="widget-content">
+                <div class="footer-logo mb-20"><span>Hubs</span>man</div>
+                <p class="mb-20">
+                  Plataforma de gestión con inteligencia artificial integrada para empresas que quieren ordenar, conectar y crecer.
+                </p>
+                <div class="social-box">
+                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                  <a href="#"><i class="fab fa-youtube"></i></a>
+                  <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="footer-widget-inner">
+              <div class="footer-widget-area">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="footer-widget mb-50">
+                      <h2>Plataforma</h2>
+                      <div class="widget-content">
+                        <ul>
+                          <li><a href="#services">Módulos</a></li>
+                          <li><a href="#about">Cómo funciona</a></li>
+                          <li><a href="#planes">Planes de inicio</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="footer-widget mb-50">
+                      <h2>Casos de uso</h2>
+                      <div class="widget-content">
+                        <ul>
+                          <li>Gestión ISO</li>
+                          <li>Seguimiento de riesgos</li>
+                          <li>Indicadores y objetivos</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="footer-widget footer-social-widget mb-50">
+                      <h2>Contacto</h2>
+                      <div class="widget-content">
+                        <ul>
+                          <li>contacto@hubsman.com</li>
+                          <li>Agenda una demo comercial</li>
+                          <li>Atención para equipos B2B</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright-area">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="copyright-text">
+                <p>© 2026 Hubsman. Todos los derechos reservados.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="copyright-link" style="text-align:right;">
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Política de privacidad</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
